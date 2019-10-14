@@ -40,7 +40,7 @@
             }
         },
         components: {
-            Headers
+            Header
         }
     }
 </script>
