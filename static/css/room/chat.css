@@ -1,0 +1,142 @@
+div.content div.watch div.chat {
+    position: absolute;
+    bottom: 0px;
+    /* width: calc(25% - 1px); */
+    right: 0;
+    /* left: 75%; */
+    width: 340px;
+    top: 0px;
+    border-left: rgba(112, 128, 144, 0.25) 1px solid;
+}
+
+div.chat p.chat-no-messages-warn {
+    color: slategrey;
+    opacity: 0.75;
+
+    margin-left: 1em;
+    margin-right: 1em
+}
+
+div.chat div.chat-messages {
+    position: absolute;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 2em;
+    top: 0;
+    bottom: 80px;
+    width: calc(100% - 2em);
+    overflow-y: auto
+}
+
+div.chat div.chat-messages.users-are-typing {
+    bottom: 100px
+}
+
+div.chat-messages div.grouped-chat-wrapper {
+    color: white;
+    display: flex;
+
+    margin-top: 1.5em;
+}
+
+div.grouped-chat-wrapper img.chat-author-avatar {
+    border-radius: 9999px;
+    
+    height: 50px;
+    width: 50px;
+
+    background-color: rgba(112, 128, 144, 0.25);
+}
+
+div.grouped-chat-wrapper div.grouped-chat-messages-content {
+    width: -webkit-fill-available;
+
+    margin-left: 1.05em
+}
+
+div.grouped-chat-wrapper img.chat-author-avatar.has-controller {
+    box-shadow: 0 0 0 3px white;
+}
+
+div.grouped-chat-messages-meta p.chat-author-name, div.chat-message p.chat-message-content {
+    margin: 0;
+}
+
+div.grouped-chat-messages-meta p.chat-author-name {
+    font-weight: 600;
+    font-size: 20px
+}
+
+div.grouped-chat-messages-content div.grouped-chat-messages {
+    margin-top: 0.5em;
+}
+
+div.chat-message:last-child p.chat-message-content {
+    margin-bottom: 0
+}
+
+div.chat-message p.chat-message-content {
+    margin-top: 0;
+    margin-bottom: 0.65em;
+}
+
+div.chat-messages div.chat-message {
+    display: flex;
+}
+
+div.chat-messages div.chat-message.is-loading {
+    opacity: 0.35;
+    pointer-events: none
+}
+
+div.chat-message div.chat-message-options {
+    position: absolute;
+    right: 0px;
+    margin-right: 1.5em;
+
+    opacity: 0;
+
+}
+
+div.chat-message:hover div.chat-message-options {
+    display: flex;
+    
+    background-color: black;
+    border-radius: 5px;
+
+    opacity: 1
+}
+
+div.chat-message-options img.chat-message-option {
+    filter: invert(1);
+
+    cursor: pointer;
+
+    opacity: 0.25;
+
+    transition: all 0.1s ease-in-out
+}
+
+div.chat-message-options img.chat-message-option:hover {
+    opacity: 0.75
+}
+
+div.chat-message div.chat-message-options * {
+    margin-left: 0.5em
+}
+
+p.chat-typing-bar {
+    position: absolute;
+
+    bottom: 90px;
+
+    margin: 0;
+    margin-left: 1em;
+
+    font-size: 14px;
+    color: #6d6d6d !important;
+}
+
+div.content div.watch div.player-footer, div.content div.watch div.chat {
+    background: black;
+}

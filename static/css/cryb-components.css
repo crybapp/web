@@ -1,0 +1,117 @@
+/* .button {
+    border: 0;
+    padding: 0;
+    outline: 0;
+    margin: 0;
+    
+    color: white;
+    background-color: black;
+    border: 1px solid black;
+
+    cursor: pointer;
+    
+    font-size: 17.5px;
+    padding: 10px;
+    padding-left: 12.5px;
+    padding-right: 12.5px;
+    border-radius: 5px;
+
+    transition: all 0.2s
+}
+
+.button.discord {
+    background-color: #7289DA;
+    border-color: #7289DA;
+
+    color: white;
+}
+
+.button:hover {
+    color: black;
+    background-color: white;
+}
+
+.button.discord:hover {
+    background-color: white;
+    color: #7289DA;
+} */
+
+.loading {
+    background: linear-gradient(225deg,red,#d200ff,#0063ff,#00ffc1,#0bff66,#16ff00,#f0ff00,red) !important;
+    background-size: 1600% 1600% !important;
+    
+    transform: translateZ(0);
+    animation: loadingAnimation 10s ease infinite
+}
+
+@keyframes loadingAnimation {
+    0% {
+        background-position: 0 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    to {
+        background-position: 0 50%
+    }
+}
+
+input.input, button.button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+
+    padding: 18px;
+
+    font-size: 20px;
+    border-radius: 10px;
+    transition: background-color 0.2s ease-in-out;
+
+    box-shadow: 0 0 0 1px rgba(112, 128, 144, 0.25);
+
+    transition: all 0.2s ease-in-out
+}
+input.input:hover, input.input:focus, button.button:not(.disabled):hover {
+    box-shadow: 0 0 0 1px black;
+}
+
+button.button {
+    cursor: pointer;
+    font-weight: 500;  
+    margin-left: 0.25em
+}
+
+button.button:not(.disabled):hover {
+    color: white;
+    background-color: black
+}
+
+button.button:not(.disabled):active {
+    box-shadow: 0 0 0 1px white
+}
+
+button.button.disabled {
+    cursor: not-allowed;
+    /* pointer-events: none; */
+
+    opacity: 0.55;
+
+}
+
+div.box {
+    box-shadow: 0 0 0 1px rgba(112, 128, 144, 0.25);
+    border-radius: 10px;
+
+    transition: all 0.1s ease-in-out
+}
+
+div.box:hover {
+    box-shadow: 0px 4px 10px #00000017 !important;
+}
+
+div.box:active {
+    box-shadow: 0px 6px 15px #00000017 !important;
+}

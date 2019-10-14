@@ -1,0 +1,48 @@
+<template>
+    <div class="root">
+        <Header :dark=isDarkTheme />
+        <div class="content" :class="{ 'is-dark': isDarkTheme }">
+            <nuxt />
+        </div>
+    </div>
+</template>
+<script>
+    import { mapGetters } from 'vuex'
+    import { parse } from 'cookieparser'
+    
+    import Header from '~/components/header/index'
+
+    export default {
+        head() {
+            return {
+                titleTemplate: chunk => this.$route.name === 'room' && this.room ? `${this.room.name} - Cryb` : (chunk ? `${chunk} - Cryb` : 'Cryb'),
+                meta: [
+                    { charset: 'utf-8' },
+                    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                    { name: 'description', content: 'Cryb makes it easy to enjoy what you love with your friends' },
+                    { name: 'theme-color', content: '#000000' },
+                    { property: 'og:image', content: '/img/cryb-icon-hq.png'}
+                ],
+                link: [
+                    { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
+                ],
+                script: [
+                    {
+                        src: 'https://www.googletagmanager.com/gtag/js?id=UA-146441740-1'
+                    }
+                ]
+            }
+        },
+        computed: {
+            ...mapGetters(['room']),
+            isDarkTheme() {
+                return this.$route.name === 'room'
+            }
+        },
+        components: {
+            Headers
+        }
+    }
+</script>
+<style src="~/static/css/cryb-master.css"></style>
+<style src="~/static/css/cryb-components.css"></style>

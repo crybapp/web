@@ -1,0 +1,103 @@
+a.button-wrapper {
+    cursor: pointer;
+    color: white;
+    
+    height: fit-content
+}
+
+a.button-wrapper div.button {
+    padding: 10px;
+
+    background-color: black;
+    box-shadow: 0 0 0 1px black;
+
+    font-weight: 600;
+    border-radius: 5px;
+
+    width: fit-content;
+    display: flex;
+
+    transition: all 0.2s ease-in-out
+}
+
+div.content.is-dark a.button-wrapper div.button {
+    background-color: black;
+    box-shadow: 0 0 0 1px rgba(112, 128, 144, .25)
+}
+
+a.button-wrapper div.button.disabled {
+    color: black;
+    opacity: 0.35;
+    background-color: white;
+
+    cursor: not-allowed
+}
+
+div.button img.button-icon, div.button img.button-icon-hover {
+    height: 25px;
+    margin-right: 0.5em
+}
+
+div.button img.button-icon-hover {
+    display: none
+}
+
+div.button:hover img.button-icon {
+    display: none
+}
+
+div.button:hover img.button-icon-hover {
+    display: block
+}
+
+div.button p.button-content {
+    margin: auto
+}
+
+a.button-wrapper div.button:not(.disabled):not(.loading):hover {
+    background-color: white
+}
+
+div.button:not(.discord):not(.disabled):not(.loading):hover p.button-content {
+    color: black
+}
+
+div.content.is-dark div.button:not(.disabled):not(.loading):hover {
+    background-color: #080808
+}
+
+div.content.is-dark div.button:not(.discord):not(.disabled):not(.loading):hover p.button-content {
+    color: white
+}
+
+a.button-wrapper div.button.discord {
+    background-color: #7289DA;
+    box-shadow: 0 0 0 1px #7289DA;
+
+    /* margin-top: 1em */
+}
+
+/* a.button.discord img.icon {
+    filter: invert(1)
+} */
+
+a.button-wrapper div.button.discord:not(.disabled):not(.loading):hover {
+    background-color: white;
+    color: #7289DA;
+
+    /* margin-top: 1em */
+}
+
+a.button-wrapper div.button.loading {
+    cursor: default;
+    box-shadow: none
+}
+
+p.button-content {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}

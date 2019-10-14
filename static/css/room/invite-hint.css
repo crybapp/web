@@ -1,0 +1,24 @@
+div.invite-hint {
+    max-width: 20em;
+    height: fit-content;
+    margin-left: 2em;
+}
+
+div.invite-hint h3.title {
+    margin: 0;
+    margin-bottom: 0.55em;
+}
+
+div.invite-hint p.subtitle {
+    margin-bottom: 0
+}
+
+div.invite-hint a.invite-link {
+    opacity: 0.75;
+
+    transition: opacity 0.2s
+}
+
+div.invite-hint a.invite-link:hover {
+    opacity: 1
+}

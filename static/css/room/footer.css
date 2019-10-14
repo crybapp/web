@@ -1,0 +1,141 @@
+div.content div.watch div.player-footer {
+    position: absolute;
+
+    left: 0px;
+    bottom: 0px;
+    width: calc(100% - 341px);
+    height: fit-content;
+
+    border-top: rgba(112, 128, 144, 0.25) 1px solid;
+
+    overflow: none;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    height: 180px;
+}    
+
+div.player-footer div.user-icons {
+    display: flex;
+    /* position: absolute; */
+    justify-content: stretch;
+    /* top: 50%; */
+    /* left: 50%; */
+    width: fit-content;
+    /* height: fit-content; */
+    /* transform: translate(-50%, -50%); */
+    /* width: 100%; */
+    /* flex-wrap: unset; */
+    /* padding-left: 3em; */
+    /* padding-right: 3em; */
+    /* margin-left: 2em; */
+    /* margin-right: 2em; */
+    /* margin: 3em; */
+    margin: auto;
+    /* left: 0; */
+    padding-left: auti;
+    align-items: flex-start;
+    padding: 40px;
+    /* z-index: 5; */
+    align-items: center;
+    /* vertical-align: middle; */
+}
+
+div.user-icons div.user-icon {
+    height: 100px;
+    width: 100px;
+    margin-left: 1.5em;
+    border-radius: 999px;
+    background-color: rgba(112, 128, 144, 0.25);
+}
+
+div.user-icons div.user-icon:first-child {
+    margin-left: 0
+}
+
+/* div.user-icons div.user-icon:last-child {
+    margin-right: 2em
+} */
+
+div.user-icon.offline img.user-icon-avatar {
+    opacity: 0.25;
+
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%)
+}
+
+div.user-icon:not(:first-child):last-child img.user-icon-avatar {
+    margin-right: 2em;
+}
+
+div.user-icons div.user-icon.passable {
+    cursor: pointer;
+    box-shadow: 0 0 0 0px black;
+    transition: box-shadow 0.2s ease-in-out
+}
+
+div.user-icons div.user-icon.passable:hover {
+    box-shadow: 0 0 0 5px white
+}
+
+div.user-icon img.user-icon-avatar {
+    border-radius: 100px;
+    height: 100%
+}
+
+div.user-icons img.user-icon:first-child {
+    margin-left: 0
+}
+
+img.user-icon:hover {
+    opacity: 0.25;
+}
+
+div.user-icon div.user-control-indicator {
+    position: absolute;
+    bottom: 2.15em;
+    width: 40px;
+    height: 40px;
+    margin-left: 60px;
+    /* border-radius: 12.5px; */
+    border-radius: 999px;
+    background-color: white;
+    box-shadow: 0 0 0px 6px black;
+    transform: scale(0);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+div.user-icon div.user-control-indicator.visible {
+    transform: scale(1)
+}
+
+div.user-icon div.user-control-indicator.non-interactable {
+    cursor: default;
+    /* pointer-events: all */
+}
+
+div.user-control-indicator img.user-control-icon {
+    height: 23px;
+
+    transition: all 0.2s ease-in-out
+}
+
+div.user-control-indicator img.user-control-icon.remove-control {
+    opacity: 0;
+    height: 0
+}
+
+div.user-control-indicator:hover:not(.non-interactable) img.user-control-icon.remove-control {
+    opacity: 1;
+    height: 23px;
+}
+
+div.user-control-indicator:hover:not(.non-interactable) img.user-control-icon.has-control {
+    opacity: 0;
+    height: 0;
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@cryb/web",
+  "version": "1.0.0",
+  "description": "The web app used as the primary client for Cryb",
+  "main": "index.js",
+  "repository": "https://github.com/crybapp/web",
+  "author": "William Gibson <w.gibbo3@icloud.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nuxt start",
+    "build": "nuxt build",
+    "dev": "nuxt"
+  },
+  "dependencies": {
+    "@novnc/novnc": "^1.1.0",
+    "@nuxtjs/axios": "^5.5.4",
+    "browser-cookies": "^1.2.0",
+    "cookieparser": "^0.1.0",
+    "date-fns": "^2.0.1",
+    "dotenv": "^8.0.0",
+    "jsmpeg": "^1.0.0",
+    "nuxt": "^2.8.1",
+    "nuxt-client-init-module": "^0.1.4",
+    "nuxt-clipboard2": "^0.2.1"
+  }
+}

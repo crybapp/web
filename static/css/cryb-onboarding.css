@@ -1,0 +1,15 @@
+* {
+    font-family: monospace
+    /* font-family: 'Courier New', Courier, monospace */
+}
+
+div.center {
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%
+}
+
+img.logo {
+    height: 50px
+}

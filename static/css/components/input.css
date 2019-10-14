@@ -1,0 +1,75 @@
+a.input-wrapper {
+    color: white
+}
+
+a.input-wrapper div.input {
+    padding: 10px;
+
+    background-color: white;
+    box-shadow: 0 0 0 1px grey;
+
+    font-weight: 600;
+    border-radius: 5px;
+
+    width: fit-content;
+    display: flex;
+
+    transition: all 0.2s ease-in-out
+}
+
+div.input img.input-icon, div.input img.input-icon-hover {
+    height: 25px;
+    margin-right: 0.5em
+}
+
+div.input img.input-icon-hover {
+    display: none
+}
+
+div.input:hover img.input-icon {
+    display: none
+}
+
+div.input:hover img.input-icon-hover {
+    display: block
+}
+
+div.input input.input-inner {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    outline: 0;
+
+    font-size: 16px;
+}
+
+a.input-wrapper div.input:hover, input.input:focus div.input {
+    /* color: black;
+    background-color: white; */
+    box-shadow: 0 0 0 1px black;
+    /* border-color: black */
+}
+
+a.input-wrapper div.input.discord {
+    background-color: #7289DA;
+    box-shadow: 0 0 0 1px #7289DA;
+
+    /* margin-top: 1em */
+}
+
+/* a.input.discord img.icon {
+    filter: invert(1)
+} */
+
+a.input-wrapper div.input.discord:hover {
+    background-color: white;
+    color: #7289DA;
+
+    /* margin-top: 1em */
+}
+
+div.input.disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+    pointer-events: none;
+}

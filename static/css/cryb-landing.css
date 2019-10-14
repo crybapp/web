@@ -1,0 +1,75 @@
+div.center {
+    width: 60%;
+    max-width: 100%
+}
+
+div.landing div.left, div.landing div.right {
+    position: absolute;
+
+    top: 0px;
+    width: 50%;
+    height: 100%
+}
+
+div.landing div.left {
+    left: 0px
+}
+
+div.landing div.right {
+    overflow: hidden;
+
+    left: 50%;
+    
+    pointer-events: none
+}
+
+div.center img.logo {
+    height: 30px;
+    margin-bottom: 0.5em
+}
+
+div.login, div.continue {
+    /* position: absolute; */
+    margin-top: 1.35em;
+    width: fit-content
+}
+
+div.login div.buttons a.button-wrapper div.button {
+    margin-top: 0.65em
+}
+
+/* div.login div.buttons a.button-wrapper:last-child {
+    margin-bottom: 0
+} */
+
+p.disclaimer {
+    position: absolute;
+
+    color: gray;
+    font-size: 14px;
+
+    margin: 0;
+    margin-top: 12.5px;
+}
+
+div.right .video {
+    position: absolute;
+    transform: translateX(-50%);
+
+    left: 50%;
+    right: 0px;
+    height: 100%
+}
+
+@media only screen and (max-width: 900px) {
+    div.landing div.left, div.landing div.right {
+        width: 100%;
+        height: 100%;
+    }
+    
+    div.landing div.right {
+        /* top: 50%;
+        left: 0; */
+        display: none
+    }
+}
