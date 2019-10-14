@@ -1,4 +1,4 @@
-![Cryb OSS](.github/cryb.png "Cryb OSS Logo")
+![Cryb OSS](.github/web-icon.png "@cryb/web Logo")
 
 _**Web** - Web client_
 
