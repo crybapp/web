@@ -1,7 +1,7 @@
 {
   "name": "@cryb/web",
   "version": "1.0.0",
-  "description": "The web app used as the primary client for Cryb",
+  "description": "The Web app used as the primary client for Cryb",
   "main": "index.js",
   "repository": "https://github.com/crybapp/web",
   "author": "William Gibson <w.gibbo3@icloud.com>",
