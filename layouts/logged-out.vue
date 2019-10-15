@@ -27,7 +27,7 @@
         },
         data() {
             return {
-                ...brand
+                brand
             }
         }
     }

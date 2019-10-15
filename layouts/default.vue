@@ -43,7 +43,7 @@
         },
         data() {
             return {
-                ...brand
+                brand
             }
         },
         components: {

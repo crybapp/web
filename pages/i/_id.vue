@@ -94,7 +94,7 @@
         },
         data() {
             return {
-                ...brand,
+                brand,
                 error: '',
                 loading: false
             }

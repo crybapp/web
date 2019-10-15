@@ -40,7 +40,7 @@
         middleware: 'logged-out',
         data() {
             return {
-                ...brand
+                brand
             }
         },
         components: {

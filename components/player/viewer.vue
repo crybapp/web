@@ -45,7 +45,7 @@
         },
         data() {
             return {
-                ...brand,
+                brand,
                 activeKeyEvent: null,
                 showMutedPopup: false
             }
