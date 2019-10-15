@@ -16,6 +16,7 @@
             </div>
         </div>
         <div class="right">
+            <iframe class="video" width="1920" height="1080" :src="`https://www.youtube.com/embed/${brand.landing_video_id}?controls=0&autoplay=1&loop=1&playlist=${brand.landing_video_id}`" frameborder="0" allow="accelerometer; autoplay; loop; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <iframe class="video" width="1920" height="1080" src="https://www.youtube.com/embed/-eUJgIrWONo?controls=0&autoplay=1&loop=1&playlist=-eUJgIrWONo" frameborder="0" allow="accelerometer; autoplay; loop; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
