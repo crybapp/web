@@ -9,7 +9,7 @@
         <div class="player-tooltips" v-if=showMutedPopup>
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
-                    <p class="player-tooltip-title">Cryb is muted</p>
+                    <p class="player-tooltip-title">{{ brand.name }} is muted</p>
                     <p class="player-tooltip-body">Your browser requires user interaction in order to let us play video with audio</p>
                 </div>
                 <Button @click.native=unmute()>Unmute</Button>
@@ -19,6 +19,8 @@
 </template>
 <script>
     import { mapGetters } from 'vuex'
+    
+    import brand from '~/brand/config'
 
     import Button from '~/components/button'
 
@@ -43,6 +45,7 @@
         },
         data() {
             return {
+                ...brand,
                 activeKeyEvent: null,
                 showMutedPopup: false
             }

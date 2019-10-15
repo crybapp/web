@@ -4,14 +4,14 @@
             <div class="center">
                 <img src="/img/cryb-logo.svg" class="logo">
                 <h1 class="title">Share the internet with your friends</h1>
-                <p class="body">Cryb makes it easy to start up a room, add your friends, and browse the web</p>
+                <p class="body">{{ brand.name }} makes it easy to start up a room, add your friends, and browse the web</p>
                 <div class="login" v-if=!token>
                     <Button type="discord" :href=redirectUrl icon="/icons/discord-white.svg" hover="/icons/discord-colour.svg">
                         Login with Discord
                     </Button>
                 </div>
                 <div class="continue" v-else>
-                    <Button href="/home" icon="/icons/user-white.svg" hover="/icons/user.svg">Continue to Cryb</Button>
+                    <Button href="/home" icon="/icons/user-white.svg" hover="/icons/user.svg">Continue to {{ brand.name }}</Button>
                 </div>
             </div>
         </div>
@@ -22,6 +22,8 @@
 </template>
 <script>
     import { mapGetters } from 'vuex'
+    
+    import brand from '~/brand/config'
 
     import Button from '~/components/button'
 
@@ -36,6 +38,11 @@
         },
         layout: 'logged-out',
         middleware: 'logged-out',
+        data() {
+            return {
+                ...brand
+            }
+        },
         components: {
             Button
         }
