@@ -10,7 +10,6 @@ export default {
     ],
     env: {
         WS_URL: process.env.API_WS_URL,
-        APERTURE_WS_URL: process.env.APERTURE_WS_URL,
         
         BASE_WEB_URL: process.env.WEB_BASE_URL,
         SHOW_PLAYER_DEVTOOLS: process.env.NODE_ENV === 'development'
