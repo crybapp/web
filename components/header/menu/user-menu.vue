@@ -64,6 +64,9 @@
                     this.$store.commit('handleRoom', null)
                 } catch(error) {
                     console.error(error)
+
+                    if(error && error.response && error.response.status === 410)
+                        this.$store.commit('handleRoom', null)
                 }
 
                 this.leavingRoom = false

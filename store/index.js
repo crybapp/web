@@ -449,10 +449,10 @@ export const actions = {
             commit('handleSelfUser', user)
             commit('handleUserId', user.id)
         } catch(error) {
+            console.error(error)
+
             if(error && error.response && error.response.status === 401)
                 commit('logout')
-
-            console.error(error)
         }
     },
 
@@ -472,6 +472,9 @@ export const actions = {
             commit('handleRoom', null)
         } catch(error) {
             console.error(error)
+
+            if(error && error.response && error.response.status === 410)
+                commit('handleRoom', null)
         }
     },
 
