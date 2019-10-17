@@ -163,6 +163,10 @@
             if(typeof document.addEventListener !== 'undefined' && hidden !== undefined)
                 document.addEventListener(visibilityChange, () => this.handleVisibilityChange(hidden), false)
             
+
+            if(this.apertureWs && this.apertureToken)
+                this.playStream()
+
             this.$store.subscribe(({ type }, { stream }) => {
                 switch(type) {
                     case 'updateAperture':
