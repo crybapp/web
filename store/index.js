@@ -47,7 +47,7 @@ export const getters = {
     ws: ({ ws }) => ws
 }
 
-export const state = () => ({
+const initialState = {
     user: null,
     userId: null,
 
@@ -70,6 +70,10 @@ export const state = () => ({
     wsHeartbeat: null,
     wsReconnect: null,
     wsReconnectInterval: 5000
+}
+
+export const state = () => ({
+    ...initialState
 })
 
 export const mutations = {
@@ -430,7 +434,7 @@ export const mutations = {
         if(_state.ws)
             this.commit('disconnectWebSocket')
 
-        const state = state(), SAFE_KEYS = []
+        const state = {...initialState}, SAFE_KEYS = []
         Object.keys(state).forEach(key =>
             SAFE_KEYS.indexOf(key) === -1 ?
             _state[key] = state[key] :
