@@ -4,8 +4,7 @@
             Portal ID: {{ portal.id }}<br>
             Portal Status: {{ portal.status }}
         </p>
-        <canvas class="player-stream" ref="stream"></canvas>
-        <textarea class='keyboard-capture' ref='keyboard' @keydown=didKeyDown @keyup=didKeyUp  @mousemove=didMouseMove @mousedown=didMouseDown @mouseup=didMouseUp @mousewheel=didMouseWheel @contextmenu=handleRightClick></textarea>
+        <canvas class="player-stream" ref="stream" tabindex="1" @keydown=didKeyDown @keyup=didKeyUp @mousemove=didMouseMove @mousedown=didMouseDown @mouseup=didMouseUp @mousewheel=didMouseWheel @contextmenu=handleRightClick></canvas>
         <div class="player-tooltips" v-if=showMutedPopup>
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
@@ -33,10 +32,14 @@
             },
 
             streamWidth() {
-                return 1280
+                if(!this.player) return 1280
+
+                return this.player.video.destination.width
             },
             streamHeight() {
-                return 720
+                if(!this.player) return 720
+
+                return this.player.video.destination.height
             },
 
             showPlayerDevtools() {
@@ -58,8 +61,9 @@
             playStream() {
                 if(typeof window === 'undefined') return
 
-                const player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, { canvas: this.$refs.stream })
-                console.log(player)
+                if(this.player) this.player.destroy()
+
+                this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, { canvas: this.$refs.stream })
             },
 
             handleVisibilityChange(hidden) {
@@ -131,11 +135,10 @@
             },
             calculateXPos(event) {
                 const { clientX, srcElement: elem } = event,
-                    { width: clientWidth } = this.$refs.stream.getBoundingClientRect(),
-                    { width: parentWidth } = elem.parentElement.getBoundingClientRect(),
-                    xPos = clientX - ((parentWidth - clientWidth) / 2)
+                    rect = elem.getBoundingClientRect(),
+                    xPos = clientX - rect.left /* + (elem.clientHeight / 2) */
 
-                return Math.round(this.streamWidth * (xPos / clientWidth))
+                return Math.round(this.streamWidth * (xPos / elem.clientWidth))
             },
             calculateYPos(event) {
                 const { clientY, srcElement: elem } = event,
@@ -163,6 +166,10 @@
             if(typeof document.addEventListener !== 'undefined' && hidden !== undefined)
                 document.addEventListener(visibilityChange, () => this.handleVisibilityChange(hidden), false)
             
+
+            if(this.apertureWs && this.apertureToken)
+                this.playStream()
+
             this.$store.subscribe(({ type }, { stream }) => {
                 switch(type) {
                     case 'updateAperture':
@@ -172,8 +179,8 @@
                 }
             })
 
-            if(this.$refs.keyboard)
-                this.$refs.keyboard.onpaste = this.didPaste
+            if(this.$refs.stream)
+                this.$refs.stream.onpaste = this.didPaste
         },
         components: {
             Button

@@ -85,9 +85,11 @@ p.player-dev {
 
 canvas.player-stream {
     position: fixed;
+
+    outline: none;
     
-    left: 50%;
     top: 50%;
+    left: 50%;
     max-width: 100%;
     max-height: 100%;
     

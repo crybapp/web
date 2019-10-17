@@ -387,13 +387,18 @@ div.header-menu a.menu-option-wrapper.disabled {
     cursor: default
 }
 
-div.header-menu div.menu-section {
-    border-bottom: 1.5px rgba(112, 128, 144, 0.5) solid
-}
-
 div.header-menu div.menu-section:not(:first-child):first-of-type {
     border-top: 1.5px rgba(112, 128, 144, 0.5) solid
 }
+
+div.header-menu div.menu-section:not(:last-child) {
+/* div.header-menu div.menu-section { */
+    border-bottom: 1.5px rgba(112, 128, 144, 0.5) solid
+}
+
+/* div.header-menu div.menu-section:last-child {
+    border-bottom: none
+} */
 
 ::selection {
     background: #e4e4e4
