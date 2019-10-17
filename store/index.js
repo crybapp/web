@@ -230,7 +230,7 @@ export const mutations = {
         state.users[user.id] = user
         
         if(state.room)
-            if(state.room.indexOf(user.id) === -1)
+            if(state.room.members.indexOf(user.id) === -1)
                 state.room.members.push(user)
     },
     handleUserLeave(state, { u: userId }) {
