@@ -6,11 +6,11 @@
 
 export default {
 	// The name of the service (i.e. 'Cryb')
-	name: 'Cryb',
+	name: process.env.BRAND_NAME,
 	
 	// The YouTube ID for the landing video
-	landing_video_id: '-eUJgIrWONo',
+	landing_video_id: process.env.BRAND_LANDING_VIDEO_ID,
 
 	// Optional: Google Analytics Tracking
-	// ga_tracking_id: ''
+	// ga_tracking_id: process.env.BRAND_GA_TRACKING_ID
 }
