@@ -4,8 +4,7 @@
             Portal ID: {{ portal.id }}<br>
             Portal Status: {{ portal.status }}
         </p>
-        <canvas class="player-stream" ref="stream"></canvas>
-        <textarea class='keyboard-capture' ref='keyboard' @keydown=didKeyDown @keyup=didKeyUp  @mousemove=didMouseMove @mousedown=didMouseDown @mouseup=didMouseUp @mousewheel=didMouseWheel @contextmenu=handleRightClick></textarea>
+        <canvas class="player-stream" ref="stream" tabindex="1" @keydown=didKeyDown @keyup=didKeyUp @mousemove=didMouseMove @mousedown=didMouseDown @mouseup=didMouseUp @mousewheel=didMouseWheel @contextmenu=handleRightClick></canvas>
         <div class="player-tooltips" v-if=showMutedPopup>
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
@@ -136,11 +135,10 @@
             },
             calculateXPos(event) {
                 const { clientX, srcElement: elem } = event,
-                    { width: clientWidth } = this.$refs.stream.getBoundingClientRect(),
-                    { width: parentWidth } = elem.parentElement.getBoundingClientRect(),
-                    xPos = clientX - ((parentWidth - clientWidth) / 2)
+                    rect = elem.getBoundingClientRect(),
+                    xPos = clientX - rect.left /* + (elem.clientHeight / 2) */
 
-                return Math.round(this.streamWidth * (xPos / clientWidth))
+                return Math.round(this.streamWidth * (xPos / elem.clientWidth))
             },
             calculateYPos(event) {
                 const { clientY, srcElement: elem } = event,
@@ -181,8 +179,8 @@
                 }
             })
 
-            if(this.$refs.keyboard)
-                this.$refs.keyboard.onpaste = this.didPaste
+            if(this.$refs.stream)
+                this.$refs.stream.onpaste = this.didPaste
         },
         components: {
             Button
