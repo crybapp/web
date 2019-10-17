@@ -26,6 +26,11 @@
                 <h1 class="title">We're {{ portalStatus }} your browser now</h1>
                 <p class="body">Normally this takes a couple seconds, hang tight!<br>If you have any issues either refresh the page, ask the room owner to restart the browser or contact support.</p>
             </div>
+            <!-- The portal is created and the stream between the client and the aperture is being established -->
+            <div class="player-msg" v-else-if="portalStatus === 'open'">
+                <h1 class="title">Strap in...</h1>
+                <p class="body">Everything is ready - we're just getting the stream between you and the VM started!</p>
+            </div>
             <div class="loading-wrapper">
                 <div class="loading"></div>
             </div>
