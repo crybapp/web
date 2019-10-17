@@ -329,7 +329,7 @@ export const mutations = {
 
             const { op, d, t } = json
 
-            if(op !== 11)
+            if(op !== 11 && !isProduction())
                 console.log(op, d, t)
 
             if(op === 0) {
