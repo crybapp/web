@@ -12,12 +12,10 @@ export const getters = {
     onlineUserIds: ({ onlineUsers }) => onlineUsers,
     onlineUsers: ({ users, onlineUsers }) => {
         return onlineUsers ? [
-            ...new Set(onlineUsers.map(id => users[id] || null
-                .filter(
-                    (user, i) =>
-                        user !== null &&
-                        onlineUsers.indexOf(user.id) >= i)
-                    )
+            ...new Set(
+                onlineUsers
+                    .map(id => users[id] || null)
+                    .filter((user, i) => user !== null && onlineUsers.indexOf(user.id) >= i)
             )
         ] : []
     },
@@ -262,6 +260,7 @@ export const mutations = {
      */
     setTypingStatus(state, typing) {
         if(!state.ws) return
+        if(state.ws.readyState !== state.ws.OPEN) return
 
         state.ws.send(JSON.stringify({ op: 0, d: { typing }, t: 'TYPING_UPDATE' }))
     },
@@ -401,10 +400,7 @@ export const mutations = {
             if(!state.ws) return this.commit('invalidateHeartbeat')
             if(state.ws.readyState !== state.ws.OPEN) return this.commit('invalidateHeartbeat')
 
-            state.ws.send(JSON.stringify({
-                op: 1,
-                d: {}
-            }))
+            state.ws.send(JSON.stringify({ op: 1, d: {} }))
         }, interval)
     },
     invalidateHeartbeat(state) {
