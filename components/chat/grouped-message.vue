@@ -42,19 +42,6 @@
                 return this.author.id === this.controllerId
             }
         },
-        // data() {
-            // return {
-                // timestamp: formatDistance(new Date(this.group.createdAt || new Date()), new Date(), { addSuffix: true }),
-                // dateTimer: null
-            // }  
-        // },
-        // mounted() {
-            // this.dateTimer = setInterval(() => this.timestamp = formatDistance(new Date(this.group.createdAt), new Date(), { addSuffix: true }), 1000)
-        // },
-        // beforeDestroy() {
-            // clearInterval(this.dateTimer)
-            // this.dateTimer = null
-        // },
         components: {
             Message
         },

@@ -29,9 +29,7 @@
         },
         data() {
             return {
-                loading: false,
-                // timestamp: formatDistance(new Date(this.message.createdAt || new Date()), new Date()),
-                // dateTimer: null
+                loading: false
             }  
         },
         methods: {
@@ -60,13 +58,6 @@
                 }
             }
         },
-        // mounted() {
-        //     this.dateTimer = setInterval(() => this.timestamp = formatDistance(new Date(this.message.createdAt), new Date()), 1000)
-        // },
-        // beforeDestroy() {
-        //     clearInterval(this.dateTimer)
-        //     this.dateTimer = null
-        // },
         props: [
             'message'
         ]

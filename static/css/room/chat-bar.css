@@ -1,10 +1,10 @@
 div.chat div.chat-bar-wrapper {
     position: absolute;
-    bottom: 0px;
-    height: 80px;
-    /* width: 100%; */
-    right: 0;
+
     left: 0;
+    right: 0;
+    height: 80px;
+    bottom: 0px;
 
     border-top: rgba(112, 128, 144, 0.25) 1px solid
 }
@@ -54,9 +54,8 @@ div.chat-bar-wrapper div.send-button.is-enabled {
     background: white
 }
 
-div.chat-bar-wrapper div.send-button.is-enabled:hover {
-    /* add cool animations here */
-}
+/* Add animations */
+div.chat-bar-wrapper div.send-button.is-enabled:hover {}
 
 div.chat-bar-wrapper div.send-button.disabled {
     opacity: 0.65;

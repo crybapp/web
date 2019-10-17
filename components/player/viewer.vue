@@ -90,7 +90,6 @@
             didKeyUp(event) {
                 const { keyCode, ctrlKey, shiftKey } = event
 
-                // needs persistance
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_UP')
             },
 
@@ -136,14 +135,14 @@
             calculateXPos(event) {
                 const { clientX, srcElement: elem } = event,
                     rect = elem.getBoundingClientRect(),
-                    xPos = clientX - rect.left /* + (elem.clientHeight / 2) */
+                    xPos = clientX - rect.left
 
                 return Math.round(this.streamWidth * (xPos / elem.clientWidth))
             },
             calculateYPos(event) {
                 const { clientY, srcElement: elem } = event,
                     rect = elem.getBoundingClientRect(),
-                    yPos = clientY - rect.top /* + (elem.clientHeight / 2) */
+                    yPos = clientY - rect.top
 
                 return Math.round(this.streamHeight * (yPos / elem.clientHeight))
             }
@@ -173,7 +172,7 @@
             this.$store.subscribe(({ type }, { stream }) => {
                 switch(type) {
                     case 'updateAperture':
-                        this.$nextTick(this.playStream) // Play the video with the attached stream
+                        this.$nextTick(this.playStream)
 
                         break
                 }

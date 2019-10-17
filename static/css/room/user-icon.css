@@ -1,16 +1,19 @@
 div.user-icon div.user-name-wrapper {
+    position: absolute;
+
+    background-color: white;
+
     margin: 0;
     width: 100px;
-    text-align: center;
-    background-color: white;
-    /* padding-top: 5px; */
-    /* padding-bottom: 5px; */
-    font-weight: bold;
-    border-radius: 999px;
-    position: absolute;
-    box-shadow: 0 0 0px 5px black;
     bottom: 1.5em;
+
     opacity: 0;
+    box-shadow: 0 0 0px 5px black;
+
+    font-weight: bold;
+    text-align: center;
+    border-radius: 999px;
+
     transition: all 0.2s;
 }
 

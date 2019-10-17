@@ -1,11 +1,11 @@
 div.content div.watch div.chat {
     position: absolute;
-    bottom: 0px;
-    /* width: calc(25% - 1px); */
-    right: 0;
-    /* left: 75%; */
-    width: 340px;
+
     top: 0px;
+    right: 0;
+    bottom: 0px;
+    width: 340px;
+
     border-left: rgba(112, 128, 144, 0.25) 1px solid;
 }
 
