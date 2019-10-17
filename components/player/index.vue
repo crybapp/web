@@ -70,5 +70,5 @@
     }
 </script>
 <style src="~/static/css/room/player.css">
-/* Fix scoping */
+/* Manage scoping properly */
 </style>

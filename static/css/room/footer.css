@@ -18,28 +18,14 @@ div.content div.watch div.player-footer {
 
 div.player-footer div.user-icons {
     display: flex;
-    /* position: absolute; */
-    justify-content: stretch;
-    /* top: 50%; */
-    /* left: 50%; */
+
     width: fit-content;
-    /* height: fit-content; */
-    /* transform: translate(-50%, -50%); */
-    /* width: 100%; */
-    /* flex-wrap: unset; */
-    /* padding-left: 3em; */
-    /* padding-right: 3em; */
-    /* margin-left: 2em; */
-    /* margin-right: 2em; */
-    /* margin: 3em; */
+    justify-content: stretch;
+
     margin: auto;
-    /* left: 0; */
-    padding-left: auti;
-    align-items: flex-start;
     padding: 40px;
-    /* z-index: 5; */
+
     align-items: center;
-    /* vertical-align: middle; */
 }
 
 div.user-icons div.user-icon {
@@ -53,10 +39,6 @@ div.user-icons div.user-icon {
 div.user-icons div.user-icon:first-child {
     margin-left: 0
 }
-
-/* div.user-icons div.user-icon:last-child {
-    margin-right: 2em
-} */
 
 div.user-icon.offline img.user-icon-avatar {
     opacity: 0.25;
@@ -94,20 +76,24 @@ img.user-icon:hover {
 
 div.user-icon div.user-control-indicator {
     position: absolute;
-    bottom: 2.15em;
+    display: flex;
+
     width: 40px;
     height: 40px;
+    bottom: 2.15em;
+
     margin-left: 60px;
-    /* border-radius: 12.5px; */
     border-radius: 999px;
+
     background-color: white;
     box-shadow: 0 0 0px 6px black;
-    transform: scale(0);
+
     cursor: pointer;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    transform: scale(0);
+    justify-content: center;
+    
+    transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28)
 }
 
 div.user-icon div.user-control-indicator.visible {
@@ -115,8 +101,7 @@ div.user-icon div.user-control-indicator.visible {
 }
 
 div.user-icon div.user-control-indicator.non-interactable {
-    cursor: default;
-    /* pointer-events: all */
+    cursor: default
 }
 
 div.user-control-indicator img.user-control-icon {

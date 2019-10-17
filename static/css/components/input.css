@@ -44,28 +44,17 @@ div.input input.input-inner {
 }
 
 a.input-wrapper div.input:hover, input.input:focus div.input {
-    /* color: black;
-    background-color: white; */
     box-shadow: 0 0 0 1px black;
-    /* border-color: black */
 }
 
 a.input-wrapper div.input.discord {
     background-color: #7289DA;
-    box-shadow: 0 0 0 1px #7289DA;
-
-    /* margin-top: 1em */
+    box-shadow: 0 0 0 1px #7289DA
 }
 
-/* a.input.discord img.icon {
-    filter: invert(1)
-} */
-
 a.input-wrapper div.input.discord:hover {
-    background-color: white;
     color: #7289DA;
-
-    /* margin-top: 1em */
+    background-color: white
 }
 
 div.input.disabled {
