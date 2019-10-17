@@ -9,5 +9,8 @@ export default {
 	name: 'Cryb',
 	
 	// The YouTube ID for the landing video
-	landing_video_id: '-eUJgIrWONo'
+	landing_video_id: '-eUJgIrWONo',
+
+	// Optional: Google Analytics Tracking
+	// ga_tracking_id: ''
 }

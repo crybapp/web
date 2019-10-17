@@ -3,6 +3,7 @@
         <Header :dark=isDarkTheme />
         <div class="content" :class="{ 'is-dark': isDarkTheme }">
             <nuxt />
+            <GoogleAnalytics v-if=brand.ga_tracking_id />
         </div>
     </div>
 </template>
@@ -13,9 +14,17 @@
     import brand from '~/brand/config'
 
     import Header from '~/components/header/index'
+    import GoogleAnalytics from '~/components/analytics'
 
     export default {
         head() {
+            const script = []
+
+            if(this.brand.ga_tracking_id)
+                script.push({
+                    src: `https://www.googletagmanager.com/gtag/js?id=${this.brand.ga_tracking_id}`
+                })
+
             return {
                 titleTemplate: chunk => this.$route.name === 'room' && this.room ? `${this.room.name} - ${this.brand.name}` : (chunk ? `${chunk} - ${this.brand.name}` : this.brand.name),
                 meta: [
@@ -29,9 +38,7 @@
                     { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
                 ],
                 script: [
-                    {
-                        src: 'https://www.googletagmanager.com/gtag/js?id=UA-146441740-1'
-                    }
+                    ...script
                 ]
             }
         },
@@ -47,7 +54,8 @@
             }
         },
         components: {
-            Header
+            Header,
+            GoogleAnalytics
         }
     }
 </script>
