@@ -230,7 +230,8 @@ export const mutations = {
         state.users[user.id] = user
         
         if(state.room)
-            state.room.members.push(user)
+            if(state.room.indexOf(user.id) === -1)
+                state.room.members.push(user)
     },
     handleUserLeave(state, { u: userId }) {
         if(state.userId === userId) return
@@ -276,7 +277,8 @@ export const mutations = {
         if(userId === state.userId) return
 
         if(presence === 'online')
-            state.onlineUsers.push(userId)
+            if(state.onlineUsers.indexOf(userId) === -1)
+                state.onlineUsers.push(userId)
         else
             state.onlineUsers.splice(state.onlineUsers.indexOf(userId), 1)
     },

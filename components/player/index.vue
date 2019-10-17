@@ -1,6 +1,6 @@
 <template>
     <div class="player-wrapper" v-if=room>
-        <div class="player stream-loading" v-if="portalStatus !== 'open'">
+        <div class="player stream-loading" v-if=!showViewer>
             <video class="static-placeholder" src="https://cryb.nyc3.cdn.digitaloceanspaces.com/static-assets/static-placeholder.mp4" autoplay muted loop></video>
             <p class="player-dev" v-if=showPlayerDevtools>
                 Portal ID: {{ portal.id || 'N/A' }}<br>
@@ -41,7 +41,14 @@
 
     export default {
         computed: {
-            ...mapGetters(['user', 'room', 'portal', 'stream']),
+            ...mapGetters(['user', 'room', 'portal', 'stream', 'apertureWs', 'apertureToken']),
+
+            showViewer() {
+                return this.portalStatus === 'open' && this.apertureWs && this.apertureToken
+            },
+            showPlayerDevtools() {
+                return process.env.SHOW_PLAYER_DEVTOOLS
+            },
 
             portalStatus() {
                 return this.portal.status
@@ -49,13 +56,6 @@
 
             isSelfRoomOwner() {
                 return this.room.owner.id === this.user.id
-            },
-            isPortalOpen() {
-                return this.portal.status === 'open'
-            },
-
-            showPlayerDevtools() {
-                return process.env.SHOW_PLAYER_DEVTOOLS
             }
         },
         components: {
