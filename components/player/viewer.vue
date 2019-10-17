@@ -33,10 +33,14 @@
             },
 
             streamWidth() {
-                return 1280
+                if(!this.player) return 1280
+
+                return this.player.video.destination.width
             },
             streamHeight() {
-                return 720
+                if(!this.player) return 720
+
+                return this.player.video.destination.height
             },
 
             showPlayerDevtools() {
@@ -58,8 +62,9 @@
             playStream() {
                 if(typeof window === 'undefined') return
 
-                const player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, { canvas: this.$refs.stream })
-                console.log(player)
+                if(this.player) this.player.destroy()
+
+                this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, { canvas: this.$refs.stream })
             },
 
             handleVisibilityChange(hidden) {
