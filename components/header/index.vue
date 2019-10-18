@@ -9,7 +9,7 @@
             <RoomMenu :dark=dark ref="roomMenu" />
         </div>
         <div class="right" v-if=user>
-            <img :src=user.icon class="profile-image" @click=toggleUserMenu()>
+            <img :src=userIcon v-if=userIcon class="profile-image" @click=toggleUserMenu()>
             <UserMenu :dark=dark ref="userMenu" />
         </div>
         <div class="right" v-else-if=token>
@@ -33,6 +33,11 @@
                     return this.room.name
 
                 return null
+            },
+            userIcon() {
+                if(!this.user) return null
+
+                return this.user.icon.replace(".gif", ".png")
             },
 
             isUserMenuVisible() {
