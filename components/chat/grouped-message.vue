@@ -1,6 +1,7 @@
 <template>
-    <div class="grouped-chat-wrapper" v-if=author>
-        <img :src=author.icon class="chat-author-avatar" :class="{ 'has-controller': hasController }">
+    <div class="grouped-chat-wrapper" v-if=author @mouseover="hover = true" @mouseleave="hover = false">
+        <img v-if="hover" :src=author.icon class="chat-author-avatar" :class="{ 'has-controller': hasController }">
+        <img v-else :src=getStaticUserIcon class="chat-author-avatar" :class="{ 'has-controller': hasController }">
         <div class="grouped-chat-messages-content">
             <div class="grouped-chat-messages-meta">
                 <p class="chat-author-name">{{ author.name }}
@@ -19,6 +20,11 @@
     import Message from './message'
 
     export default {
+        data() {
+            return {
+                hover: false,
+            }
+        },
         computed: {
             ...mapGetters(['users', 'timestamps', 'userId', 'controllerId', 'sendingMessages']),
 
@@ -40,7 +46,10 @@
                 if(!this.author) return false
 
                 return this.author.id === this.controllerId
-            }
+            },
+            getStaticUserIcon() {
+                return this.author.icon.replace(".gif", ".png")
+            },
         },
         components: {
             Message
