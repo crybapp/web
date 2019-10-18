@@ -110,7 +110,7 @@ div.header div.gradient:hover + img.logo {
 
 div.header img.profile-image {
     cursor: pointer;
-    border-radius: 9999px;
+    border-radius: 50%;
     width: 32px;
     height: 32px;
     background-color: rgba(112, 128, 144, 0.25);
