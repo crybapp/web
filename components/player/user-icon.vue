@@ -1,7 +1,6 @@
 <template>
     <div class="user-icon" :class="{ 'passable': canPassControl, 'offline': !isUserOnline, 'has-control': hasControl }" v-if=member @click=didClickUserIcon() :title=hoverTitle @mouseover="hover = true" @mouseleave="hover = false">
-        <img v-if="hover" :src=member.icon :alt=member.name class="user-icon-avatar">
-        <img v-else :src=getStaticUserIcon :alt=member.name class="user-icon-avatar">
+        <img :src=userIcon v-if=userIcon class="user-icon-avatar" >
         <div class="user-name-wrapper">
             <p class="user-name">{{ member.name }}</p>
         </div>
@@ -15,13 +14,16 @@
 	import { mapGetters } from 'vuex'
 
     export default {
-        data() {
-            return {
-                hover: false,
-            }
-        },
         computed: {
             ...mapGetters(['room', 'userId', 'controllerId', 'onlineUserIds']),
+
+            userIcon() {
+                if(!this.member) return null
+
+                if(this.hover) return this.member.icon
+                
+                return this.member.icon.replace(".gif", ".png")
+            },
 
             hoverTitle() {
                 if(!this.interactable) return `${this.isUserSelf ? 'You have' : `${this.member.name} has`} the controller`
@@ -71,10 +73,12 @@
                 if(!this.controllerId) return false
 
                 return this.userId === this.controllerId
-            },
-            getStaticUserIcon() {
-                return this.member.icon.replace(".gif", ".png")
-            },
+            }
+        },
+        data() {
+            return {
+                hover: false,
+            }
         },
         methods: {
             didClickUserIcon() {
