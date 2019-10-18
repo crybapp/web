@@ -3,6 +3,11 @@ div.center {
     max-width: 100%
 }
 
+div.center:not(.has-landing-video) {
+    max-width: 60%;
+    width: fit-content
+}
+
 div.landing div.left, div.landing div.right {
     position: absolute;
 
