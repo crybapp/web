@@ -40,12 +40,21 @@ div.input input.input-inner {
     padding: 0;
     outline: 0;
 
+    background-color: rgba(0, 0, 0, 0);
+
     font-size: 16px;
 }
 
-a.input-wrapper div.input:hover, input.input:focus div.input {
+a.input-wrapper div.input:hover {
     box-shadow: 0 0 0 1px black;
+    /* background-color: #f7f7f7; */
+    /* box-shadow: 0px 4px 10px #00000017 !important */
 }
+
+/* a.input-wrapper div.input:active, input.input:focus div.input {
+    background-color: #ececec;
+    box-shadow: 0px 6px 15px #00000017 !important
+} */
 
 a.input-wrapper div.input.discord {
     background-color: #7289DA;
