@@ -32,7 +32,7 @@
                     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
                     { name: 'description', content: `${this.brand.name} makes it easy to enjoy what you love with your friends` },
                     { name: 'theme-color', content: '#000000' },
-                    { property: 'og:image', content: '/img/cryb-icon-hq.png'}
+                    { property: 'og:image', content: '/img/icon-hq.png'}
                 ],
                 link: [
                     { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
@@ -59,5 +59,5 @@
         }
     }
 </script>
-<style src="~/static/css/cryb-master.css"></style>
-<style src="~/static/css/cryb-components.css"></style>
+<style src="~/static/css/master.css"></style>
+<style src="~/static/css/components.css"></style>

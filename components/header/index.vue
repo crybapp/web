@@ -3,7 +3,7 @@
         <div class="left">
             <nuxt-link :to="shouldShowRoomMenu ? '#room-menu' : (token ? '/home' : '/')" @click.native=toggleRoomMenu()>
                 <div class="gradient loading"></div>
-                <img :src="`/img/cryb-logo${dark ? '-light' : ''}.svg`" class="logo" />
+                <img :src="`/img/logo${dark ? '-light' : ''}.svg`" class="logo" />
             </nuxt-link>
             <h1 class="title" v-if=title>{{ title }}</h1>
             <RoomMenu :dark=dark ref="roomMenu" />

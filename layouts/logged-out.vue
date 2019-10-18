@@ -43,5 +43,5 @@
         }
     }
 </script>
-<style src="~/static/css/cryb-master.css"></style>
-<style src="~/static/css/cryb-components.css"></style>
+<style src="~/static/css/master.css"></style>
+<style src="~/static/css/components.css"></style>
