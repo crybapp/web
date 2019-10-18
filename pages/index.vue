@@ -2,7 +2,7 @@
     <div class="landing">
         <div :class="{ left: hasLandingVideo, 'has-landing-video': hasLandingVideo }">
             <div class="center">
-                <img src="/img/cryb-logo.svg" class="logo">
+                <img src="/img/logo.svg" class="logo">
                 <h1 class="title">Share the internet with your friends</h1>
                 <p class="body">{{ brand.name }} makes it easy to start up a room, add your friends, and browse the web</p>
                 <div class="login" v-if=!token>
@@ -52,4 +52,4 @@
         }
     }
 </script>
-<style src="~/static/css/cryb-landing.css" scoped></style>
+<style src="~/static/css/landing.css" scoped></style>

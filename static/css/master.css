@@ -92,8 +92,8 @@ div.header div.gradient {
 
     mask-repeat: round;
     -webkit-mask-repeat: round;
-    mask-image: url('/img/cryb-logo.svg');
-    -webkit-mask-image: url('/img/cryb-logo.svg');
+    mask-image: url('/img/logo.svg');
+    -webkit-mask-image: url('/img/logo.svg');
     
     opacity: 0;
 
