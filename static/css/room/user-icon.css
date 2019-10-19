@@ -12,7 +12,7 @@ div.user-icon div.user-name-wrapper {
 
     font-weight: bold;
     text-align: center;
-    border-radius: 999px;
+    border-radius: 50px;
 
     transition: all 0.2s;
 }
