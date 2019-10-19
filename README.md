@@ -2,7 +2,7 @@
 
 _**Web** - Web client_
 
-![GitHub contributors](https://img.shields.io/github/contributors/crybapp/web) ![GitHub](https://img.shields.io/github/license/crybapp/web) [![PayPal Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/williamsthing)
+[![GitHub contributors](https://img.shields.io/github/contributors/crybapp/web)](https://github.com/crybapp/web/graphs/contributors) [![License](https://img.shields.io/github/license/crybapp/web)](https://github.com/crybapp/web/blob/master/LICENSE) [![PayPal Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/williamsthing)
 
 ## Docs
 * [Info](#info)
@@ -14,7 +14,7 @@ _**Web** - Web client_
     * [Running the app locally](#running-the-app-locally)
         * [Background services](#background-services)
         * [Starting @cryb/web](#starting-@cryb/web)
-* [Questions / Issues](#questions-/-issues)
+* [Questions / Issues](#questions--issues)
 
 ## Info
 `@cryb/web` is the primary web client for interacting with `@cryb/api` and `@cryb/aperture`.
@@ -89,4 +89,4 @@ yarn dev
 
 ## Questions / Issues
 
-If you have an issues with `@cryb/web`, please either open a GitHub issue, or contact a maintainer.
+If you have an issues with `@cryb/web`, please either open a GitHub issue, or contact a maintainer or join the [Cryb Discord Server](https://discord.gg/ShTATH4) and ask in #tech-support.
