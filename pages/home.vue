@@ -145,4 +145,5 @@
         }
     }
 </script>
+
 <style src="~/static/css/home.css" scoped></style>

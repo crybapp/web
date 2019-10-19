@@ -55,37 +55,23 @@ The following services need to be installed for `@cryb/web` to function:
 We recommend that you run the following services alongside `@cryb/web`, but it's not required.
 * `@cryb/aperture`
 
-You also need to install the required dependencies, by running either:
+You also need to install the required dependencies by running `yarn`.
 
-```
-npm install
-```
-or
-```
-yarn
-```
+Ensure that `.env.example` is either copied and renamed to `.env`, or is simply renamed to `.env`.
 
-Ensure that `.env-example` is either copied and renamed to `.env`, or is simply renamed to `.env`.
-
-In this file, you'll need some values. Documentation is available in the `.env-example` file.
+In this file, you'll need some values. Documentation is available in the `.env.example` file.
 
 ### Running the app locally
 
 #### Background Services
-Make sure that you have installed `@cryb/api`, and that it is running on port 4000.
+Make sure that you have installed `@cryb/api`.
 
 If you're developing a feature that requires the VM infrastructure, then make sure `@cryb/aperture` is running.
 
 #### Starting @cryb/web
-To run `@cryb/web` in development mode, run either:
+To run `@cryb/web` in development mode, run `yarn dev`.
 
-```
-npm run dev
-```
-or
-```
-yarn dev
-```
+It is recommended that in production you run `yarn build`, then `yarn start`.
 
 ## Questions / Issues
 
