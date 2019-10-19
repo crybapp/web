@@ -75,4 +75,4 @@ It is recommended that in production you run `yarn build`, then `yarn start`.
 
 ## Questions / Issues
 
-If you have an issues with `@cryb/web`, please either open a GitHub issue, or contact a maintainer or join the [Cryb Discord Server](https://discord.gg/ShTATH4) and ask in #tech-support.
+If you have an issues with `@cryb/web`, please either open a GitHub issue, contact a maintainer or join the [Cryb Discord Server](https://discord.gg/ShTATH4) and ask in #tech-support.
