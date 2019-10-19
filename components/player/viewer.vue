@@ -60,10 +60,14 @@
 
             playStream() {
                 if(typeof window === 'undefined') return
+                if(!JSMpeg) return // TODO: Add a popup that allows the user to retry playing the stream once the jsmpeg script has loaded
 
                 if(this.player) this.player.destroy()
 
-                this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, { canvas: this.$refs.stream })
+                this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
+                    canvas: this.$refs.stream,
+                    pauseWhenHidden: false
+                })
             },
 
             handleVisibilityChange(hidden) {
