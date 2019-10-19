@@ -33,6 +33,8 @@ div.player div.player-msg {
 
     margin: 0;
     transform: translate(-50%, -50%);
+
+    padding:5%;
 }
 
 div.player-msg h1.title {
@@ -159,4 +161,24 @@ div.player-tooltip p.player-tooltip-body {
 
 div.player-tooltip a.player-tooltip-action {
     color: black
+}
+
+/* Mobile adaptation */
+
+@media only screen and (max-width: 768px),(orientation: portrait) {
+
+    div.content div.watch div.player-wrapper {
+        width: 100%;
+        bottom: 60%;
+    }
+    
+}
+
+@media only screen and (max-width: 768px) and (orientation: landscape) {
+
+    div.content div.watch div.player-wrapper {
+        width: 100%;
+        bottom: 0;
+    }
+    
 }
