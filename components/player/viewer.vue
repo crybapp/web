@@ -88,14 +88,14 @@
             },
 
             didKeyDown(event) {
-	        event.preventDefault()        
-		const { keyCode, ctrlKey, shiftKey } = event
+                event.preventDefault()
+                const { keyCode, ctrlKey, shiftKey } = event
                 this.activeKeyEvent = event
 
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_DOWN')
             },
             didKeyUp(event) {
-		event.preventDefault()
+                event.preventDefault()
                 const { keyCode, ctrlKey, shiftKey } = event
 
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_UP')
@@ -114,7 +114,7 @@
             },
             didMouseUp(event) {
                 const { button } = event,
-                    { x, y } = this.calculatePos(event)
+                      { x, y } = this.calculatePos(event)
 
                 this.emitEvent({ x, y, button: button + 1 }, 'MOUSE_UP')
             },
