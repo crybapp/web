@@ -63,7 +63,11 @@
 
                 if(this.player) this.player.destroy()
 
-                this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, { canvas: this.$refs.stream })
+                this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, { 
+			canvas: this.$refs.stream,
+			videoBufferSize: process.env.VIDEO_BITRATE * 1024,
+			audioBufferSize: process.env.AUDIO_BITRATE * 1024 
+		})
             },
 
             handleVisibilityChange(hidden) {
@@ -82,35 +86,41 @@
             },
 
             didKeyDown(event) {
-                const { keyCode, ctrlKey, shiftKey } = event
+	        event.preventDefault()        
+		const { keyCode, ctrlKey, shiftKey } = event
                 this.activeKeyEvent = event
 
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_DOWN')
             },
             didKeyUp(event) {
+		event.preventDefault()
                 const { keyCode, ctrlKey, shiftKey } = event
 
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_UP')
             },
 
             didMouseMove(event) {
+		event.preventDefault()
                 const { x, y } = this.calculatePos(event)
 
                 this.emitEvent({ x, y }, 'MOUSE_MOVE')
             },
             didMouseDown(event) {
+		event.preventDefault()
                 const { button } = event,
                     { x, y } = this.calculatePos(event)
 
                 this.emitEvent({ x, y, button: button + 1 }, 'MOUSE_DOWN')
             },
             didMouseUp(event) {
+		event.preventDefault()
                 const { button } = event,
                     { x, y } = this.calculatePos(event)
 
                 this.emitEvent({ x, y, button: button + 1 }, 'MOUSE_UP')
             },
             didMouseWheel(event) {
+		event.preventDefault()
                 const { deltaX, deltaY } = event
 
                 this.emitEvent({ scrollUp: deltaY > 0 }, 'MOUSE_SCROLL')
