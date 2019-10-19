@@ -68,7 +68,7 @@
                     canvas: this.$refs.stream,
                     pauseWhenHidden: false,
                     videoBufferSize: process.env.VIDEO_BITRATE * 1024,
-			              audioBufferSize: process.env.AUDIO_BITRATE * 1024 
+                    audioBufferSize: process.env.AUDIO_BITRATE * 1024 
                 })
             },
 
