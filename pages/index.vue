@@ -1,8 +1,8 @@
 <template>
     <div class="landing">
-        <div class="left">
+        <div :class="{ left: hasLandingVideo, 'has-landing-video': hasLandingVideo }">
             <div class="center">
-                <img src="/img/cryb-logo.svg" class="logo">
+                <img src="/img/logo.svg" class="logo">
                 <h1 class="title">Share the internet with your friends</h1>
                 <p class="body">{{ brand.name }} makes it easy to start up a room, add your friends, and browse the web</p>
                 <div class="login" v-if=!token>
@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-        <div class="right">
+        <div class="right" v-if=hasLandingVideo>
             <iframe class="video" width="1920" height="1080" :src="`https://www.youtube.com/embed/${brand.landing_video_id}?controls=0&autoplay=1&loop=1&playlist=${brand.landing_video_id}`" frameborder="0" allow="accelerometer; autoplay; loop; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
@@ -34,7 +34,11 @@
             return { redirectUrl }
         },
         computed: {
-            ...mapGetters(['token'])
+            ...mapGetters(['token']),
+
+            hasLandingVideo() {
+                return this.brand.landing_video_id && this.brand.landing_video_id.length > 0
+            }
         },
         layout: 'logged-out',
         middleware: 'logged-out',
@@ -48,4 +52,4 @@
         }
     }
 </script>
-<style src="~/static/css/cryb-landing.css" scoped></style>
+<style src="~/static/css/landing.css" scoped></style>

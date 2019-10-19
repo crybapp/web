@@ -34,14 +34,10 @@ div.modal {
     height: fit-content;
 
     padding: 1.5em;
-    /* padding-top: 1.25em; */
-    /* padding-bottom: 1.25em; */
     z-index: 9999;
     
-    /* color: white;
-    background-color: black; */
-    background-color: white;
     color: black;
+    background-color: white;
 
     border: rgba(112, 128, 144, 0.25) 1px solid;
     border-radius: 10px;

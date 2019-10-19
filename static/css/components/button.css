@@ -72,20 +72,12 @@ div.content.is-dark div.button:not(.discord):not(.disabled):not(.loading):hover 
 
 a.button-wrapper div.button.discord {
     background-color: #7289DA;
-    box-shadow: 0 0 0 1px #7289DA;
-
-    /* margin-top: 1em */
+    box-shadow: 0 0 0 1px #7289DA
 }
 
-/* a.button.discord img.icon {
-    filter: invert(1)
-} */
-
 a.button-wrapper div.button.discord:not(.disabled):not(.loading):hover {
-    background-color: white;
     color: #7289DA;
-
-    /* margin-top: 1em */
+    background-color: white
 }
 
 a.button-wrapper div.button.loading {

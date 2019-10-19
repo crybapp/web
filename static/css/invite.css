@@ -13,11 +13,11 @@ div.invite-details {
 }
 
 img.invite-member-icon {
-    border-radius: 999px;
     height: 35px;
 
-    margin: auto;
-    /* margin-left: 0.75em */
+    border-radius: 50%;
+
+    margin: auto
 }
 
 div.invite-member-icons {

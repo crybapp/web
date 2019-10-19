@@ -28,7 +28,6 @@ div.player div.player-msg {
     top: 50%;
     left: 50%;
 
-    /* width: 80%; */
     width: fit-content;
     min-width: 70%;
 
@@ -66,7 +65,6 @@ p.player-dev {
 
     top: 0px;
     left: 15px;
-    /* left: 50%; */
     width: fit-content;
     max-width: 90%;
 
@@ -79,15 +77,13 @@ p.player-dev {
     pointer-events: none
 }
 
-/* p.player-dev:hover {
-    display: none
-} */
-
 canvas.player-stream {
     position: fixed;
+
+    outline: none;
     
-    left: 50%;
     top: 50%;
+    left: 50%;
     max-width: 100%;
     max-height: 100%;
     
@@ -159,7 +155,6 @@ div.player-tooltip p.player-tooltip-body {
     font-weight: 400;
 
     margin-top: 7.5px;
-    /* margin-bottom: 10px; */
 }
 
 div.player-tooltip a.player-tooltip-action {

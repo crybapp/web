@@ -1,6 +1,6 @@
 <template>
     <div class="player-wrapper" v-if=room>
-        <div class="player stream-loading" v-if="portalStatus !== 'open'">
+        <div class="player stream-loading" v-if=!showViewer>
             <video class="static-placeholder" src="https://cryb.nyc3.cdn.digitaloceanspaces.com/static-assets/static-placeholder.mp4" autoplay muted loop></video>
             <p class="player-dev" v-if=showPlayerDevtools>
                 Portal ID: {{ portal.id || 'N/A' }}<br>
@@ -26,6 +26,11 @@
                 <h1 class="title">We're {{ portalStatus }} your browser now</h1>
                 <p class="body">Normally this takes a couple seconds, hang tight!<br>If you have any issues either refresh the page, ask the room owner to restart the browser or contact support.</p>
             </div>
+            <!-- The portal is created and the stream between the client and the aperture is being established -->
+            <div class="player-msg" v-else-if="portalStatus === 'open'">
+                <h1 class="title">Strap in...</h1>
+                <p class="body">Everything is ready - we're just getting the stream between you and the VM started!</p>
+            </div>
             <div class="loading-wrapper">
                 <div class="loading"></div>
             </div>
@@ -41,7 +46,14 @@
 
     export default {
         computed: {
-            ...mapGetters(['user', 'room', 'portal', 'stream']),
+            ...mapGetters(['user', 'room', 'portal', 'stream', 'apertureWs', 'apertureToken']),
+
+            showViewer() {
+                return this.portalStatus === 'open' && this.apertureWs && this.apertureToken
+            },
+            showPlayerDevtools() {
+                return process.env.SHOW_PLAYER_DEVTOOLS
+            },
 
             portalStatus() {
                 return this.portal.status
@@ -49,13 +61,6 @@
 
             isSelfRoomOwner() {
                 return this.room.owner.id === this.user.id
-            },
-            isPortalOpen() {
-                return this.portal.status === 'open'
-            },
-
-            showPlayerDevtools() {
-                return process.env.SHOW_PLAYER_DEVTOOLS
             }
         },
         components: {
@@ -65,5 +70,5 @@
     }
 </script>
 <style src="~/static/css/room/player.css">
-/* Fix scoping */
+/* Manage scoping properly */
 </style>

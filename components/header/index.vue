@@ -3,13 +3,13 @@
         <div class="left">
             <nuxt-link :to="shouldShowRoomMenu ? '#room-menu' : (token ? '/home' : '/')" @click.native=toggleRoomMenu()>
                 <div class="gradient loading"></div>
-                <img :src="`/img/cryb-logo${dark ? '-light' : ''}.svg`" class="logo" />
+                <img :src="`/img/logo${dark ? '-light' : ''}.svg`" class="logo" />
             </nuxt-link>
             <h1 class="title" v-if=title>{{ title }}</h1>
             <RoomMenu :dark=dark ref="roomMenu" />
         </div>
         <div class="right" v-if=user>
-            <img :src=user.icon class="profile-image" @click=toggleUserMenu()>
+            <img :src=userIcon v-if=userIcon class="profile-image" @click=toggleUserMenu()>
             <UserMenu :dark=dark ref="userMenu" />
         </div>
         <div class="right" v-else-if=token>
@@ -33,6 +33,11 @@
                     return this.room.name
 
                 return null
+            },
+            userIcon() {
+                if(!this.user) return null
+
+                return this.user.icon.replace(".gif", ".png")
             },
 
             isUserMenuVisible() {

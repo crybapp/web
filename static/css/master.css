@@ -92,8 +92,8 @@ div.header div.gradient {
 
     mask-repeat: round;
     -webkit-mask-repeat: round;
-    mask-image: url('/img/cryb-logo.svg');
-    -webkit-mask-image: url('/img/cryb-logo.svg');
+    mask-image: url('/img/logo.svg');
+    -webkit-mask-image: url('/img/logo.svg');
     
     opacity: 0;
 
@@ -101,17 +101,16 @@ div.header div.gradient {
 }
 
 div.header div.gradient:hover {
-    opacity: 1;
+    opacity: 1
 }
 
 div.header div.gradient:hover + img.logo {
-    /* opacity: 0 */
     visibility: hidden
 }
 
 div.header img.profile-image {
     cursor: pointer;
-    border-radius: 9999px;
+    border-radius: 50%;
     width: 32px;
     height: 32px;
     background-color: rgba(112, 128, 144, 0.25);
@@ -387,12 +386,12 @@ div.header-menu a.menu-option-wrapper.disabled {
     cursor: default
 }
 
-div.header-menu div.menu-section {
-    border-bottom: 1.5px rgba(112, 128, 144, 0.5) solid
-}
-
 div.header-menu div.menu-section:not(:first-child):first-of-type {
     border-top: 1.5px rgba(112, 128, 144, 0.5) solid
+}
+
+div.header-menu div.menu-section:not(:last-child) {
+    border-bottom: 1.5px rgba(112, 128, 144, 0.5) solid
 }
 
 ::selection {
