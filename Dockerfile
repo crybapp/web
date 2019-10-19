@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:lts-buster
 
 WORKDIR /usr/src/app
 COPY . .
