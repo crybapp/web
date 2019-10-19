@@ -19,6 +19,7 @@
     "date-fns": "^2.0.1",
     "dotenv": "^8.0.0",
     "jsmpeg": "^1.0.0",
+    "node-emoji": "^1.10.0",
     "nuxt": "^2.8.1",
     "nuxt-client-init-module": "^0.1.4",
     "nuxt-clipboard2": "^0.2.1"
