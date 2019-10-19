@@ -119,6 +119,7 @@
                 this.emitEvent({ x, y, button: button + 1 }, 'MOUSE_UP')
             },
             didMouseWheel(event) {
+                event.preventDefault()
                 const { deltaX, deltaY } = event
 
                 this.emitEvent({ scrollUp: deltaY > 0 }, 'MOUSE_SCROLL')
