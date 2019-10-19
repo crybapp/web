@@ -127,4 +127,5 @@
         }
     }
 </script>
-<style src="~/static/css/cryb-invite.css" scoped></style>
+
+<style src="~/static/css/invite.css" scoped></style>

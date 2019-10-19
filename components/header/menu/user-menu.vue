@@ -101,8 +101,6 @@
                     this.inviteFriends()
                 else if(name === 'logout')
                     this.logout()
-                // else
-                //     this.$refs.menu.toggleMenu()
             }
         },
         components: {

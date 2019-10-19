@@ -21,11 +21,10 @@ div.options.is-horizontal {
 }
 
 div.options div.option {
-    height: fit-content;
     width: 14em;
+    height: fit-content;
     
     padding: 2em;
-    /* cursor: pointer; */
 
     display: flex;
     justify-content: center;

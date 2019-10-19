@@ -1,10 +1,9 @@
 <template>
-    <div class="grouped-chat-wrapper" v-if=author>
-        <img :src=author.icon class="chat-author-avatar" :class="{ 'has-controller': hasController }">
+    <div class="grouped-chat-wrapper" v-if=author @mouseover="hover = true" @mouseleave="hover = false">
+        <img :src=userIcon v-if=userIcon class="chat-author-avatar" :class="{ 'has-controller': hasController }">
         <div class="grouped-chat-messages-content">
             <div class="grouped-chat-messages-meta">
-                <p class="chat-author-name">{{ author.name }}
-                </p>
+                <p class="chat-author-name">{{ author.name }}</p>
             </div>
             <div class="grouped-chat-messages">
                 <Message v-for="message in messages" :key=message.id :message=message />
@@ -31,6 +30,14 @@
                 return [...this.group.messages, ...this.sendingMessages]
             },
 
+            userIcon() {
+                if(!this.author) return null
+
+                if(this.hover) return this.author.icon
+                
+                return this.author.icon.replace(".gif", ".png")
+            },
+
             isAuthorSelf() {
                 if(!this.author) return
 
@@ -42,19 +49,11 @@
                 return this.author.id === this.controllerId
             }
         },
-        // data() {
-            // return {
-                // timestamp: formatDistance(new Date(this.group.createdAt || new Date()), new Date(), { addSuffix: true }),
-                // dateTimer: null
-            // }  
-        // },
-        // mounted() {
-            // this.dateTimer = setInterval(() => this.timestamp = formatDistance(new Date(this.group.createdAt), new Date(), { addSuffix: true }), 1000)
-        // },
-        // beforeDestroy() {
-            // clearInterval(this.dateTimer)
-            // this.dateTimer = null
-        // },
+        data() {
+            return {
+                hover: false
+            }
+        },
         components: {
             Message
         },

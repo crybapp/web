@@ -3,6 +3,11 @@ div.center {
     max-width: 100%
 }
 
+div.center:not(.has-landing-video) {
+    max-width: 60%;
+    width: fit-content
+}
+
 div.landing div.left, div.landing div.right {
     position: absolute;
 
@@ -29,18 +34,14 @@ div.center img.logo {
 }
 
 div.login, div.continue {
-    /* position: absolute; */
-    margin-top: 1.35em;
-    width: fit-content
+    width: fit-content;
+
+    margin-top: 1.35em
 }
 
 div.login div.buttons a.button-wrapper div.button {
     margin-top: 0.65em
 }
-
-/* div.login div.buttons a.button-wrapper:last-child {
-    margin-bottom: 0
-} */
 
 p.disclaimer {
     position: absolute;
@@ -68,8 +69,6 @@ div.right .video {
     }
     
     div.landing div.right {
-        /* top: 50%;
-        left: 0; */
         display: none
     }
 }

@@ -1,13 +1,23 @@
 <template>
     <div class="root">
         <nuxt />
+        <GoogleAnalytics v-if=brand.ga_tracking_id />
     </div>
 </template>
 <script>
     import brand from '~/brand/config'
 
+    import GoogleAnalytics from '~/components/analytics'
+
     export default {
         head() {
+            const script = []
+
+            if(this.brand.ga_tracking_id)
+                script.push({
+                    src: `https://www.googletagmanager.com/gtag/js?id=${this.brand.ga_tracking_id}`
+                })
+
             return {
                 titleTemplate: this.brand.name,
                 meta: [
@@ -19,9 +29,7 @@
                     { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
                 ],
                 script: [
-                    {
-                        src: 'https://www.googletagmanager.com/gtag/js?id=UA-146441740-1'
-                    }
+                    ...script
                 ]
             }
         },
@@ -29,8 +37,12 @@
             return {
                 brand
             }
+        },
+        components: {
+            GoogleAnalytics
         }
     }
 </script>
-<style src="~/static/css/cryb-master.css"></style>
-<style src="~/static/css/cryb-components.css"></style>
+
+<style src="~/static/css/master.css"></style>
+<style src="~/static/css/components.css"></style>

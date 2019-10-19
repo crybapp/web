@@ -145,4 +145,5 @@
         }
     }
 </script>
-<style src="~/static/css/cryb-home.css" scoped></style>
+
+<style src="~/static/css/home.css" scoped></style>

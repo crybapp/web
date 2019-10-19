@@ -12,12 +12,10 @@ export const getters = {
     onlineUserIds: ({ onlineUsers }) => onlineUsers,
     onlineUsers: ({ users, onlineUsers }) => {
         return onlineUsers ? [
-            ...new Set(onlineUsers.map(id => users[id] || null
-                .filter(
-                    (user, i) =>
-                        user !== null &&
-                        onlineUsers.indexOf(user.id) >= i)
-                    )
+            ...new Set(
+                onlineUsers
+                    .map(id => users[id] || null)
+                    .filter((user, i) => user !== null && onlineUsers.indexOf(user.id) >= i)
             )
         ] : []
     },
@@ -47,7 +45,7 @@ export const getters = {
     ws: ({ ws }) => ws
 }
 
-export const state = () => ({
+const initialState = {
     user: null,
     userId: null,
 
@@ -70,6 +68,10 @@ export const state = () => ({
     wsHeartbeat: null,
     wsReconnect: null,
     wsReconnectInterval: 5000
+}
+
+export const state = () => ({
+    ...initialState
 })
 
 export const mutations = {
@@ -230,7 +232,8 @@ export const mutations = {
         state.users[user.id] = user
         
         if(state.room)
-            state.room.members.push(user)
+            if(state.room.members.indexOf(user.id) === -1)
+                state.room.members.push(user)
     },
     handleUserLeave(state, { u: userId }) {
         if(state.userId === userId) return
@@ -257,6 +260,7 @@ export const mutations = {
      */
     setTypingStatus(state, typing) {
         if(!state.ws) return
+        if(state.ws.readyState !== state.ws.OPEN) return
 
         state.ws.send(JSON.stringify({ op: 0, d: { typing }, t: 'TYPING_UPDATE' }))
     },
@@ -276,7 +280,8 @@ export const mutations = {
         if(userId === state.userId) return
 
         if(presence === 'online')
-            state.onlineUsers.push(userId)
+            if(state.onlineUsers.indexOf(userId) === -1)
+                state.onlineUsers.push(userId)
         else
             state.onlineUsers.splice(state.onlineUsers.indexOf(userId), 1)
     },
@@ -323,7 +328,7 @@ export const mutations = {
 
             const { op, d, t } = json
 
-            if(op !== 11)
+            if(op !== 11 && !isProduction())
                 console.log(op, d, t)
 
             if(op === 0) {
@@ -395,10 +400,7 @@ export const mutations = {
             if(!state.ws) return this.commit('invalidateHeartbeat')
             if(state.ws.readyState !== state.ws.OPEN) return this.commit('invalidateHeartbeat')
 
-            state.ws.send(JSON.stringify({
-                op: 1,
-                d: {}
-            }))
+            state.ws.send(JSON.stringify({ op: 1, d: {} }))
         }, interval)
     },
     invalidateHeartbeat(state) {
@@ -428,7 +430,7 @@ export const mutations = {
         if(_state.ws)
             this.commit('disconnectWebSocket')
 
-        const state = state(), SAFE_KEYS = []
+        const state = { ...initialState }, SAFE_KEYS = []
         Object.keys(state).forEach(key =>
             SAFE_KEYS.indexOf(key) === -1 ?
             _state[key] = state[key] :
