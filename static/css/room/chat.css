@@ -40,7 +40,7 @@ div.chat-messages div.grouped-chat-wrapper {
 }
 
 div.grouped-chat-wrapper img.chat-author-avatar {
-    border-radius: 9999px;
+    border-radius: 50%;
     
     height: 50px;
     width: 50px;

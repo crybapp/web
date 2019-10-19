@@ -32,7 +32,7 @@ div.user-icons div.user-icon {
     height: 100px;
     width: 100px;
     margin-left: 1.5em;
-    border-radius: 999px;
+    border-radius: 50%;
     background-color: rgba(112, 128, 144, 0.25);
 }
 
@@ -62,7 +62,7 @@ div.user-icons div.user-icon.passable:hover {
 }
 
 div.user-icon img.user-icon-avatar {
-    border-radius: 100px;
+    border-radius: 50%;
     height: 100%
 }
 
@@ -83,7 +83,7 @@ div.user-icon div.user-control-indicator {
     bottom: 2.15em;
 
     margin-left: 60px;
-    border-radius: 999px;
+    border-radius: 50%;
 
     background-color: white;
     box-shadow: 0 0 0px 6px black;
