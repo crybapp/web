@@ -167,7 +167,7 @@ div.header-menu div.menu-option {
     padding: 0.8em;
     border-bottom: rgba(112, 128, 144, 0.25) 1px solid;
 
-    transition: background-color 0.05s
+    transition: background-color 0.2s ease-in-out
 }
 
 div.header-menu div.menu-option.disabled {
@@ -224,11 +224,19 @@ div.header-menu.is-dark a {
 }
 
 div.header-menu a.menu-option-wrapper:not(.disabled):hover > div.menu-option {
+    background-color: #f7f7f7
+}
+
+div.header-menu a.menu-option-wrapper:not(.disabled):active > div.menu-option {
     background-color: #ececec
 }
 
 div.header-menu.is-dark a.menu-option-wrapper:not(.disabled):hover > div.menu-option {
-    background-color: #080808
+    background-color: #111111
+}
+
+div.header-menu.is-dark a.menu-option-wrapper:not(.disabled):active > div.menu-option {
+    background-color: #222222
 }
 
 div.menu-cover {
