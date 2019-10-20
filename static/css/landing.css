@@ -17,6 +17,10 @@ div.landing div.left, div.landing div.right {
 }
 
 div.landing div.left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
     left: 0px
 }
 
