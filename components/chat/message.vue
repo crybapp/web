@@ -1,6 +1,6 @@
 <template>
     <div class="chat-message" :class="{ 'is-loading': loading || isMessageSending }">
-        <p class="chat-message-content">{{ getEmojifiedMessageContent }}</p>
+        <p class="chat-message-content" v-html="getEmojifiedMessageContent"></p>
         <div class="chat-message-options" v-if=!isMessageSending>
             <img class="chat-message-option chat-message-report" src="/icons/message-exclaimation.svg" title="Report message" v-if=!isAuthorSelf @click=report()>
             <img class="chat-message-option chat-message-delete" src="/icons/trash-full.svg" title="Delete message" v-if="isAuthorSelf || isSelfRoomOwner" @click=destroy()>
@@ -11,6 +11,7 @@
     import { mapGetters } from 'vuex'
     import { formatDistance } from 'date-fns'
     import emoji from 'node-emoji'
+    import twemoji from 'twemoji'
 
     export default {
         computed: {
@@ -29,9 +30,9 @@
             },
             getEmojifiedMessageContent() {
                 if (typeof this.message === 'string') {
-                    return emoji.emojify(this.message)
+                    return twemoji.parse(emoji.emojify(this.message))
                 } else {
-                    return emoji.emojify(this.message.content)
+                    return twemoji.parse(emoji.emojify(this.message.content))
                 }
             }
         },
