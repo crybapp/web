@@ -23,7 +23,7 @@ div.invite-hint a.invite-link:hover {
     opacity: 1
 }
 
-/* Mobile adaptation */
+/* Mobile UI adaptation */
 @media only screen and (max-width: 768px),(orientation: portrait) {
 
     div.invite-hint {
