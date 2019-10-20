@@ -9,7 +9,6 @@ export const getters = {
 
     users: ({ users }) => users,
 
-    onlineUserIds: ({ onlineUsers }) => onlineUsers,
     onlineUsers: ({ users, onlineUsers }) => {
         return onlineUsers ? [
             ...new Set(
@@ -19,6 +18,7 @@ export const getters = {
             )
         ] : []
     },
+    onlineUserIds: ({ onlineUsers }) => onlineUsers ? [...new Set(onlineUsers)] : [],
     typingUsers: ({ users, userId, typingUsers }) => {
         return [
             ...new Set(
