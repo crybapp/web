@@ -1,10 +1,10 @@
 <template>
-    <div class="user-icon" :class="{ 'passable': canPassControl, 'offline': !isUserOnline, 'has-control': hasControl }" v-if=member @click=didClickUserIcon() :title=hoverTitle @mouseover="hover = true" @mouseleave="hover = false">
-        <img :src=userIcon v-if=userIcon class="user-icon-avatar" >
+    <div class="user-icon" :class="{ 'passable': canPassControl, 'offline': !isUserOnline, 'has-control': hasControl }" v-if=member @click=didClickUserIcon() @mouseover="hover = true" @mouseleave="hover = false">
+        <img :src=userIcon v-if=userIcon class="user-icon-avatar" :title=userHoverTitle />
         <div class="user-name-wrapper">
             <p class="user-name">{{ member.name }}</p>
         </div>
-        <div class="user-control-indicator" :class="{ 'visible': hasControl, 'non-interactable': !interactable }" @click=didClickControlIcon()>
+        <div class="user-control-indicator" :class="{ 'visible': hasControl, 'non-interactable': !interactable }" @click=didClickControlIcon() :title=indicatorHoverTitle>
             <img src="/icons/cursor-a.svg" class="user-control-icon has-control">
             <img src="/icons/multiply.svg" class="user-control-icon remove-control" v-if=interactable>
         </div>
@@ -25,18 +25,22 @@
                 return this.member.icon.replace(".gif", ".png")
             },
 
-            hoverTitle() {
-                if(!this.interactable) return `${this.isUserSelf ? 'You have' : `${this.member.name} has`} the controller`
-                if(this.isUserSelf && this.hasControl) return 'Release the controller'
+            userHoverTitle() {
+                if(this.controllerId === null && this.isUserSelf) return 'Take the controller'
+                if(!this.isUserSelf && this.canPassControl) return `Pass ${this.member.name} the controller`
 
-                if(this.isUserSelf)
-                    if(this.hasControl)
-                        return 'Release the controller'
-                    else
-                        return 'Take the controller'
-
-                return `Steal the controller from ${this.member.name}`
+                return `${this.member.name}${this.isUserSelf ? ' (you)' : ''}`
             },
+            indicatorHoverTitle() {
+                if(this.hasControl && this.interactable)
+                    return `Release the controller${this.isUserSelf ? '' : ` from ${this.member.name}`}`
+
+                if(this.canPassControl) return `Give the controller to ${this.member.name}`
+                if(this.hasControl) return `${this.member.name} has the controller`
+
+                return `${this.member.name}${this.isUserSelf ? ' (you)' : ''}`
+            },
+
             interactable() {
                 return this.isUserSelf || this.isSelfOwnerOfRoom
             },
@@ -90,7 +94,7 @@
             didClickControlIcon() {
                 if(this.hasControl && this.interactable)
                     this.$store.dispatch('releaseControl')
-            },
+            }
         },
         props: [
             'member'
