@@ -1,5 +1,5 @@
 <template>
-    <div class="center">
+    <div class="error">
         <h1 class="title" v-if="error.statusCode === 404">{{ error.statusCode }} Not Found</h1>
         <h1 class="title" v-else-if=error.statusCode>{{ error.statusCode }}</h1>
         <h1 class="title" v-else>Fuck.</h1>
