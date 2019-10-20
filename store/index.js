@@ -446,15 +446,15 @@ export const mutations = {
 export const actions = {
     async fetchUser({ commit }) {
         try {
-            const user = await this.$axios.$get('user/me')
+            const user = await this.$axios.$get('user/me').then(response => {
+                if (response && response.status === 401)
+                    commit('logout')
+            })
 
             commit('handleSelfUser', user)
             commit('handleUserId', user.id)
         } catch(error) {
             console.error(error)
-
-            if(error && error.response && error.response.status === 401)
-                commit('logout')
         }
     },
 
