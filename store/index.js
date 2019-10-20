@@ -6,7 +6,7 @@ const isProduction = () => process.env.NODE_ENV === 'production'
 export const getters = {
     user: ({ user }) => user,
     userId: ({ userId }) => userId,
-    
+
     users: ({ users }) => users,
 
     onlineUserIds: ({ onlineUsers }) => onlineUsers,
@@ -446,10 +446,7 @@ export const mutations = {
 export const actions = {
     async fetchUser({ commit }) {
         try {
-            const user = await this.$axios.$get('user/me').then(response => {
-                if (response && response.status === 401)
-                    commit('logout')
-            })
+            const user = await this.$axios.$get('user/me')
 
             commit('handleSelfUser', user)
             commit('handleUserId', user.id)
@@ -509,12 +506,32 @@ export const actions = {
     },
 
     async nuxtClientInit({ commit }, req) {
+        this.$axios.interceptors.response.use(response => {
+            return response
+        }, error => {
+            if (error.response && error.response.status === 401) {
+                // Invalid token, we should logout
+                console.warn('Token seems to be invalid - logging out...')
+                commit('logout')
+            } else console.error(error)
+        })
+
         const token = cookies.get('token')
 
         if(token)
             commit('handleToken', { token, save: false })
     },
     async nuxtServerInit({ commit }, { req }) {
+        this.$axios.interceptors.response.use(response => {
+            return response
+        }, error => {
+            if (error.response && error.response.status === 401) {
+                // Invalid token, we should logout
+                console.warn('Token seems to be invalid - logging out...')
+                commit('logout')
+            } else console.error(error)
+        })
+
         if(typeof req.headers.cookie !== 'string') return
 
         const { token, allow_cookies } = parse(req.headers.cookie)
