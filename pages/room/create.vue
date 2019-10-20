@@ -1,7 +1,5 @@
 <template>
-    <div class="center">
-        <CreateRoom />
-    </div>
+    <CreateRoom />
 </template>
 <script>
     import CreateRoom from '~/components/room/create'

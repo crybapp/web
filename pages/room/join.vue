@@ -1,7 +1,5 @@
 <template>
-    <div class="center">
-        <JoinRoom />
-    </div>
+    <JoinRoom />
 </template>
 <script>
     import JoinRoom from '~/components/room/join'

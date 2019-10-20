@@ -28,13 +28,6 @@ a:hover {
     color: rgba(0, 0, 0, 0.65)
 }
 
-div.center {
-    transform: translate(-50%, -50%);
-    position: absolute;
-    top: 50%;
-    left: 50%
-}
-
 div.header {
     position: fixed;
 
@@ -266,6 +259,12 @@ div.content {
     left: 0px;
     width: 100%;
     bottom: 0
+}
+
+div.content.is-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 div.content.no-header {

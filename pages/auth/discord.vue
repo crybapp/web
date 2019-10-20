@@ -1,7 +1,5 @@
 <template>
-    <div class="center">
-        <p>{{ message }}</p>
-    </div>
+    <p>{{ message }}</p>
 </template>
 <script>
 export default {
