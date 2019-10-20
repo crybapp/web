@@ -17,7 +17,7 @@
     "browser-cookies": "^1.2.0",
     "cookieparser": "^0.1.0",
     "date-fns": "^2.0.1",
-    "dotenv": "^8.0.0",
+    "dotenv": "^8.2.0",
     "jsmpeg": "^1.0.0",
     "nuxt": "^2.8.1",
     "nuxt-client-init-module": "^0.1.4",
