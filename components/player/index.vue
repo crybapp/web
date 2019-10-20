@@ -41,8 +41,8 @@
 <script>
     import { mapGetters } from 'vuex'
 
-    import Button from '~/components/button'
-    import Viewer from '~/components/player/viewer'
+    import Button from '~/components/Button'
+    import Viewer from '~/components/Player/Viewer'
 
     export default {
         computed: {

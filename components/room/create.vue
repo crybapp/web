@@ -16,9 +16,9 @@
 <script>
     import { mapGetters } from 'vuex'
 
-    import Form from '~/components/form'
-    import Input from '~/components/input'
-    import Button from '~/components/button'
+    import Form from '~/components/Form'
+    import Input from '~/components/Input'
+    import Button from '~/components/Button'
 
     export default {
         computed: {

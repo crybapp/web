@@ -7,7 +7,7 @@
 <script>
     import brand from '~/brand/config'
 
-    import GoogleAnalytics from '~/components/analytics'
+    import GoogleAnalytics from '~/components/GoogleAnalytics'
 
     export default {
         head() {

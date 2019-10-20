@@ -15,7 +15,7 @@
     import { mapGetters } from 'vuex'
     import { formatDistance } from 'date-fns'
 
-    import Message from './message'
+    import Message from '~/components/Chat/Message'
 
     export default {
         computed: {

@@ -13,8 +13,8 @@
     
     import brand from '~/brand/config'
 
-    import Header from '~/components/header/index'
-    import GoogleAnalytics from '~/components/analytics'
+    import Header from '~/components/Header'
+    import GoogleAnalytics from '~/components/GoogleAnalytics'
 
     export default {
         head() {

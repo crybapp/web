@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-    import JoinRoom from '~/components/room/join'
+    import JoinRoom from '~/components/Room/Join'
 
     export default {
         head() {

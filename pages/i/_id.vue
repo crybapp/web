@@ -36,8 +36,8 @@
 
     import brand from '~/brand/config'
 
-    import Form from '~/components/form'
-    import Button from '~/components/button'
+    import Form from '~/components/Form'
+    import Button from '~/components/Button'
 
     export default {
         async asyncData(context) {

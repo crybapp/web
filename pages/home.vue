@@ -60,12 +60,12 @@
 <script>
     import { mapGetters } from 'vuex'
 
-    import Modal from '~/components/modal/index'
-    import JoinRoom from '~/components/room/join'
-    import CreateRoom from '~/components/room/create'
+    import Modal from '~/components/Modal'
+    import JoinRoom from '~/components/Room/Join'
+    import CreateRoom from '~/components/Room/Create'
 
-    import Input from '~/components/input'
-    import Button from '~/components/button'
+    import Input from '~/components/Input'
+    import Button from '~/components/Button'
 
     export default {
         head() {
