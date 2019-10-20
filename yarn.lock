@@ -4774,10 +4774,10 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
-nuxt-client-init-module@^0.1.4:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/nuxt-client-init-module/-/nuxt-client-init-module-0.1.5.tgz#3d59a9454018debedd63b1a37c502c306780a94e"
-  integrity sha512-xBBbblWuA6LdKiEO/Z+y3CB5cOEzE+ZE1xQ1fjGCfZFLXeA0HCPRsBJcTGH2TVoTBmPnqV6CkgVNZC5VPbsbUA==
+nuxt-client-init-module@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/nuxt-client-init-module/-/nuxt-client-init-module-0.1.6.tgz#dfcfec010df88a07db649c0096d673349c0cc4f5"
+  integrity sha512-jJKz7oQPXgnGrQ/xzb5gHSUbE9my5UOq+uaa51jKt9/ieJiEbdRkohMWyQMetVc0qcZO6vgnn+AkTYFX+BH0fg==
 
 nuxt-clipboard2@^0.2.1:
   version "0.2.1"
