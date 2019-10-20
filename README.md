@@ -2,7 +2,7 @@
 
 _**Web** - Web client_
 
-![GitHub contributors](https://img.shields.io/github/contributors/crybapp/web) ![GitHub](https://img.shields.io/github/license/crybapp/web) [![PayPal Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/williamsthing)
+[![GitHub contributors](https://img.shields.io/github/contributors/crybapp/web)](https://github.com/crybapp/web/graphs/contributors) [![License](https://img.shields.io/github/license/crybapp/web)](https://github.com/crybapp/web/blob/master/LICENSE) [![PayPal Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/williamsthing)
 
 ## Docs
 * [Info](#info)
@@ -14,7 +14,7 @@ _**Web** - Web client_
     * [Running the app locally](#running-the-app-locally)
         * [Background services](#background-services)
         * [Starting @cryb/web](#starting-@cryb/web)
-* [Questions / Issues](#questions-/-issues)
+* [Questions / Issues](#questions--issues)
 
 ## Info
 `@cryb/web` is the primary web client for interacting with `@cryb/api` and `@cryb/aperture`.
@@ -55,38 +55,24 @@ The following services need to be installed for `@cryb/web` to function:
 We recommend that you run the following services alongside `@cryb/web`, but it's not required.
 * `@cryb/aperture`
 
-You also need to install the required dependencies, by running either:
+You also need to install the required dependencies by running `yarn`.
 
-```
-npm install
-```
-or
-```
-yarn
-```
+Ensure that `.env.example` is either copied and renamed to `.env`, or is simply renamed to `.env`.
 
-Ensure that `.env-example` is either copied and renamed to `.env`, or is simply renamed to `.env`.
-
-In this file, you'll need some values. Documentation is available in the `.env-example` file.
+In this file, you'll need some values. Documentation is available in the `.env.example` file.
 
 ### Running the app locally
 
 #### Background Services
-Make sure that you have installed `@cryb/api`, and that it is running on port 4000.
+Make sure that you have installed `@cryb/api`.
 
 If you're developing a feature that requires the VM infrastructure, then make sure `@cryb/aperture` is running.
 
 #### Starting @cryb/web
-To run `@cryb/web` in development mode, run either:
+To run `@cryb/web` in development mode, run `yarn dev`.
 
-```
-npm run dev
-```
-or
-```
-yarn dev
-```
+It is recommended that in production you run `yarn build`, then `yarn start`.
 
 ## Questions / Issues
 
-If you have an issues with `@cryb/web`, please either open a GitHub issue, or contact a maintainer.
+If you have an issues with `@cryb/web`, please either open a GitHub issue, contact a maintainer or join the [Cryb Discord Server](https://discord.gg/ShTATH4) and ask in #tech-support.
