@@ -19,12 +19,14 @@ div.chat p.chat-no-messages-warn {
 
 div.chat div.chat-messages {
     position: absolute;
-    padding-left: 1em;
-    padding-right: 1em;
-    padding-bottom: 2em;
+
     top: 0;
     bottom: 80px;
     width: calc(100% - 2em);
+
+    padding-left: 1em;
+    padding-right: 1em;
+
     overflow-y: auto
 }
 
@@ -37,6 +39,7 @@ div.chat-messages div.grouped-chat-wrapper {
     display: flex;
 
     margin-top: 1.5em;
+    margin-bottom: 2em
 }
 
 div.grouped-chat-wrapper img.chat-author-avatar {

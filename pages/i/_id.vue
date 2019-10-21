@@ -1,5 +1,5 @@
 <template>
-    <div class="center">
+    <div class="invite-page">
         <div class="invite-wrapper" v-if=room>
             <div class="portal-indicator loading" v-if="room.portal.status === 'open'"></div>
             <img src="/icons/tv.svg" class="invite-image">
@@ -127,5 +127,4 @@
         }
     }
 </script>
-
 <style src="~/static/css/invite.css" scoped></style>

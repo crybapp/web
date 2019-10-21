@@ -37,7 +37,7 @@
 				if(!this.room) return []
 				if(!this.room.members) return []
 
-				return this.room.members.map(({ id }) => id)
+				return [...new Set(this.room.members.map(({ id }) => id))]
 			}
 		},
 		components: {
