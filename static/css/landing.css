@@ -1,3 +1,7 @@
+body {
+    background-color: black;
+}
+
 div.center {
     width: 60%;
     max-width: 100%
@@ -74,5 +78,11 @@ div.right .video {
     
     div.landing div.right {
         display: none
+    }
+}
+
+@media screen and (prefers-color-scheme: light) {
+    body {
+        background-color: white
     }
 }

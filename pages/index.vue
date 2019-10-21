@@ -2,7 +2,10 @@
     <div class="landing">
         <div :class="{ left: hasLandingVideo, 'has-landing-video': hasLandingVideo }">
             <div class="center">
-                <img src="/img/logo.svg" class="logo">
+                <picture>
+                    <source srcset="/img/logo.svg" media="(prefers-color-scheme: light)">
+                    <img src="/img/logo-light.svg" class="logo">
+                </picture>
                 <h1 class="title">Share the internet with your friends</h1>
                 <p class="body">{{ brand.name }} makes it easy to start up a room, add your friends, and browse the web</p>
                 <div class="login" v-if=!token>

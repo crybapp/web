@@ -18,14 +18,12 @@ img {
 }
 
 a {
-    color: rgba(0, 0, 0, 0.45);
+    color: rgb(199, 199, 199);
     text-decoration: none;
-
-    transition: color 0.2s
 }
 
 a:hover {
-    color: rgba(0, 0, 0, 0.65)
+    color: rgb(133, 133, 133);
 }
 
 div.header {
@@ -35,7 +33,7 @@ div.header {
     left: 0;
     
     border-bottom: rgba(112, 128, 144, 0.25) 1px solid;
-    background-color: white;
+    background-color: black;
     
     padding: 16px;
 
@@ -51,15 +49,8 @@ div.header h1.title {
     margin: 0;
     margin-left: 0.65em;
     font-size: 27px;
-    font-weight: 500
-}
-
-div.header.is-dark {
-    background-color: black
-}
-
-div.header.is-dark h1.title {
-    color: white
+    font-weight: 500;
+    color: black;
 }
 
 div.header div.left, div.header div.right {
@@ -85,8 +76,8 @@ div.header div.gradient {
 
     mask-repeat: round;
     -webkit-mask-repeat: round;
-    mask-image: url('/img/logo.svg');
-    -webkit-mask-image: url('/img/logo.svg');
+    mask-image: url('/img/logo-light.svg');
+    -webkit-mask-image: url('/img/logo-light.svg');
     
     opacity: 0;
 
@@ -114,7 +105,8 @@ div.header div.header-menu {
     pointer-events: none;
     top: 0;
     width: 150px;
-    background-color: white;
+    background-color: black;
+    color: white;
     overflow-x: hidden;
     overflow-y: auto;
     border-radius: 5px;
@@ -122,10 +114,6 @@ div.header div.header-menu {
     opacity: 0;
     transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
     z-index: -1;
-}
-
-div.header div.header-menu:not(.is-dark) {
-    box-shadow: 0px 2px 4px #00000017;
 }
 
 div.header div.header-menu.visible {
@@ -142,16 +130,11 @@ div.header-menu.room-menu {
     left: 16px;
 }
 
-div.header div.header-menu.is-dark {
-    background-color: black;
-    color: white
-}
-
-div.header-menu.is-dark div.menu-option:not(.loading) img.menu-option-icon {
+div.header-menu div.menu-option:not(.loading) img.menu-option-icon {
     filter: invert(1)
 }
 
-div.header-menu.is-dark img.menu-option-icon.align-top {
+div.header-menu img.menu-option-icon.align-top {
     height: fit-content;
     margin-top: 0.3em
 }
@@ -209,26 +192,14 @@ div.menu-option .menu-option-content {
 
 div.header-menu a {
     text-decoration: none;
-    color: black
-}
-
-div.header-menu.is-dark a {
     color: white
 }
 
 div.header-menu a.menu-option-wrapper:not(.disabled):hover > div.menu-option {
-    background-color: #f7f7f7
-}
-
-div.header-menu a.menu-option-wrapper:not(.disabled):active > div.menu-option {
-    background-color: #ececec
-}
-
-div.header-menu.is-dark a.menu-option-wrapper:not(.disabled):hover > div.menu-option {
     background-color: #111111
 }
 
-div.header-menu.is-dark a.menu-option-wrapper:not(.disabled):active > div.menu-option {
+div.header-menu a.menu-option-wrapper:not(.disabled):active > div.menu-option {
     background-color: #222222
 }
 
@@ -258,7 +229,9 @@ div.content {
     top: calc(32px + (16px * 2));
     left: 0px;
     width: 100%;
-    bottom: 0
+    bottom: 0;
+    background-color: black;
+    color: white
 }
 
 div.content.is-center {
@@ -269,14 +242,6 @@ div.content.is-center {
 
 div.content.no-header {
     top: 0px
-}
-
-div.content.is-dark {
-    background-color: black
-}
-
-div.content.is-dark * {
-    color: white
 }
 
 div.room-onboarding {
@@ -402,17 +367,81 @@ div.header-menu div.menu-section:not(:last-child) {
 }
 
 ::selection {
-    background: #e4e4e4
+    background: #9c9c9c
 }
 
 ::-moz-selection {
-    background: #e4e4e4
-}
-
-div.is-dark ::selection {
     background: #9c9c9c
 }
 
-div.is-dark ::-moz-selection {
-    background: #9c9c9c
+@media screen and (prefers-color-scheme: light) {
+
+    ::selection {
+        background: #e4e4e4
+    }
+    
+    ::-moz-selection {
+        background: #e4e4e4
+    }
+
+    a {
+        color: rgba(0, 0, 0, 0.75);
+    }
+
+    a:hover {
+        color: rgba(0, 0, 0, 0.95)
+    }
+
+    div.content {
+        background-color: white;
+        color: black
+    }
+
+    a:hover {
+        color: rgba(0, 0, 0, 0.65)
+    }
+
+    div.header {
+        background-color: white
+    }
+
+    div.header h1.title {
+        color: white
+    }
+
+    div.header div.header-menu {
+        box-shadow: 0px 2px 4px #00000017
+    }
+
+    div.header div.header-menu {
+        background-color: white;
+        color: black
+    }
+
+    div.header-menu div.menu-option:not(.loading) img.menu-option-icon {
+        filter: invert(0)
+    }
+
+    div.header-menu a {
+        color: black
+    }
+
+    /*
+    div.header-menu.is-dark img.menu-option-icon.align-top {
+    height: fit-content;
+    margin-top: 0.3em
+    }*/
+
+    div.header-menu a.menu-option-wrapper:not(.disabled):hover > div.menu-option {
+        background-color: #f7f7f7
+    }
+    
+    div.header-menu a.menu-option-wrapper:not(.disabled):active > div.menu-option {
+        background-color: #ececec
+    }
+
+    div.header div.gradient {
+        mask-image: url('/img/logo.svg');
+        -webkit-mask-image: url('/img/logo.svg');
+    }
 }

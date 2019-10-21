@@ -50,8 +50,8 @@ div.button p.button-content {
 }
 
 a.button-wrapper div.button:not(.disabled):not(.loading):hover {
-    background-color: #f7f7f7;
-    box-shadow: 0px 4px 10px #00000017 !important
+    background-color: #080808;
+    box-shadow: 0px 4px 10px #ffffff9a !important
 }
 
 a.button-wrapper div.button:not(.disabled):not(.loading):active {
@@ -60,14 +60,6 @@ a.button-wrapper div.button:not(.disabled):not(.loading):active {
 }
 
 div.button:not(.discord):not(.disabled):not(.loading):hover p.button-content {
-    color: black
-}
-
-div.content.is-dark div.button:not(.disabled):not(.loading):hover {
-    background-color: #080808
-}
-
-div.content.is-dark div.button:not(.discord):not(.disabled):not(.loading):hover p.button-content {
     color: white
 }
 
@@ -93,4 +85,15 @@ p.button-content {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none
+}
+
+@media screen and (prefers-color-scheme: light) {
+    a.button-wrapper div.button:not(.disabled):not(.loading):hover {
+        background-color: #f7f7f7;
+        box-shadow: 0px 4px 10px #00000017 !important
+    }
+
+    div.button:not(.discord):not(.disabled):not(.loading):hover p.button-content {
+        color: black
+    }
 }
