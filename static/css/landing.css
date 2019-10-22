@@ -48,13 +48,13 @@ div.login div.buttons a.button-wrapper div.button {
 }
 
 p.disclaimer {
-    position: absolute;
+    /* position: absolute; */
 
     color: gray;
     font-size: 14px;
 
     margin: 0;
-    margin-top: 12.5px;
+    /* margin-top: 12.5px; */
 }
 
 div.right .video {

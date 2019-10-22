@@ -294,13 +294,10 @@ p.subtitle {
 }
 
 p.disclaimer {
-    position: absolute;
-
     color: gray;
     font-size: 14px;
 
     margin: 0;
-    margin-top: 12.5px;
 }
 
 div.has-icon h1.title {
