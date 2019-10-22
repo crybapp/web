@@ -285,7 +285,8 @@ img.close-button, img.close-button-hover {
 }
 
 div.has-icon img.close-button, div.has-icon img.close-button-hover {
-    display: block
+    display: block;
+    filter: invert(1)
 }
 
 img.close-button-hover {
@@ -375,7 +376,6 @@ div.header-menu div.menu-section:not(:last-child) {
 }
 
 @media screen and (prefers-color-scheme: light) {
-
     ::selection {
         background: #e4e4e4
     }
@@ -426,11 +426,10 @@ div.header-menu div.menu-section:not(:last-child) {
         color: black
     }
 
-    /*
-    div.header-menu.is-dark img.menu-option-icon.align-top {
-    height: fit-content;
-    margin-top: 0.3em
-    }*/
+    div.has-icon img.close-button, div.has-icon img.close-button-hover {
+        display: block;
+        filter: invert(0)
+    }
 
     div.header-menu a.menu-option-wrapper:not(.disabled):hover > div.menu-option {
         background-color: #f7f7f7
