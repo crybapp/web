@@ -1,7 +1,3 @@
-body {
-    background-color: black;
-}
-
 div.center {
     width: 60%;
     max-width: 100%
@@ -25,7 +21,10 @@ div.landing div.left {
     justify-content: center;
     align-items: center;
     
-    left: 0px
+    left: 0px;
+
+    background-color: black;
+    color:white
 }
 
 div.landing div.right {
@@ -82,7 +81,13 @@ div.right .video {
 }
 
 @media screen and (prefers-color-scheme: light) {
-    body {
-        background-color: white
+    div.landing {
+        background-color: white;
+        color: black
+    }
+
+    div.landing div.left {
+        background-color: white;
+        color:black
     }
 }
