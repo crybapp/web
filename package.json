@@ -16,11 +16,11 @@
     "@nuxtjs/axios": "^5.5.4",
     "browser-cookies": "^1.2.0",
     "cookieparser": "^0.1.0",
-    "date-fns": "^2.0.1",
-    "dotenv": "^8.0.0",
+    "date-fns": "^2.5.1",
+    "dotenv": "^8.2.0",
     "jsmpeg": "^1.0.0",
-    "nuxt": "^2.8.1",
-    "nuxt-client-init-module": "^0.1.4",
+    "nuxt": "^2.10.1",
+    "nuxt-client-init-module": "^0.1.6",
     "nuxt-clipboard2": "^0.2.1"
   }
 }

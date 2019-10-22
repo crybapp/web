@@ -6,9 +6,10 @@
                 <h1 class="title">Share the internet with your friends</h1>
                 <p class="body">{{ brand.name }} makes it easy to start up a room, add your friends, and browse the web</p>
                 <div class="login" v-if=!token>
-                    <Button type="discord" :href=redirectUrl icon="/icons/discord-white.svg" hover="/icons/discord-colour.svg">
+                    <Button type="discord" v-if=redirectUrl :href=redirectUrl icon="/icons/discord-white.svg" hover="/icons/discord-colour.svg">
                         Login with Discord
                     </Button>
+                    <p class="disclaimer" v-else>Uh-oh! Looks like we can't find a redirect url for Login with Discord. If this is your site, make sure the environment variables for both API and Web are setup correctly</p>
                 </div>
                 <div class="continue" v-else>
                     <Button href="/home" icon="/icons/user-white.svg" hover="/icons/user.svg">Continue to {{ brand.name }}</Button>
