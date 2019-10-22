@@ -5,7 +5,8 @@ div.invite-wrapper {
 img.invite-image {
     width: 100px;
     height: 100px;
-    margin-top: -7.5px
+    margin-top: -7.5px;
+    filter: invert(1)
 }
 
 div.invite-details {
@@ -43,4 +44,10 @@ div.portal-indicator {
     border-radius: 10px;
 
     z-index: -1;
+}
+
+@media screen and (prefers-color-scheme: light) {
+    img.invite-image {
+        filter: invert(0)
+    }
 }
