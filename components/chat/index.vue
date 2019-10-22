@@ -1,6 +1,6 @@
 <template>
     <div class="chat">
-        <p class="chat-no-messages-warn" v-if="!messages || messages.length === 0">Nobody said nothing. Maybe say something?</p>
+        <p class="chat-no-messages-warn" v-if="!messages || messages.length === 0" v-html="$t('room.chat.noMessages')"></p>
         <div class="chat-messages" :class="{ 'users-are-typing': typingUsers.length > 0 }" ref="messagesView" v-else-if=messages>
             <GroupedChatMessage v-for="(group, i) in messages" :key=group.id :group=group :isLastGroup="i === messages.length - 1" />
         </div>

@@ -9,7 +9,7 @@
             ...mapGetters(['typingUsers']),
 
             typingTooltip() {
-                return `${this.typingUsersList} ${this.typingUsers.length === 1 ? 'is' : ' are'} typing...`
+                return this.$t('room.chat.typing', {users: this.typingUsersList, isAre: this.typingUsers.length === 1 ? this.$t('general.is') : this.$t('general.are')})
             },
             areUsersTyping() {
                 return this.typingUsers.length > 0

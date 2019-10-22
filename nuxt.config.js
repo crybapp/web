@@ -8,6 +8,7 @@ export default {
 
         '@nuxtjs/axios'
     ],
+    plugins: ["~/middleware/i18n.js"],
     env: {
         /**
          * Brand

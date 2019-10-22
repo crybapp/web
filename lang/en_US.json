@@ -1,0 +1,118 @@
+{
+  "index": {
+    "title": "Share the internet with your friends",
+    "body": "{brand} makes it easy to start up a room, add your friends, and browse the web",
+    "loginWithDiscord": "Login with Discord",
+    "continueToBrand": "Continue to {brand}"
+  },
+  "discord": {
+    "authenticating": "Authenticating...",
+    "authenticated": "Authenticated! Redirecting...",
+    "authenticationError": "An error occured while authenticating. Please go home and Login with Discord again."
+  },
+  "home": {
+    "inRoom": {
+      "title": "Let's jump back into watching",
+      "subtitle": "You're already in a room. Click the button below to get back into the room.<br>Want out? There's an option for that too",
+      "returnToRoom": "Return to {room}",
+      "leaving": "Leaving {room}...",
+      "leave": "Leave {room}"
+    },
+    "noRoom": {
+      "title": "Welcome Home",
+      "subtitle": "It's never been easier to join or start a room with your friends.<br>Select an option below to get started",
+      "joinRoom": {
+        "header": "Join a Room",
+        "description": "Received an invite link or an invite code for a room? Enter it here!"
+      },
+      "createRoom": {
+        "header": "Create a Room",
+        "description": "Need a room where you can watch anything with your friends? This is the place to go"
+      }
+    },
+    "modals": {
+      "joinRoom": {
+        "title": "Join Room",
+        "subtitle": "If your friend sent you an invite to a room, you're in the right place. Copy the invite into the box below and we'll get you sorted in no time",
+        "placeholder": "Invite Code or Link",
+        "findRoom": "Find Room",
+        "findingRoom": "Finding Room..."
+      },
+      "createRoom": {
+        "title": "Create a Room",
+        "subtitle": "When you create a room, you'll be able to add your friends and browse the internet.",
+        "createRoom": "Create Room",
+        "creatingRoom": "Creating Room..."
+      }
+    }
+  },
+  "invite": {
+    "title": "Join {room}",
+    "subtitle": "Start watching along with <b>{membersList}</b> instantly",
+    "loginWithDiscord": "Login with Discord",
+    "acceptInvite": "Accept Invite",
+    "acceptingInvite": "Accepting Invite...",
+    "viewRoom": "View Room",
+    "alreadyInThisRoom": "You're already in this room",
+    "membersOthers": "and {0} others",
+    "inviteNotFound": {
+      "title": "Invite Not Found",
+      "subtitle": "We couldn't find a room linked with this invite code. Make sure you have the right invite and try again!"
+    },
+    "confirmLeave": "Are you sure you want to leave {room} Once you leave, you cannot join back without an invite"
+  },
+  "room": {
+    "chat": {
+      "noMessages": "Nobody said nothing. Maybe say something?",
+      "placeholder": "Say something cool...",
+      "sendButtonTooltip": "Send Message",
+      "typing": "{users} {isAre} typing..."
+    },
+    "player": {
+      "new": {
+        "title": "And so it begins...",
+        "body": "Add a friend or two to get the party started! Once someone else joins this room, we'll queue up your room for a virtual browser"
+      },
+      "waiting": {
+        "title": "Hold your horses...",
+        "body": "We're waiting for the right gears to align so we can get your browser ready - hold tight!<br>If this is taking a little long, then either restart the room or contact support."
+      },
+      "queued": {
+        "title": "You're in the queue!",
+        "body": "There are a couple rooms infront of you waiting for a virtual browser, it shouldn't take too long"
+      },
+      "creating": {
+        "title": "We're creating your browser now",
+        "body": "Normally this takes a couple seconds, hang tight!<br>If you have any issues either refresh the page, ask the room owner to restart the browser or contact support."
+      },
+      "starting": {
+        "title": "We're starting your browser now",
+        "body": "Normally this takes a couple seconds, hang tight!<br>If you have any issues either refresh the page, ask the room owner to restart the browser or contact support."
+      },
+      "connecting": {
+        "title": "Strap in...",
+        "body": "Everything is ready - we're just getting the stream between you and the VM started!"
+      }
+    },
+    "controller": {
+      "take": "Take the controller",
+      "pass": "Pass {member} the controller",
+      "release": "Release the controller",
+      "releaseOther": "Release the controller from {member}",
+      "giveOther": "Give the controller to {member}",
+      "current": "{member} has the controller"
+    },
+    "viewser": {
+      "muted": { 
+        "title": "{brand} is muted",
+        "body": "Your browser requires user interaction in order to let us play video with audio"
+      },
+      "unmute": "Unmute"
+    }
+  },
+  "general": {
+    "is": "is",
+    "are": "are",
+    "you": "you"
+  }
+}

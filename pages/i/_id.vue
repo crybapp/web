@@ -10,23 +10,23 @@
                 <div class="invite-member-icons-overlay"></div>
             </div>
             <div class="invite-details">
-                <h1 class="title">Join {{ room.name }}</h1>
-                <p class="subtitle">Start watching along with {{ membersList }} instantly</p>
+                <h1 class="title" v-html="$t('invite.title', {room: room.name})"></h1>
+                <p class="subtitle" v-html="$t('invite.subtitle', {membersList})"></p>
                 <Form>
                     <Button type="discord" :href=redirectUrl v-if=!user icon="/icons/discord-white.svg" hover="/icons/discord-colour.svg">
-                        Login with Discord
+                        {{ $t('invite.loginWithDiscord') }}
                     </Button>
-                    <Button v-else-if=!isSelfInInvitedRoom :loading=loading :disabled=isSelfInRoom @click.native=joinRoom()>{{ loading ? 'Accepting invite...' : 'Accept Invite' }}</Button>
-                    <Button v-else-if=isSelfInInvitedRoom href="/room">View Room</Button>
+                    <Button v-else-if=!isSelfInInvitedRoom :loading=loading :disabled=isSelfInRoom @click.native=joinRoom()>{{ loading ? $t('invite.acceptingInvite') : $t('invite.acceptInvite') }}</Button>
+                    <Button v-else-if=isSelfInInvitedRoom href="/room">{{ $t('invite.viewRoom') }}</Button>
                 </Form>
                 <p class="disclaimer" v-if="isSelfInRoom && !isSelfInInvitedRoom">You're already in a room. You need to <a href="#" @click=leaveRoom()>leave the room you're in</a> before joining this one</p>
-                <p class="disclaimer" v-else-if=isSelfInInvitedRoom>You're already in this room</p>
+                <p class="disclaimer" v-else-if=isSelfInInvitedRoom v-html="$t('invite.alreadyInThisRoom')"></p>
                 <p class="error" v-if=error>{{ error }}</p>
             </div>
         </div>
         <div class="invite-not-found" v-else>
-            <h1 class="title">Invite Not Found</h1>
-            <p class="subtitle">We couldn't find a room linked with this invite code. Make sure you have the right invite and try again!</p>
+            <h1 class="title" v-html="$t('invite.inviteNotFound.title')"></h1>
+            <p class="subtitle" v-html="$t('invite.inviteNotFound.subtitle')"></p>
             <p>If something seems fishy, <nuxt-link to="/support" target="_blank">contact support</nuxt-link>.</p>
         </div>
     </div>
@@ -57,10 +57,10 @@
             if(this.room)
                 inviteHeaders = {
                     meta: [
-                        { name: 'description', content: `You've been invted to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
+                        { name: 'description', content: `You've been invited to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
 
                         { property: 'og:title', content: `Join ${this.room.name} on ${this.brand.name}` },
-                        { property: 'og:description', content: `You've been invted to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
+                        { property: 'og:description', content: `You've been invited to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
                     ],
                     link: [
                         { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
@@ -76,9 +76,9 @@
             ...mapGetters(['user']),
 
             membersList() {
-                const memberLimit = 3, members = this.room.members.slice(0, 3)
+                const memberLimit = 3, members = this.room.members.slice(0, memberLimit)
 
-                return `${members.map(({ name }) => name).join(', ')}${this.room.members.length > memberLimit ? ` and ${this.room.members.length - memberLimit} others` : ''}`
+                return `${members.map(({ name }) => name).join(', ')}${this.room.members.length > memberLimit ? ` ${this.$t("invite.membersOthers", [this.room.members.length - memberLimit])}` : ''}`
             },
 
             isSelfInRoom() {
@@ -116,7 +116,7 @@
                 }
             },
             leaveRoom() {
-                if(!confirm(`Are you sure you want to leave ${this.user.room.name}? Once you leave, you cannot join back without an invite`)) return
+                if(!confirm(this.$t('invite.confirmLeave', {room: this.user.room.name}))) return
 
                 this.$store.dispatch('leaveRoom')
             }

@@ -8,10 +8,10 @@
         <div class="player-tooltips" v-if=showMutedPopup>
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
-                    <p class="player-tooltip-title">{{ brand.name }} is muted</p>
-                    <p class="player-tooltip-body">Your browser requires user interaction in order to let us play video with audio</p>
+                    <p class="player-tooltip-title" v-html="$t('room.viewer.muted.title', {brand: brand.name})"></p>
+                    <p class="player-tooltip-body" v-html="$t('room.viewer.muted.body')"></p>
                 </div>
-                <Button @click.native=unmute()>Unmute</Button>
+                <Button @click.native=unmute()>{{ $t('room.viewer.unmute') }}</Button>
             </div>
         </div>
     </div>
