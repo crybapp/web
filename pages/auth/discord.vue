@@ -1,5 +1,5 @@
 <template>
-    <p>{{ message }}</p>
+    <p v-html="message"></p>
 </template>
 <script>
 export default {
@@ -11,7 +11,7 @@ export default {
     middleware: 'logged-out',
     data() {
         return {
-            message: 'Authenticating...'
+            message: this.$t('discord.authenticating')
         }
     },
     async mounted() {
@@ -20,13 +20,13 @@ export default {
         try {
             const token = await this.$axios.$post(`/auth/discord`, { code })
 
-            this.message = 'Authenticated! Redirecting...'
-
+            this.message = this.$t('discord.authenticated')
+            
             this.$store.commit('handleToken', { token, save: true })
             this.$store.dispatch('fetchUser')
             this.$router.push(state ? `/i/${state.split('=')[1]}` : '/home')
         } catch(error) {
-            this.message = 'An error occured while authenticating. Please go home and Login with Discord again.'
+            this.message = this.$t('discord.authenticationError')
         }
     }
 }

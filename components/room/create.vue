@@ -4,11 +4,11 @@
             <img src="/icons/circle-close.svg" class="close-button">
             <img src="/icons/circle-close-filled.svg" class="close-button-hover">
         </nuxt-link>
-        <h1 class="title">Create a Room</h1>
-        <p class="subtitle">When you create a room, you'll be able to add your friends and browse the internet.</p>
+        <h1 class="title" v-html="$t('home.modals.createRoom.title')"></h1>
+        <p class="subtitle" v-html="$t('home.modals.createRoom.subtitle')"></p>
         <Form>
             <Input placeholder="Room Name" v-model=roomName :disabled=loading @keydown.enter=createRoom() />
-            <Button @click.native=createRoom() :disabled=!isRoomNameValid :loading=loading>{{ loading ? 'Creating room...' : 'Create Room'}}</Button>
+            <Button @click.native=createRoom() :disabled=!isRoomNameValid :loading=loading>{{ loading ? $t('home.modals.createRoom.creatingRoom') : $t('home.modals.createRoom.createRoom')}}</Button>
         </Form>
         <p class="error" v-if=error>{{ error }}</p>
     </div>

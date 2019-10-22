@@ -26,19 +26,20 @@
             },
 
             userHoverTitle() {
-                if(this.controllerId === null && this.isUserSelf) return 'Take the controller'
-                if(!this.isUserSelf && this.canPassControl) return `Pass ${this.member.name} the controller`
+                if(this.controllerId === null && this.isUserSelf) return this.$t('room.controller.take')
+                if(!this.isUserSelf && this.canPassControl) return this.$t('room.controller.pass', {member: this.member.name})
 
-                return `${this.member.name}${this.isUserSelf ? ' (you)' : ''}`
+                return `${this.member.name}${this.isUserSelf ? ` (${this.$t('general.you')})` : ''}`
             },
             indicatorHoverTitle() {
-                if(this.hasControl && this.interactable)
-                    return `Release the controller${this.isUserSelf ? '' : ` from ${this.member.name}`}`
+                if(this.hasControl && this.interactable) {
+                   return this.isUserSelf ? this.$t('room.controller.release') : this.$t('room.controller.releaseOther', {member: this.member.name})
+                }
 
-                if(this.canPassControl) return `Give the controller to ${this.member.name}`
-                if(this.hasControl) return `${this.member.name} has the controller`
+                if(this.canPassControl) return this.$t('room.controller.giveOther', {member: this.member.name})
+                if(this.hasControl) return this.$t('room.controller.current', {member: this.member.name})
 
-                return `${this.member.name}${this.isUserSelf ? ' (you)' : ''}`
+                return `${this.member.name}${this.isUserSelf ? ` (${this.$t('general.you')})` : ''}`
             },
 
             interactable() {

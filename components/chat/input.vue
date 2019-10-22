@@ -1,7 +1,7 @@
 <template>
     <div class="chat-bar-wrapper">
-        <input type="text" class="chat-bar" :class="{ 'disabled': sending }" placeholder="Say something cool..." ref="input" v-model=content @keyup=didPressKey @keyup.enter=sendMessage() />
-        <div class="send-button" :class="{ 'is-enabled': canSendMessage, loading: sending, disabled: sending }" @click="sendMessage()" title="Send Message">
+        <input type="text" class="chat-bar" :class="{ 'disabled': sending }" :placeholder="$t('room.chat.placeholder')" ref="input" v-model=content @keyup=didPressKey @keyup.enter=sendMessage() />
+        <div class="send-button" :class="{ 'is-enabled': canSendMessage, loading: sending, disabled: sending }" @click="sendMessage()" :title="$t('room.chat.sendButtonTooltip')">
             <img src="/icons/airplane.svg" class="send-button-icon">
         </div>
     </div>
