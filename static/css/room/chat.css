@@ -161,6 +161,17 @@ div.content div.watch div.player-footer, div.content div.watch div.chat {
 
 @media only screen and (max-width: 768px) and (orientation: landscape) {
 
+    div.content div.watch div.chat:focus-within {
+        display:block;
+        visibility: hidden;
+
+        position: fixed;
+        top: 0px;
+        bottom: 0px;
+
+        width: 100%;
+    }
+
     div.content div.watch div.chat {
         display:none;
     }

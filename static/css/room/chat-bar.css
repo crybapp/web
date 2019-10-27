@@ -72,3 +72,12 @@ div.send-button img.send-button-icon {
 div.chat-bar-wrapper div.send-button.is-enabled img.send-button-icon {
     filter: invert(0)
 }
+
+@media only screen and (max-width: 768px) and (orientation: landscape) {
+
+    div.chat div.chat-bar-wrapper:focus-within {
+        visibility: visible;
+        background: inherit;
+    }
+
+}
