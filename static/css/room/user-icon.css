@@ -38,3 +38,13 @@ div.chat-bar-wrapper input.disabled {
 div.watch {
     overflow: none
 }
+
+@media screen and (prefers-color-scheme: light) {
+    div.user-name-wrapper p.user-name {
+        color: white !important
+    }
+    
+    div.user-icon div.user-name-wrapper {
+        background-color: black;
+    }
+}

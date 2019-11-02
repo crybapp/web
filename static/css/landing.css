@@ -21,7 +21,10 @@ div.landing div.left {
     justify-content: center;
     align-items: center;
     
-    left: 0px
+    left: 0px;
+
+    background-color: black;
+    color:white
 }
 
 div.landing div.right {
@@ -74,5 +77,17 @@ div.right .video {
     
     div.landing div.right {
         display: none
+    }
+}
+
+@media screen and (prefers-color-scheme: light) {
+    div.landing {
+        background-color: white;
+        color: black
+    }
+
+    div.landing div.left {
+        background-color: white;
+        color:black
     }
 }

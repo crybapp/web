@@ -124,3 +124,13 @@ div.user-control-indicator:hover:not(.non-interactable) img.user-control-icon.ha
     opacity: 0;
     height: 0;
 }
+
+@media screen and (prefers-color-scheme: light) {
+    div.user-icons div.user-icon.passable:hover {
+        box-shadow: 0 0 0 3px black
+    }
+
+    div.user-icon div.user-control-indicator {
+        box-shadow: 0 0 0px 3px black
+    }
+}

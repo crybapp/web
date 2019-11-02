@@ -72,3 +72,14 @@ div.send-button img.send-button-icon {
 div.chat-bar-wrapper div.send-button.is-enabled img.send-button-icon {
     filter: invert(0)
 }
+
+@media screen and (prefers-color-scheme: light) {
+
+    div.content div.chat-bar-wrapper input.chat-bar {
+        color: black
+    }
+
+    div.content div.chat-bar-wrapper div.send-button {
+        background-color: white
+    }
+}
