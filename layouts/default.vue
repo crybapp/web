@@ -29,7 +29,7 @@
                 titleTemplate: chunk => this.$route.name === 'room' && this.room ? `${this.room.name} - ${this.brand.name}` : (chunk ? `${chunk} - ${this.brand.name}` : this.brand.name),
                 meta: [
                     { charset: 'utf-8' },
-                    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                    { name: 'viewport', content: 'width=device-width, initial-scale=1, user-scalable=no' },
                     { name: 'description', content: `${this.brand.name} makes it easy to enjoy what you love with your friends` },
                     { name: 'theme-color', content: '#000000' },
                     { property: 'og:image', content: '/img/icon-hq.png'}

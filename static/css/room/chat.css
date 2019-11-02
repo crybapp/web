@@ -154,6 +154,7 @@ img.emoji {
 }
 
 @media screen and (prefers-color-scheme: light) {
+
     div.chat-messages div.grouped-chat-wrapper {
         color: black
     }
@@ -166,4 +167,41 @@ img.emoji {
     div.content div.watch div.player-footer, div.content div.watch div.chat {
         background: white;
     }
+
+}
+
+/* Mobile adaptation */
+
+@media only screen and (max-width: 768px) and (orientation: portrait) {
+
+    div.content div.watch div.chat {
+        left:0;
+        width:100%;
+
+        position: relative;
+        
+        min-height: calc(55vh - 65px);
+        max-height: calc((91vh - 65px) - 56.25vw);
+        height: calc((36vh - 56.25vw) * 100);
+    }
+
+}
+
+@media only screen and (max-width: 768px) and (orientation: landscape) {
+
+    div.content div.watch div.chat:focus-within {
+        display:block;
+        visibility: hidden;
+
+        position: fixed;
+        top: 0px;
+        bottom: 0px;
+
+        width: 100%;
+    }
+
+    div.content div.watch div.chat {
+        display:none;
+    }
+
 }
