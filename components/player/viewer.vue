@@ -66,7 +66,9 @@
 
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
                     canvas: this.$refs.stream,
-                    pauseWhenHidden: false
+                    pauseWhenHidden: false,
+                    videoBufferSize: parseInt(process.env.VIDEO_BITRATE || 1200) * 1024,
+                    audioBufferSize: parseInt(process.env.AUDIO_BITRATE || 128) * 1024 
                 })
             },
 
@@ -86,12 +88,14 @@
             },
 
             didKeyDown(event) {
+                event.preventDefault()
                 const { keyCode, ctrlKey, shiftKey } = event
                 this.activeKeyEvent = event
 
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_DOWN')
             },
             didKeyUp(event) {
+                event.preventDefault()
                 const { keyCode, ctrlKey, shiftKey } = event
 
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_UP')
@@ -110,11 +114,12 @@
             },
             didMouseUp(event) {
                 const { button } = event,
-                    { x, y } = this.calculatePos(event)
+                      { x, y } = this.calculatePos(event)
 
                 this.emitEvent({ x, y, button: button + 1 }, 'MOUSE_UP')
             },
             didMouseWheel(event) {
+                event.preventDefault()
                 const { deltaX, deltaY } = event
 
                 this.emitEvent({ scrollUp: deltaY > 0 }, 'MOUSE_SCROLL')
