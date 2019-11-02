@@ -5,7 +5,7 @@ a.input-wrapper {
 a.input-wrapper div.input {
     padding: 10px;
 
-    background-color: white;
+    background-color: black;
     box-shadow: 0 0 0 1px grey;
 
     font-weight: 600;
@@ -41,12 +41,13 @@ div.input input.input-inner {
     outline: 0;
 
     background-color: rgba(0, 0, 0, 0);
+    color: white;
 
     font-size: 16px;
 }
 
 a.input-wrapper div.input:hover {
-    box-shadow: 0 0 0 1px black;
+    box-shadow: 0 0 0 1px rgb(255, 255, 255);
     /* background-color: #f7f7f7; */
     /* box-shadow: 0px 4px 10px #00000017 !important */
 }
@@ -70,4 +71,25 @@ div.input.disabled {
     opacity: 0.25;
     cursor: not-allowed;
     pointer-events: none;
+}
+
+::placeholder {
+    color: white;
+    opacity: 0.7
+}
+
+@media screen and (prefers-color-scheme: light) {
+    ::placeholder {
+        color:#999;
+        opacity: 1
+    }
+
+    a.input-wrapper div.input {
+        background-color: white;
+        color: black
+    }
+
+    a.input-wrapper div.input:hover {
+        box-shadow: 0 0 0 1px black
+    }
 }

@@ -36,8 +36,8 @@ div.modal {
     padding: 1.5em;
     z-index: 9999;
     
-    color: black;
-    background-color: white;
+    color: white;
+    background-color: black;
 
     border: rgba(112, 128, 144, 0.25) 1px solid;
     border-radius: 10px;
@@ -70,5 +70,17 @@ div.modal-cover {
 }
 
 div.modal-wrapper.cover div.modal-cover {
-    background-color: white
+    background-color: black
+}
+
+@media screen and (prefers-color-scheme: light) {
+    div.modal-wrapper.cover div.modal-cover {
+        background-color: white
+    }
+
+    
+    div.modal {
+        color: black;
+        background-color: white
+    }
 }

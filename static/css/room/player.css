@@ -33,6 +33,7 @@ div.player div.player-msg {
 
     margin: 0;
     transform: translate(-50%, -50%);
+    color: white;
 }
 
 div.player-msg h1.title {

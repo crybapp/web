@@ -104,10 +104,12 @@ div.chat-message div.chat-message-options {
 div.chat-message:hover div.chat-message-options {
     display: flex;
     
-    background-color: black;
     border-radius: 5px;
 
-    opacity: 1
+    opacity: 1;
+
+    -webkit-filter: invert(0);
+    filter: invert(0);
 }
 
 div.chat-message-options img.chat-message-option {
@@ -142,4 +144,20 @@ p.chat-typing-bar {
 
 div.content div.watch div.player-footer, div.content div.watch div.chat {
     background: black;
+}
+
+@media screen and (prefers-color-scheme: light) {
+
+    div.chat-messages div.grouped-chat-wrapper {
+        color: black
+    }
+
+    div.chat-message:hover div.chat-message-options {
+        -webkit-filter: invert(1);
+        filter: invert(1);
+    }
+
+    div.content div.watch div.player-footer, div.content div.watch div.chat {
+        background: white;
+    }
 }
