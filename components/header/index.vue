@@ -23,10 +23,10 @@
 <script>
     import { mapGetters } from 'vuex'
 
-    import UserMenu from './menu/user-menu'
-    import RoomMenu from './menu/room-menu'
+    import Button from '~/components/Button'
 
-    import Button from '~/components/button'
+    import UserMenu from '~/components/Header/Menu/UserMenu'
+    import RoomMenu from '~/components/Header/Menu/RoomMenu'
 
     export default {
         computed: {

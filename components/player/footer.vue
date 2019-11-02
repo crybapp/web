@@ -9,8 +9,8 @@
 <script>
 	import { mapGetters } from 'vuex'
 
-	import UserIcon from './user-icon'
-	import RoomInviteHint from '~/components/invite/room/hint'
+	import UserIcon from '~/components/Player/UserIcon'
+	import RoomInviteHint from '~/components/Invite/Room/Hint'
 	
 	export default {
 		computed: {

@@ -11,9 +11,9 @@
 <script>
     import { mapGetters } from 'vuex'
 
-    import ChatInput from './input'
-    import ChatTypingBar from './typing'
-    import GroupedChatMessage from './grouped-message'
+    import ChatInput from '~/components/Chat/InputBar'
+    import ChatTypingBar from '~/components/Chat/TypingBar'
+    import GroupedChatMessage from '~/components/Chat/GroupedMessage'
 
     export default {
         computed: {

@@ -14,10 +14,10 @@
 <script>
     import { mapGetters } from 'vuex'
 
-    import Chat from '~/components/chat/index'
+    import Chat from '~/components/Chat'
 
-    import Player from '~/components/player/index'
-    import PlayerFooter from '~/components/player/footer'
+    import Player from '~/components/Player'
+    import PlayerFooter from '~/components/Player/Footer'
 
     export default {
         async asyncData(context) {

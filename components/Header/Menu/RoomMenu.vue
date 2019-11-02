@@ -16,9 +16,9 @@
 <script>
     import { mapGetters } from 'vuex'
 
-    import Menu from './index'
-    import MenuOption from './option'
-    import MenuSection from './section'
+    import Menu from '~/components/Header/Menu'
+    import MenuOption from '~/components/Header/Menu/Option'
+    import MenuSection from '~/components/Header/Menu/Section'
 
     export default {
         computed: {
