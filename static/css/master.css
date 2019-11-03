@@ -50,7 +50,7 @@ div.header h1.title {
     margin-left: 0.65em;
     font-size: 27px;
     font-weight: 500;
-    color: black;
+    color: white;
 }
 
 div.header div.left, div.header div.right {
@@ -403,7 +403,7 @@ div.header-menu div.menu-section:not(:last-child) {
     }
 
     div.header h1.title {
-        color: white
+        color: black
     }
 
     div.header div.header-menu {
