@@ -92,4 +92,8 @@ div.input.disabled {
     a.input-wrapper div.input:hover {
         box-shadow: 0 0 0 1px black
     }
+    
+    div.input input.input-inner {
+        color: black
+    }
 }
