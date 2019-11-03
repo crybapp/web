@@ -16,7 +16,7 @@
     "@nuxtjs/axios": "^5.5.4",
     "browser-cookies": "^1.2.0",
     "cookieparser": "^0.1.0",
-    "date-fns": "^2.5.1",
+    "date-fns": "^2.6.0",
     "dotenv": "^8.2.0",
     "jsmpeg": "^1.0.0",
     "node-emoji": "^1.10.0",
