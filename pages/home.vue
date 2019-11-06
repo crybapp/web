@@ -92,9 +92,6 @@
     import JoinRoom from '~/components/Room/Join'
     import CreateRoom from '~/components/Room/Create'
 
-    import Input from '~/components/Input'
-    import Button from '~/components/Button'
-
     export default {
         head() {
             return {
@@ -111,9 +108,6 @@
         },
         middleware: 'authenticated',
         components: {
-            Input,
-            Button,
-
             Modal,
             JoinRoom,
             CreateRoom

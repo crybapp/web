@@ -461,7 +461,7 @@ export const actions = {
         }
     },
 
-    async fetchRoom({ commit }, id) {
+    async fetchRoom({ commit }) {
         try {
             const room = await this.$axios.$get(`room`)
 
@@ -511,7 +511,7 @@ export const actions = {
         }
     },
 
-    async nuxtClientInit({ commit }, req) {
+    async nuxtClientInit({ commit }) {
         this.$axios.interceptors.response.use(response => {
             return response
         }, error => {

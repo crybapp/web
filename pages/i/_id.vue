@@ -1,7 +1,7 @@
 <template>
     <div class="invite-page">
         <div v-if="room" class="invite-wrapper">
-            <div v-if="room.portal.status === 'open'" class="portal-indicator loading" />>
+            <div v-if="room.portal.status === 'open'" class="portal-indicator loading" />
             <img src="/icons/tv.svg" class="invite-image">
             <div class="invite-member-icons">
                 <div

@@ -1,16 +1,33 @@
 <template>
     <div class="room-join" :class="{ 'has-icon': modal && !loading }">
-        <nuxt-link to="" @click.native=$parent.$parent.hideModals()>
+        <nuxt-link to="" @click.native="$parent.$parent.hideModals()">
             <img src="/icons/circle-close.svg" class="close-button">
             <img src="/icons/circle-close-filled.svg" class="close-button-hover">
         </nuxt-link>
-        <h1 class="title">Join Room</h1>
-        <p class="subtitle">If your friend sent you an invite to a room, you're in the right place. Copy the invite into the box below and we'll get you sorted in no time</p>
+        <h1 class="title">
+            Join Room
+        </h1>
+        <p class="subtitle">
+            If your friend sent you an invite to a room, you're in the right place. Copy the invite into the box below and we'll get you sorted in no time!
+        </p>
         <Form>
-            <Input placeholder="Invite Code or Link" v-model=invite :disabled=loading @keydown.enter=joinRoom() />
-            <Button @click.native=joinRoom() :loading=loading :disabled=!isRoomInviteValid>{{ loading ? 'Finding room...' : 'Find Room' }}</Button>
+            <Input
+                v-model="invite"
+                placeholder="Invite Code or Link"
+                :disabled="loading"
+                @keydown.enter="joinRoom()"
+            />
+            <Button
+                :loading="loading"
+                :disabled="!isRoomInviteValid"
+                @click.native="joinRoom()"
+            >
+                {{ loading ? 'Finding room...' : 'Find Room' }}
+            </Button>
         </Form>
-        <p class="error" v-if=error>{{ error }}</p>
+        <p v-if="error" class="error">
+            {{ error }}
+        </p>
     </div>
 </template>
 <script>
@@ -21,18 +38,26 @@
     import Button from '~/components/Button'
 
     export default {
-        computed: {
-            ...mapGetters(['user']),
-
-            isRoomInviteValid() {
-                return this.invite.length > 0
-            }
+        components: {
+            Form,
+            Input,
+            Button
         },
+        props: [
+            'modal'
+        ],
         data() {
             return {
                 error: null,
                 loading: false,
                 invite: ''
+            }
+        },
+        computed: {
+            ...mapGetters(['user']),
+
+            isRoomInviteValid() {
+                return this.invite.length > 0
             }
         },
         methods: {
@@ -54,14 +79,6 @@
                     this.error = error.response.data.error.description
                 }
             }
-        },
-        props: [
-            'modal'
-        ],
-        components: {
-            Form,
-            Input,
-            Button
         }
     }
 </script>
