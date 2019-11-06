@@ -85,7 +85,6 @@
                 return this.portalStatus === 'open' && this.apertureWs && this.apertureToken
             },
             showPlayerDevtools() {
-                // eslint-disable-next-line no-undef
                 return process.env.SHOW_PLAYER_DEVTOOLS
             },
 

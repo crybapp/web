@@ -74,7 +74,6 @@
             },
 
             showPlayerDevtools() {
-                // eslint-disable-next-line no-undef
                 return process.env.SHOW_PLAYER_DEVTOOLS && this.portal
             }
         },
@@ -125,10 +124,8 @@
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
                     canvas: this.$refs.stream,
                     pauseWhenHidden: false,
-                    /* eslint-disable no-undef */
                     videoBufferSize: parseInt(process.env.VIDEO_BITRATE || 1200) * 1024,
                     audioBufferSize: parseInt(process.env.AUDIO_BITRATE || 128) * 1024
-                    /* eslint-enable no-undef */
                 })
             },
 

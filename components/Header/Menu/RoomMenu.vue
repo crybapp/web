@@ -95,7 +95,6 @@
             },
             async copyInvite() {
                 try {
-                    // eslint-disable-next-line no-undef
                     await this.$copyText(`${process.env.BASE_WEB_URL}/i/${this.room.invites[0].code}`)
 
                     this.hint = 'Copied!'

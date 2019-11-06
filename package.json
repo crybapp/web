@@ -9,7 +9,8 @@
   "scripts": {
     "start": "nuxt start",
     "build": "nuxt build",
-    "dev": "nuxt"
+    "dev": "nuxt",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@novnc/novnc": "^1.1.0",

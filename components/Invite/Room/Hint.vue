@@ -32,7 +32,6 @@
             ...mapGetters(['room']),
 
             inviteLink() {
-                // eslint-disable-next-line no-undef
                 return `${process.env.BASE_WEB_URL}/i/${this.room.invites[0].code}`
             }
         },
