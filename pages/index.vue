@@ -1,6 +1,6 @@
 <template>
     <div class="landing">
-        <div :class="{ left: hasLandingVideo, center: !hasLandingVideo }">
+        <div :class="{ 'left': true, 'has-landing-video': hasLandingVideo }">
             <div class="center">
                 <picture>
                     <source srcset="/img/logo.svg" media="(prefers-color-scheme: light)">
@@ -23,7 +23,8 @@
                         Login with Discord
                     </Button>
                     <p v-else class="disclaimer">
-                        Uh-oh! Looks like we can't find a redirect url for Login with Discord.
+                        Uh-oh! Looks like we can't find a redirect URL for Login with Discord.
+                        <br>
                         If this is your site, make sure the environment variables for both API and Web are setup correctly.
                     </p>
                 </div>
@@ -41,6 +42,8 @@
         <div v-if="hasLandingVideo" class="right">
             <iframe
                 class="video"
+                width="1920"
+                height="1080"
                 :src="`https://www.youtube.com/embed/${brand.landing_video_id}?controls=0&autoplay=1&loop=1&mute=1`"
                 frameborder="0"
                 allow="accelerometer; autoplay; loop; encrypted-media; gyroscope; picture-in-picture"
