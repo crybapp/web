@@ -1,5 +1,7 @@
 <template>
-    <p class="chat-typing-bar" v-if=areUsersTyping>{{ typingTooltip }}</p>
+    <p v-if="areUsersTyping" class="chat-typing-bar">
+        {{ typingTooltip }}
+    </p>
 </template>
 <script>
     import { mapGetters } from 'vuex'
@@ -15,7 +17,7 @@
                 return this.typingUsers.length > 0
             },
             typingUsersList() {
-                return this.typingUsers.map(user => user.name).join(', ') 
+                return this.typingUsers.map(user => user.name).join(', ')
             }
         }
     }

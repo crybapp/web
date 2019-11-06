@@ -1,6 +1,10 @@
 <template>
     <div class="header-menu-wrapper">
-        <div class="menu-cover" :class="{ visible }" @click=toggleMenu()></div>
+        <div
+            class="menu-cover"
+            :class="{ visible }"
+            @click="toggleMenu()"
+        />
         <div class="header-menu" :class="{ visible, 'is-dark': dark, 'user-menu': type === 'user', 'room-menu': type === 'room' }">
             <slot />
         </div>
@@ -8,6 +12,10 @@
 </template>
 <script>
 export default {
+    props: [
+        'type',
+        'dark'
+    ],
     data() {
         return {
             visible: false
@@ -20,10 +28,6 @@ export default {
             if(this.type)
                 this.$router.push(this.visible ? `#${this.type}-menu` : '')
         }
-    },
-    props: [
-        'type',
-        'dark'
-    ]
+    }
 }
 </script>

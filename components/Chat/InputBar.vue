@@ -1,18 +1,27 @@
 <template>
     <div class="chat-bar-wrapper">
-        <input type="text" class="chat-bar" :class="{ 'disabled': sending }" placeholder="Say something cool..." ref="input" v-model=content @keyup=didPressKey @keyup.enter=sendMessage() />
-        <div class="send-button" :class="{ 'is-enabled': canSendMessage, loading: sending, disabled: sending }" @click="sendMessage()" title="Send Message">
+        <input
+            ref="input"
+            v-model="content"
+            type="text"
+            class="chat-bar"
+            :class="{ 'disabled': sending }"
+            placeholder="Say something cool..."
+            @keyup="didPressKey"
+            @keyup.enter="sendMessage()"
+        >
+        <div
+            class="send-button"
+            :class="{ 'is-enabled': canSendMessage, loading: sending, disabled: sending }"
+            title="Send Message"
+            @click="sendMessage()"
+        >
             <img src="/icons/airplane.svg" class="send-button-icon">
         </div>
     </div>
 </template>
 <script>
     export default {
-        computed: {
-            canSendMessage() {
-                return this.content.length > 0
-            }
-        },
         data() {
             return {
                 content: '',
@@ -20,12 +29,20 @@
                 typingTimer: null
             }
         },
+        computed: {
+            canSendMessage() {
+                return this.content.length > 0
+            }
+        },
+        mounted() {
+            this.$refs.input.focus()
+        },
         methods: {
             async sendMessage() {
                 if(this.sending) return
                 if(this.content.length === 0) return
                 if(this.content.length > 255) return alert('This message is longer than 255 characters, please shorten it before trying again.')
-                
+
                 const content = this.content
 
                 this.content = ''
@@ -64,9 +81,6 @@
                     this.typingTimer = null
                 }
             }
-        },
-        mounted() {
-            this.$refs.input.focus()
         }
     }
 </script>

@@ -1,16 +1,58 @@
 <template>
-    <Menu class="room-menu" type="room" ref="menu" :dark="true" v-if=room>
-        <MenuOption to="/home" icon="home">Go Home</MenuOption>
+    <Menu
+        v-if="room"
+        ref="menu"
+        class="room-menu"
+        type="room"
+        :dark="true"
+    >
+        <MenuOption to="/home" icon="home">
+            Go Home
+        </MenuOption>
         <MenuSection>
-            <MenuOption name="copyInvite" icon="door" :html="true" v-if=room.invites>
-                <p class="menu-option-content menu-option-title">Invite Code</p>
-                <p class="menu-option-content menu-option-subtitle">{{ room.invites[0].code }}</p>
-                <p class="menu-option-content menu-option-hint">{{ hint }}</p>
+            <MenuOption
+                v-if="room.invites"
+                name="copyInvite"
+                icon="door"
+                :html="true"
+            >
+                <p class="menu-option-content menu-option-title">
+                    Invite Code
+                </p>
+                <p class="menu-option-content menu-option-subtitle">
+                    {{ room.invites[0].code }}
+                </p>
+                <p class="menu-option-content menu-option-hint">
+                    {{ hint }}
+                </p>
             </MenuOption>
-            <MenuOption name="refreshInvite" icon="die-3" :loading=refreshingInvite :disabled="refreshingInvite || destroyingRoom" v-if=room.invites>{{ refreshingInvite ? 'Refreshing...' : refreshInviteTooltip }}</MenuOption>
+            <MenuOption
+                v-if="room.invites"
+                name="refreshInvite"
+                icon="die-3"
+                :loading="refreshingInvite"
+                :disabled="refreshingInvite || destroyingRoom"
+            >
+                {{ refreshingInvite ? 'Refreshing...' : refreshInviteTooltip }}
+            </MenuOption>
         </MenuSection>
-        <MenuOption name="restartPortal" icon="cube" :loading=restartingPortal :disabled=restartingPortal v-if="room.portal.status === 'open'">{{ restartingPortal ? 'Restarting...' : 'Restart Browser' }}</MenuOption>
-        <MenuOption name="destroyRoom" icon="circle-close" :loading=destroyingRoom :disabled="refreshingInvite || destroyingRoom">{{ destroyingRoom ? 'Deleting...' : 'Delete Room' }}</MenuOption>
+        <MenuOption
+            v-if="room.portal.status === 'open'"
+            name="restartPortal"
+            icon="cube"
+            :loading="restartingPortal"
+            :disabled="restartingPortal"
+        >
+            {{ restartingPortal ? 'Restarting...' : 'Restart Browser' }}
+        </MenuOption>
+        <MenuOption
+            name="destroyRoom"
+            icon="circle-close"
+            :loading="destroyingRoom"
+            :disabled="refreshingInvite || destroyingRoom"
+        >
+            {{ destroyingRoom ? 'Deleting...' : 'Delete Room' }}
+        </MenuOption>
     </Menu>
 </template>
 <script>
@@ -53,6 +95,7 @@
             },
             async copyInvite() {
                 try {
+                    // eslint-disable-next-line no-undef
                     await this.$copyText(`${process.env.BASE_WEB_URL}/i/${this.room.invites[0].code}`)
 
                     this.hint = 'Copied!'

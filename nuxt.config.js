@@ -25,9 +25,10 @@ export default {
         /**
          * Other Config
          */
-        SHOW_PLAYER_DEVTOOLS: process.env.NODE_ENV === 'development',
-	AUDIO_BITRATE: process.env.AUDIO_BITRATE,
-	VIDEO_BITRATE: process.env.VIDEO_BITRATE
+        SHOW_PLAYER_DEVTOOLS: (process.env.SHOW_PLAYER_DEVTOOLS === 'true' ||
+                                process.env.NODE_ENV === 'development'),
+        AUDIO_BITRATE: process.env.AUDIO_BITRATE,
+        VIDEO_BITRATE: process.env.VIDEO_BITRATE
     },
     axios: {
         baseURL: process.env.API_BASE_URL

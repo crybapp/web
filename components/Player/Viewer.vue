@@ -1,29 +1,60 @@
 <template>
-    <div class='player' :class="{ 'capture-events': hasControl }">
-        <p class='player-dev' v-if=showPlayerDevtools>
-            Portal ID: {{ portal.id }}<br>
+    <div
+        class="player"
+        :class="{ 'capture-events': hasControl }"
+    >
+        <p v-if="showPlayerDevtools" class="player-dev">
+            Portal ID: {{ portal.id }}
+            <br>
             Portal Status: {{ portal.status }}
         </p>
-        <canvas class="player-stream" ref="stream" tabindex="1" @keydown=didKeyDown @keyup=didKeyUp @mousemove=didMouseMove @mousedown=didMouseDown @mouseup=didMouseUp @mousewheel=didMouseWheel @contextmenu=handleRightClick></canvas>
-        <div class="player-tooltips" v-if=showMutedPopup>
+        <canvas
+            ref="stream"
+            class="player-stream"
+            tabindex="1"
+            @keydown="didKeyDown"
+            @keyup="didKeyUp"
+            @mousemove="didMouseMove"
+            @mousedown="didMouseDown"
+            @mouseup="didMouseUp"
+            @mousewheel="didMouseWheel"
+            @contextmenu="handleRightClick"
+        />
+        <div v-if="showMutedPopup" class="player-tooltips">
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
-                    <p class="player-tooltip-title">{{ brand.name }} is muted</p>
-                    <p class="player-tooltip-body">Your browser requires user interaction in order to let us play video with audio</p>
+                    <p class="player-tooltip-title">
+                        {{ brand.name }} is muted
+                    </p>
+                    <p class="player-tooltip-body">
+                        Your browser requires user interaction in order to let us play video with audio!
+                    </p>
                 </div>
-                <Button @click.native=unmute()>Unmute</Button>
+                <Button @click.native="unmute()">
+                    Unmute
+                </Button>
             </div>
         </div>
     </div>
 </template>
 <script>
     import { mapGetters } from 'vuex'
-    
+
     import brand from '~/brand/config'
 
     import Button from '~/components/Button'
 
     export default {
+        components: {
+            Button
+        },
+        data() {
+            return {
+                brand,
+                activeKeyEvent: null,
+                showMutedPopup: false
+            }
+        },
         computed: {
             ...mapGetters(['ws', 'userId', 'controllerId', 'portal', 'apertureWs', 'apertureToken']),
 
@@ -43,15 +74,42 @@
             },
 
             showPlayerDevtools() {
+                // eslint-disable-next-line no-undef
                 return process.env.SHOW_PLAYER_DEVTOOLS && this.portal
             }
         },
-        data() {
-            return {
-                brand,
-                activeKeyEvent: null,
-                showMutedPopup: false
+        mounted() {
+            let hidden,
+                visibilityChange
+
+            if(typeof document.hidden !== 'undefined') {
+                hidden = 'hidden'
+                visibilityChange = 'visibilitychange'
+            } else if(typeof document.msHidden !== 'undefined') {
+                hidden = 'msHidden'
+                visibilityChange = 'msvisibilitychange'
+            } else if(typeof document.webkitHidden !== 'undefined') {
+                hidden = 'webkitHidden'
+                visibilityChange = 'webkitvisibilitychange'
             }
+
+            if(typeof document.addEventListener !== 'undefined' && hidden !== undefined)
+                document.addEventListener(visibilityChange, () => this.handleVisibilityChange(hidden), false)
+
+            if(this.apertureWs && this.apertureToken)
+                this.playStream()
+
+            this.$store.subscribe(({ type }, { stream }) => {
+                switch(type) {
+                    case 'updateAperture':
+                        this.$nextTick(this.playStream)
+
+                        break
+                }
+            })
+
+            if(this.$refs.stream)
+                this.$refs.stream.onpaste = this.didPaste
         },
         methods: {
             unmute() {
@@ -67,8 +125,10 @@
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
                     canvas: this.$refs.stream,
                     pauseWhenHidden: false,
+                    /* eslint-disable no-undef */
                     videoBufferSize: parseInt(process.env.VIDEO_BITRATE || 1200) * 1024,
-                    audioBufferSize: parseInt(process.env.AUDIO_BITRATE || 128) * 1024 
+                    audioBufferSize: parseInt(process.env.AUDIO_BITRATE || 128) * 1024
+                    /* eslint-enable no-undef */
                 })
             },
 
@@ -76,7 +136,7 @@
                 if(document[hidden] && this.activeKeyEvent)
                     this.didKeyUp(this.activeKeyEvent)
             },
-            
+
             handleRightClick(event) {
                 event.preventDefault()
             },
@@ -155,43 +215,6 @@
 
                 return Math.round(this.streamHeight * (yPos / elem.clientHeight))
             }
-        },
-        mounted() {
-            let hidden,
-                visibilityChange
-
-            if(typeof document.hidden !== 'undefined') {
-                hidden = 'hidden'
-                visibilityChange = 'visibilitychange'
-            } else if(typeof document.msHidden !== 'undefined') {
-                hidden = 'msHidden'
-                visibilityChange = 'msvisibilitychange'
-            } else if(typeof document.webkitHidden !== 'undefined') {
-                hidden = 'webkitHidden'
-                visibilityChange = 'webkitvisibilitychange'
-            }
-
-            if(typeof document.addEventListener !== 'undefined' && hidden !== undefined)
-                document.addEventListener(visibilityChange, () => this.handleVisibilityChange(hidden), false)
-            
-
-            if(this.apertureWs && this.apertureToken)
-                this.playStream()
-
-            this.$store.subscribe(({ type }, { stream }) => {
-                switch(type) {
-                    case 'updateAperture':
-                        this.$nextTick(this.playStream)
-
-                        break
-                }
-            })
-
-            if(this.$refs.stream)
-                this.$refs.stream.onpaste = this.didPaste
-        },
-        components: {
-            Button
         }
     }
 </script>

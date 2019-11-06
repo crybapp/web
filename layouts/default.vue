@@ -1,22 +1,30 @@
 <template>
     <div class="root">
-        <Header :dark=isDarkTheme />
+        <Header :dark="isDarkTheme" />
         <div class="content" :class="{ 'is-dark': isDarkTheme, 'is-center': !isRoomPage }">
             <nuxt />
-            <GoogleAnalytics v-if=brand.ga_tracking_id />
+            <GoogleAnalytics v-if="brand.ga_tracking_id" />
         </div>
     </div>
 </template>
 <script>
     import { mapGetters } from 'vuex'
-    import { parse } from 'cookieparser'
-    
+
     import brand from '~/brand/config'
 
     import Header from '~/components/Header'
     import GoogleAnalytics from '~/components/GoogleAnalytics'
 
     export default {
+        components: {
+            Header,
+            GoogleAnalytics
+        },
+        data() {
+            return {
+                brand
+            }
+        },
         head() {
             const script = []
 
@@ -51,15 +59,6 @@
             isDarkTheme() {
                 return this.isRoomPage
             }
-        },
-        data() {
-            return {
-                brand
-            }
-        },
-        components: {
-            Header,
-            GoogleAnalytics
         }
     }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div class="modal-wrapper" :class="{ visible, cover }">
-        <div class="modal-cover" @click=hideModal()></div>
+        <div class="modal-cover" @click="hideModal()" />
         <div class="modal">
             <slot />
         </div>
@@ -8,6 +8,9 @@
 </template>
 <script>
     export default {
+        props: [
+            'cover'
+        ],
         data() {
             return {
                 visible: false
@@ -18,10 +21,7 @@
                 this.visible = false
                 this.$router.push('')
             }
-        },
-        props: [
-            'cover'
-        ]
+        }
     }
 </script>
 <style src="~/static/css/components/modal.css" scoped></style>

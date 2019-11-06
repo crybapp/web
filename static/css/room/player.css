@@ -4,7 +4,7 @@ div.content div.watch div.player-wrapper {
     top: 0;
     left: 0;
     bottom: 181px;
-    width: calc(100% - 341px);
+    width: calc(100% - 341px)
 }
 
 div.content div.watch div.player-wrapper div.player {
@@ -18,8 +18,8 @@ div.content div.watch div.player-wrapper div.player {
     margin: 0 auto;
     overflow: hidden;
     align-content: center;
-    
-    transform: translateX(-50%);
+
+    transform: translateX(-50%)
 }
 
 div.player div.player-msg {
@@ -35,7 +35,7 @@ div.player div.player-msg {
     transform: translate(-50%, -50%);
     color: white;
 
-    padding: 5%;
+    padding: 5%
 }
 
 div.player-msg h1.title {
@@ -84,13 +84,13 @@ canvas.player-stream {
     position: fixed;
 
     outline: none;
-    
+
     top: 50%;
     left: 50%;
     max-width: 100%;
     max-height: 100%;
-    
-    transform: translate(-50%, -50%);
+
+    transform: translate(-50%, -50%)
 }
 
 textarea.keyboard-capture {
@@ -106,7 +106,7 @@ textarea.keyboard-capture {
 
     margin: 0;
     border: 0;
-    padding: 0;
+    padding: 0
 }
 
 div.player div.player-tooltips {
@@ -164,10 +164,7 @@ div.player-tooltip a.player-tooltip-action {
     color: black
 }
 
-/* Mobile UI adaptation */
-
 @media only screen and (max-width: 768px) and (orientation: portrait) {
-
     div.content div.watch div.player-wrapper {
         width: 100%;
         bottom: 60%;
@@ -175,25 +172,22 @@ div.player-tooltip a.player-tooltip-action {
         height: 56.25vw;
         max-height: 36vh;
 
-        position:relative;
+        position: relative
     }
-    
 }
 
 @media only screen and (max-width: 768px) and (orientation: landscape) {
-
     div.content div.watch div.player-wrapper {
         width: 100vw;
         height: 100vh;
-        bottom: 0;
+        bottom: 0
     }
-    
+
     div.content {
         top: 0px;
     }
 
     div.header{
-        display:none;
+        display: none
     }
-
 }

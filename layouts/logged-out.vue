@@ -1,7 +1,7 @@
 <template>
     <div class="root">
         <nuxt />
-        <GoogleAnalytics v-if=brand.ga_tracking_id />
+        <GoogleAnalytics v-if="this.brand.ga_tracking_id" />
     </div>
 </template>
 <script>
@@ -10,6 +10,9 @@
     import GoogleAnalytics from '~/components/GoogleAnalytics'
 
     export default {
+        components: {
+            GoogleAnalytics
+        },
         head() {
             const script = []
 
@@ -37,9 +40,6 @@
             return {
                 brand
             }
-        },
-        components: {
-            GoogleAnalytics
         }
     }
 </script>

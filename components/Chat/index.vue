@@ -1,8 +1,20 @@
 <template>
     <div class="chat">
-        <p class="chat-no-messages-warn" v-if="!messages || messages.length === 0">Nobody said nothing. Maybe say something?</p>
-        <div class="chat-messages" :class="{ 'users-are-typing': typingUsers.length > 0 }" ref="messagesView" v-else-if=messages>
-            <GroupedChatMessage v-for="(group, i) in messages" :key=group.id :group=group :isLastGroup="i === messages.length - 1" />
+        <p v-if="!messages || messages.length === 0" class="chat-no-messages-warn">
+            Nobody said nothing. Maybe say something?
+        </p>
+        <div
+            v-else-if="messages"
+            ref="messagesView"
+            class="chat-messages"
+            :class="{ 'users-are-typing': typingUsers.length > 0 }"
+        >
+            <GroupedChatMessage
+                v-for="(group, i) in messages"
+                :key="group.id"
+                :group="group"
+                :isLastGroup="i === messages.length - 1"
+            />
         </div>
         <ChatTypingBar />
         <ChatInput />
@@ -16,16 +28,13 @@
     import GroupedChatMessage from '~/components/Chat/GroupedMessage'
 
     export default {
+        components: {
+            ChatInput,
+            ChatTypingBar,
+            GroupedChatMessage
+        },
         computed: {
             ...mapGetters(['messages', 'typingUsers'])
-        },
-        methods: {
-            updateMessageView() {
-                const { messagesView } = this.$refs
-                if(!messagesView) return
-
-                messagesView.scrollTop = messagesView.scrollHeight
-            }
         },
         mounted() {
             this.$nextTick(this.updateMessageView)
@@ -35,10 +44,13 @@
                     this.$nextTick(this.updateMessageView)
             })
         },
-        components: {
-            ChatInput,
-            ChatTypingBar,
-            GroupedChatMessage
+        methods: {
+            updateMessageView() {
+                const { messagesView } = this.$refs
+                if(!messagesView) return
+
+                messagesView.scrollTop = messagesView.scrollHeight
+            }
         }
     }
 </script>

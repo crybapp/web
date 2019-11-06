@@ -1,12 +1,35 @@
 <template>
-    <div class="user-icon" :class="{ 'passable': canPassControl, 'offline': !isUserOnline, 'has-control': hasControl }" v-if=member @click=didClickUserIcon() @mouseover="hover = true" @mouseleave="hover = false">
-        <img :src=userIcon v-if=userIcon class="user-icon-avatar" :title=userHoverTitle />
+    <div
+        v-if="member"
+        class="user-icon"
+        :class="{ 'passable': canPassControl, 'offline': !isUserOnline, 'has-control': hasControl }"
+        @click="didClickUserIcon()"
+        @mouseover="hover = true"
+        @mouseleave="hover = false"
+    >
+        <img
+            v-if="userIcon"
+            :src="userIcon"
+            class="user-icon-avatar"
+            :title="userHoverTitle"
+        >
         <div class="user-name-wrapper">
-            <p class="user-name">{{ member.name }}</p>
+            <p class="user-name">
+                {{ member.name }}
+            </p>
         </div>
-        <div class="user-control-indicator" :class="{ 'visible': hasControl, 'non-interactable': !interactable }" @click=didClickControlIcon() :title=indicatorHoverTitle>
-            <img src="/icons/cursor-a.svg" class="user-control-icon has-control">
-            <img src="/icons/multiply.svg" class="user-control-icon remove-control" v-if=interactable>
+        <div
+            class="user-control-indicator"
+            :class="{ 'visible': hasControl, 'non-interactable': !interactable }"
+            :title="indicatorHoverTitle"
+            @click="didClickControlIcon()"
+        >
+            <img class="user-control-icon has-control" src="/icons/cursor-a.svg">
+            <img
+                v-if="interactable"
+                class="user-control-icon remove-control"
+                src="/icons/multiply.svg"
+            >
         </div>
     </div>
 </template>
@@ -14,6 +37,14 @@
 	import { mapGetters } from 'vuex'
 
     export default {
+        props: [
+            'member'
+        ],
+        data() {
+            return {
+                hover: false,
+            }
+        },
         computed: {
             ...mapGetters(['room', 'userId', 'controllerId', 'onlineUserIds']),
 
@@ -21,8 +52,7 @@
                 if(!this.member) return null
 
                 if(this.hover) return this.member.icon
-                
-                return this.member.icon.replace(".gif", ".png")
+                else return this.member.icon.replace('.gif', '.png')
             },
 
             userHoverTitle() {
@@ -79,11 +109,6 @@
                 return this.userId === this.controllerId
             }
         },
-        data() {
-            return {
-                hover: false,
-            }
-        },
         methods: {
             didClickUserIcon() {
                 if(this.controllerId === null && this.isUserSelf)
@@ -96,9 +121,6 @@
                     this.$store.dispatch('releaseControl')
             }
         },
-        props: [
-            'member'
-        ]
     }
 </script>
 <style src="~/static/css/room/user-icon.css" scoped></style>

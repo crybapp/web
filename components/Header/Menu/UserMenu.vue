@@ -1,20 +1,65 @@
 <template>
-    <Menu class="user-menu" type="user" ref="menu" :dark="dark" v-if=user>
+    <Menu
+        v-if="user"
+        ref="menu"
+        class="user-menu"
+        type="user"
+        :dark="dark"
+    >
         <MenuSection>
             <MenuOption :html="true" :disabled="true">
-                <p class="menu-option-content menu-option-title">{{ user.name }}</p>
+                <p class="menu-option-content menu-option-title">
+                    {{ user.name }}
+                </p>
             </MenuOption>
         </MenuSection>
         <MenuSection>
-            <MenuOption to="/room" icon="preview" v-if="user.room && this.$route.name !== 'room'">View Room</MenuOption>
-            <MenuOption name="leave-room" icon="panel-arrow-left" :loading=leavingRoom v-if=user.room>{{ leavingRoom ? 'Leaving...' : 'Leave Room'}}</MenuOption>
+            <MenuOption
+                v-if="user.room && this.$route.name !== 'room'"
+                to="/room"
+                icon="preview"
+            >
+                View Room
+            </MenuOption>
+            <MenuOption
+                v-if="user.room"
+                name="leave-room"
+                icon="panel-arrow-left"
+                :loading="leavingRoom"
+            >
+                {{ leavingRoom ? 'Leaving...' : 'Leave Room' }}
+            </MenuOption>
 
-            <MenuOption to="/room/join" icon="panel-arrow-right" v-if=!user.room>Join Room</MenuOption>
-            <MenuOption to="/room/create" icon="add" v-if=!user.room>Create Room</MenuOption>
+            <MenuOption
+                v-if="!user.room"
+                to="/room/join"
+                icon="panel-arrow-right"
+            >
+                Join Room
+            </MenuOption>
+            <MenuOption
+                v-if="!user.room"
+                to="/room/create"
+                icon="add"
+            >
+                Create Room
+            </MenuOption>
         </MenuSection>
         <MenuSection>
-            <MenuOption name="reload-profile" icon="user" :loading=reloadingProfile>{{ reloadingProfile ? 'Reloading...' : 'Reload Profile' }}</MenuOption>
-            <MenuOption to="/" name="logout" icon="log-out">Logout</MenuOption>
+            <MenuOption
+                name="reload-profile"
+                icon="user"
+                :loading="reloadingProfile"
+            >
+                {{ reloadingProfile ? 'Reloading...' : 'Reload Profile' }}
+            </MenuOption>
+            <MenuOption
+                to="/"
+                name="logout"
+                icon="log-out"
+            >
+                Logout
+            </MenuOption>
         </MenuSection>
     </Menu>
 </template>
@@ -26,15 +71,23 @@
     import MenuSection from '~/components/Header/Menu/Section'
 
     export default {
-        computed: {
-            ...mapGetters(['user'])
+        components: {
+            Menu,
+            MenuOption,
+            MenuSection
         },
+        props: [
+            'dark'
+        ],
         data() {
             return {
                 leavingRoom: false,
                 reloadingProfile: false,
                 loadingInvites: false
             }
+        },
+        computed: {
+            ...mapGetters(['user'])
         },
         methods: {
             async reloadProfile() {
@@ -53,7 +106,7 @@
             },
             async leaveRoom() {
                 if(!confirm('Are you sure you want to leave this room? Once you leave this room, you cannot join back without an invite')) return
-                
+
                 this.leavingRoom = true
 
                 try {
@@ -102,14 +155,6 @@
                 else if(name === 'logout')
                     this.logout()
             }
-        },
-        components: {
-            Menu,
-            MenuOption,
-            MenuSection
-        },
-        props: [
-            'dark'
-        ]
+        }
     }
 </script>

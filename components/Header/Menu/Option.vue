@@ -1,9 +1,24 @@
 <template>
-    <nuxt-link class="menu-option-wrapper" :to="to || ''" :class="{ disabled }">
-        <div class="menu-option" :class="{ 'has-icon': icon, loading, disabled }" @click=didClickOption()>
-            <img class="menu-option-icon" :class="{ 'align-top': icon === 'door' }" :src="`/icons/${icon}.svg`" v-if=icon>
-            <p class="menu-option-content" v-if="!html"><slot /></p>
-            <div class="menu-option-content" v-else>
+    <nuxt-link
+        class="menu-option-wrapper"
+        :to="to || ''"
+        :class="{ disabled }"
+    >
+        <div
+            class="menu-option"
+            :class="{ 'has-icon': icon, loading, disabled }"
+            @click="didClickOption()"
+        >
+            <img
+                v-if="icon"
+                class="menu-option-icon"
+                :class="{ 'align-top': icon === 'door' }"
+                :src="`/icons/${icon}.svg`"
+            >
+            <p v-if="!html" class="menu-option-content">
+                <slot />
+            </p>
+            <div v-else class="menu-option-content">
                 <slot />
             </div>
         </div>
@@ -11,14 +26,6 @@
 </template>
 <script>
     export default {
-        methods: {
-            didClickOption() {
-                if(this.$parent.$parent.didClickOption)
-                    this.$parent.$parent.didClickOption(this.name)
-                else if(this.$parent.$parent.$parent.didClickOption)
-                    this.$parent.$parent.$parent.didClickOption(this.name)
-            }
-        },
         props: [
             'to',
             'icon',
@@ -26,6 +33,14 @@
             'html',
             'loading',
             'disabled'
-        ]
+        ],
+        methods: {
+            didClickOption() {
+                if(this.$parent.$parent.didClickOption)
+                    this.$parent.$parent.didClickOption(this.name)
+                else if(this.$parent.$parent.$parent.didClickOption)
+                    this.$parent.$parent.$parent.didClickOption(this.name)
+            }
+        }
     }
 </script>

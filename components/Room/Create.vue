@@ -1,16 +1,33 @@
 <template>
     <div class="room-create" :class="{ 'has-icon': modal && !loading }">
-        <nuxt-link to="" @click.native=$parent.$parent.hideModals()>
+        <nuxt-link to="" @click.native="$parent.$parent.hideModals()">
             <img src="/icons/circle-close.svg" class="close-button">
             <img src="/icons/circle-close-filled.svg" class="close-button-hover">
         </nuxt-link>
-        <h1 class="title">Create a Room</h1>
-        <p class="subtitle">When you create a room, you'll be able to add your friends and browse the internet.</p>
+        <h1 class="title">
+            Create a Room
+        </h1>
+        <p class="subtitle">
+            When you create a room, you'll be able to add your friends and browse the internet.
+        </p>
         <Form>
-            <Input placeholder="Room Name" v-model=roomName :disabled=loading @keydown.enter=createRoom() />
-            <Button @click.native=createRoom() :disabled=!isRoomNameValid :loading=loading>{{ loading ? 'Creating room...' : 'Create Room'}}</Button>
+            <Input
+                v-model="roomName"
+                placeholder="Room Name"
+                :disabled="loading"
+                @keydown.enter="createRoom()"
+            />
+            <Button
+                :disabled="!isRoomNameValid"
+                :loading="loading"
+                @click.native="createRoom()"
+            >
+                {{ loading ? 'Creating room...' : 'Create Room' }}
+            </Button>
         </Form>
-        <p class="error" v-if=error>{{ error }}</p>
+        <p v-if="error" class="error">
+            {{ error }}
+        </p>
     </div>
 </template>
 <script>
@@ -21,19 +38,27 @@
     import Button from '~/components/Button'
 
     export default {
+        components: {
+            Form,
+            Input,
+            Button
+        },
+        props: [
+            'modal'
+        ],
+        data() {
+            return {
+                error: null,
+                loading: false,
+                roomName: ''
+            }
+        },
         computed: {
             ...mapGetters(['user']),
 
             isRoomNameValid() {
                 return this.roomName.length > 0 &&
                         this.roomName.length < 30
-            }
-        },
-        data() {
-            return {
-                error: null,
-                loading: false,
-                roomName: ''
             }
         },
         methods: {
@@ -45,7 +70,7 @@
                 this.loading = true
 
                 try {
-                    const room = await this.$axios.$post('room', { name: this.roomName })
+                    await this.$axios.$post('room', { name: this.roomName })
 
                     this.$router.push(`/room`)
                 } catch(error) {
@@ -54,14 +79,6 @@
                     this.loading = false
                 }
             }
-        },
-        props: [
-            'modal'
-        ],
-        components: {
-            Form,
-            Input,
-            Button
         }
     }
 </script>

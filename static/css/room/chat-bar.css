@@ -24,8 +24,8 @@ div.chat-bar-wrapper input.chat-bar {
 
     color: white;
     background-color: rgba(0, 0, 0, 0);
-    
-    font-size: 20px;
+
+    font-size: 20px
 }
 
 div.chat-bar-wrapper div.send-button {
@@ -46,7 +46,7 @@ div.chat-bar-wrapper div.send-button {
 
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center
 }
 
 div.chat-bar-wrapper div.send-button.is-enabled {
@@ -59,7 +59,7 @@ div.chat-bar-wrapper div.send-button.is-enabled:hover {}
 
 div.chat-bar-wrapper div.send-button.disabled {
     opacity: 0.65;
-    cursor: not-allowed;
+    cursor: not-allowed
 }
 
 div.send-button img.send-button-icon {
@@ -74,7 +74,6 @@ div.chat-bar-wrapper div.send-button.is-enabled img.send-button-icon {
 }
 
 @media screen and (prefers-color-scheme: light) {
-
     div.content div.chat-bar-wrapper input.chat-bar {
         color: black
     }
@@ -85,10 +84,8 @@ div.chat-bar-wrapper div.send-button.is-enabled img.send-button-icon {
 }
 
 @media only screen and (max-width: 768px) and (orientation: landscape) {
-
     div.chat div.chat-bar-wrapper:focus-within {
         visibility: visible;
-        background: inherit;
+        background: inherit
     }
-
 }

@@ -13,8 +13,8 @@ div.content div.watch div.player-footer {
     overflow-x: auto;
     overflow-y: hidden;
 
-    height: 180px;
-}    
+    height: 180px
+}
 
 div.player-footer div.user-icons {
     display: flex;
@@ -25,7 +25,7 @@ div.player-footer div.user-icons {
     margin: auto;
     padding: 40px;
 
-    align-items: center;
+    align-items: center
 }
 
 div.user-icons div.user-icon {
@@ -33,7 +33,7 @@ div.user-icons div.user-icon {
     width: 100px;
     margin-left: 1.5em;
     border-radius: 50%;
-    background-color: rgba(112, 128, 144, 0.25);
+    background-color: rgba(112, 128, 144, 0.25)
 }
 
 div.user-icons div.user-icon:first-child {
@@ -48,7 +48,7 @@ div.user-icon.offline img.user-icon-avatar {
 }
 
 div.user-icon:not(:first-child):last-child img.user-icon-avatar {
-    margin-right: 2em;
+    margin-right: 2em
 }
 
 div.user-icons div.user-icon.passable {
@@ -71,7 +71,7 @@ div.user-icons img.user-icon:first-child {
 }
 
 img.user-icon:hover {
-    opacity: 0.25;
+    opacity: 0.25
 }
 
 div.user-icon div.user-control-indicator {
@@ -92,7 +92,7 @@ div.user-icon div.user-control-indicator {
     align-items: center;
     transform: scale(0);
     justify-content: center;
-    
+
     transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28)
 }
 
@@ -126,7 +126,6 @@ div.user-control-indicator:hover:not(.non-interactable) img.user-control-icon.ha
 }
 
 @media screen and (prefers-color-scheme: light) {
-
     div.user-icons div.user-icon.passable:hover {
         box-shadow: 0 0 0 3px black
     }
@@ -134,47 +133,40 @@ div.user-control-indicator:hover:not(.non-interactable) img.user-control-icon.ha
     div.user-icon div.user-control-indicator {
         box-shadow: 0 0 0px 3px black
     }
-
 }
 
-/* Mobile UI adaptation */
-
 @media only screen and (max-width: 768px) and (orientation: portrait) {
-
     div.content div.watch div.player-footer {
-        left:0px;
+        left: 0px;
         right: 0px;
         top: 0px;
 
         width: 100%;
         height: 9vh;
 
-        position:relative;
+        position: relative
     }
-        
+
     div.user-icons div.user-icon{
-        height:7vh;
-        width:7vh;
+        height: 7vh;
+        width: 7vh
     }
 
     div.player-footer div.user-icons {
-        padding: 1vh;
+        padding: 1vh
     }
 
     div.user-icons div.has-control {
-        box-shadow: 0px 0px 0px 3px white;
+        box-shadow: 0px 0px 0px 3px white
     }
 
     div.user-icon div.user-control-indicator {
-        display:none;
+        display: none
     }
-
 }
 
 @media only screen and (max-width: 768px) and (orientation: landscape) {
-
     div.content div.watch div.player-footer {
-        display:none;
+        display: none
     }
-
 }

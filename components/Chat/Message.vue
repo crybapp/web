@@ -1,19 +1,41 @@
 <template>
-    <div class="chat-message" :class="{ 'is-loading': loading || isMessageSending }">
-        <p class="chat-message-content" v-html="getEmojifiedMessageContent"></p>
-        <div class="chat-message-options" v-if=!isMessageSending>
-            <img class="chat-message-option chat-message-report" src="/icons/message-exclaimation.svg" title="Report message" v-if=!isAuthorSelf @click=report()>
-            <img class="chat-message-option chat-message-delete" src="/icons/trash-full.svg" title="Delete message" v-if="isAuthorSelf || isSelfRoomOwner" @click=destroy()>
+    <div
+        class="chat-message"
+        :class="{ 'is-loading': loading || isMessageSending }"
+    >
+        <p class="chat-message-content" v-html="getEmojifiedMessageContent" />
+        <div v-if="!isMessageSending" class="chat-message-options">
+            <img
+                v-if="!isAuthorSelf"
+                class="chat-message-option chat-message-report"
+                src="/icons/message-exclaimation.svg"
+                title="Report message"
+                @click="report()"
+            >
+            <img
+                v-if="isAuthorSelf || isSelfRoomOwner"
+                class="chat-message-option chat-message-delete"
+                src="/icons/trash-full.svg"
+                title="Delete message"
+                @click="destroy()"
+            >
         </div>
     </div>
 </template>
 <script>
     import { mapGetters } from 'vuex'
-    import { formatDistance } from 'date-fns'
     import emoji from 'node-emoji'
     import twemoji from 'twemoji'
 
     export default {
+        props: [
+            'message'
+        ],
+        data() {
+            return {
+                loading: false
+            }
+        },
         computed: {
             ...mapGetters(['userId', 'room']),
 
@@ -29,17 +51,11 @@
                 return typeof this.message === 'string'
             },
             getEmojifiedMessageContent() {
-                if (typeof this.message === 'string') {
+                if (typeof this.message === 'string')
                     return twemoji.parse(emoji.emojify(this.message))
-                } else {
+                else
                     return twemoji.parse(emoji.emojify(this.message.content))
-                }
             }
-        },
-        data() {
-            return {
-                loading: false
-            }  
         },
         methods: {
             async destroy() {
@@ -66,9 +82,6 @@
                     this.loading = false
                 }
             }
-        },
-        props: [
-            'message'
-        ]
+        }
     }
 </script>
