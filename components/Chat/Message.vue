@@ -26,6 +26,7 @@
     import { mapGetters } from 'vuex'
     import emoji from 'node-emoji'
     import twemoji from 'twemoji'
+    import sanitizeHtml from 'sanitize-html'
 
     export default {
         props: [
@@ -51,10 +52,15 @@
                 return typeof this.message === 'string'
             },
             getEmojifiedMessageContent() {
+                var content;
                 if (typeof this.message === 'string')
-                    return twemoji.parse(emoji.emojify(this.message))
+                    content = this.message
                 else
-                    return twemoji.parse(emoji.emojify(this.message.content))
+                    content = this.message.content
+
+                content = sanitizeHtml(content, { allowedTags: [], allowedAttributes: {} })
+
+                return twemoji.parse(emoji.emojify(content))
             }
         },
         methods: {

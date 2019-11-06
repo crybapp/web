@@ -21,6 +21,8 @@
     </div>
 </template>
 <script>
+    import sanitizeHtml from 'sanitize-html'
+
     export default {
         data() {
             return {
@@ -43,7 +45,9 @@
                 if(this.content.length === 0) return
                 if(this.content.length > 255) return alert('This message is longer than 255 characters, please shorten it before trying again.')
 
-                const content = this.content
+                const content = sanitizeHtml(this.content, { allowedTags: [], allowedAttributes: {} })
+
+                if (content.length === 0) return
 
                 this.content = ''
                 this.didEndTyping()
