@@ -58,7 +58,7 @@
                 else
                     content = this.message.content
 
-                content = sanitizeHtml(content)
+                content = sanitizeHtml(content, { allowedTags: [], allowedAttributes: {} })
 
                 return twemoji.parse(emoji.emojify(content))
             }

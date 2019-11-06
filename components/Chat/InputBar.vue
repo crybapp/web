@@ -45,7 +45,7 @@
                 if(this.content.length === 0) return
                 if(this.content.length > 255) return alert('This message is longer than 255 characters, please shorten it before trying again.')
 
-                const content = sanitizeHtml(this.content)
+                const content = sanitizeHtml(this.content, { allowedTags: [], allowedAttributes: {} })
 
                 if (content.length === 0) return
 
