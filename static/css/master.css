@@ -7,7 +7,6 @@ img {
     -khtml-user-drag: none;
     -moz-user-drag: none;
     -o-user-drag: none;
-    user-drag: none;
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -262,8 +261,7 @@ p.disclaimer {
     color: gray;
     font-size: 14px;
 
-    margin: 0;
-    margin-top: 0.5em
+    margin-top: 0.8em
 }
 
 div.has-icon h1.title {
