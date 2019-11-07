@@ -127,6 +127,10 @@
                     videoBufferSize: parseInt(process.env.VIDEO_BITRATE || 1200) * 1024,
                     audioBufferSize: parseInt(process.env.AUDIO_BITRATE || 128) * 1024
                 })
+
+                if (this.player.audioOut && !this.player.audioOut.unlocked) {
+                    this.showMutedPopup = true
+                }
             },
 
             handleVisibilityChange(hidden) {
@@ -137,6 +141,7 @@
             handleRightClick(event) {
                 event.preventDefault()
             },
+
             didPaste(event) {
                 const { clipboardData } = event,
                         text = clipboardData.getData('text/plain')
@@ -151,6 +156,7 @@
 
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_DOWN')
             },
+
             didKeyUp(event) {
                 event.preventDefault()
                 const { keyCode, ctrlKey, shiftKey } = event
@@ -163,18 +169,21 @@
 
                 this.emitEvent({ x, y }, 'MOUSE_MOVE')
             },
+
             didMouseDown(event) {
                 const { button } = event,
                     { x, y } = this.calculatePos(event)
 
                 this.emitEvent({ x, y, button: button + 1 }, 'MOUSE_DOWN')
             },
+
             didMouseUp(event) {
                 const { button } = event,
                       { x, y } = this.calculatePos(event)
 
                 this.emitEvent({ x, y, button: button + 1 }, 'MOUSE_UP')
             },
+
             didMouseWheel(event) {
                 event.preventDefault()
                 const { deltaX, deltaY } = event
