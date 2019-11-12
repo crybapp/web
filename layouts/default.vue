@@ -1,22 +1,30 @@
 <template>
     <div class="root">
-        <Header :dark=isDarkTheme />
+        <Header :dark="isDarkTheme" />
         <div class="content" :class="{ 'is-dark': isDarkTheme, 'is-center': !isRoomPage }">
             <nuxt />
-            <GoogleAnalytics v-if=brand.ga_tracking_id />
+            <GoogleAnalytics v-if="brand.ga_tracking_id" />
         </div>
     </div>
 </template>
 <script>
     import { mapGetters } from 'vuex'
-    import { parse } from 'cookieparser'
-    
+
     import brand from '~/brand/config'
 
-    import Header from '~/components/header/index'
-    import GoogleAnalytics from '~/components/analytics'
+    import Header from '~/components/Header'
+    import GoogleAnalytics from '~/components/GoogleAnalytics'
 
     export default {
+        components: {
+            Header,
+            GoogleAnalytics
+        },
+        data() {
+            return {
+                brand
+            }
+        },
         head() {
             const script = []
 
@@ -29,7 +37,7 @@
                 titleTemplate: chunk => this.$route.name === 'room' && this.room ? `${this.room.name} - ${this.brand.name}` : (chunk ? `${chunk} - ${this.brand.name}` : this.brand.name),
                 meta: [
                     { charset: 'utf-8' },
-                    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+                    { name: 'viewport', content: 'width=device-width, initial-scale=1, user-scalable=no' },
                     { name: 'description', content: `${this.brand.name} makes it easy to enjoy what you love with your friends` },
                     { name: 'theme-color', content: '#000000' },
                     { property: 'og:image', content: '/img/icon-hq.png'}
@@ -51,15 +59,6 @@
             isDarkTheme() {
                 return this.isRoomPage
             }
-        },
-        data() {
-            return {
-                brand
-            }
-        },
-        components: {
-            Header,
-            GoogleAnalytics
         }
     }
 </script>

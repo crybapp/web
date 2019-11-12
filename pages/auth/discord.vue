@@ -1,11 +1,13 @@
 <template>
-    <p>{{ message }}</p>
+    <p>
+        {{ message }}
+    </p>
 </template>
 <script>
 export default {
     head() {
         return {
-            title: 'Logging In'
+            title: 'Logging in'
         }
     },
     middleware: 'logged-out',
@@ -26,7 +28,7 @@ export default {
             this.$store.dispatch('fetchUser')
             this.$router.push(state ? `/i/${state.split('=')[1]}` : '/home')
         } catch(error) {
-            this.message = 'An error occured while authenticating. Please go home and Login with Discord again.'
+            this.message = 'An error occurred while authenticating. Please go home and try logging in again.'
         }
     }
 }

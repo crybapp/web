@@ -15,12 +15,12 @@ div.modal-wrapper {
 
     z-index: 9999;
 
-    transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1)
 }
 
 div.modal-wrapper.visible {
     opacity: 1;
-    pointer-events: all;
+    pointer-events: all
 }
 
 div.modal-wrapper.cover {
@@ -35,13 +35,12 @@ div.modal {
 
     padding: 1.5em;
     z-index: 9999;
-    
-    color: black;
-    background-color: white;
+
+    color: white;
+    background-color: black;
 
     border: rgba(112, 128, 144, 0.25) 1px solid;
     border-radius: 10px;
-
 
     transition: 0.2s all ease-in-out
 }
@@ -70,5 +69,17 @@ div.modal-cover {
 }
 
 div.modal-wrapper.cover div.modal-cover {
-    background-color: white
+    background-color: black
+}
+
+@media screen and (prefers-color-scheme: light) {
+    div.modal-wrapper.cover div.modal-cover {
+        background-color: white
+    }
+
+
+    div.modal {
+        color: black;
+        background-color: white
+    }
 }

@@ -1,6 +1,7 @@
 import { parse } from 'cookieparser'
 import cookies from 'browser-cookies'
 
+// eslint-disable-next-line no-undef
 const isProduction = () => process.env.NODE_ENV === 'production'
 
 export const getters = {
@@ -38,7 +39,7 @@ export const getters = {
 
     messages: ({ room }) => room ? (room.messages || []) : [],
     controllerId: ({ controllerId }) => controllerId,
-    
+
     apertureWs: ({ apertureWs }) => apertureWs,
     apertureToken: ({ apertureToken }) => apertureToken,
 
@@ -97,11 +98,13 @@ export const mutations = {
             if(token)
                 cookies.set('token', token, {
                     expires: 365,
+                    // eslint-disable-next-line no-undef
                     domain: process.env.COOKIE_DOMAIN,
                     secure: isProduction()
                 })
             else
                 cookies.erase('token', {
+                    // eslint-disable-next-line no-undef
                     domain: process.env.COOKIE_DOMAIN
                 })
     },
@@ -118,7 +121,7 @@ export const mutations = {
 
             if(room.portal)
                 state.portal = room.portal
-            
+
             if(!room.messages)
                 state.room.messages = []
 
@@ -130,7 +133,7 @@ export const mutations = {
 
             if(state.onlineUsers && state.onlineUsers.indexOf(state.userId) === -1)
                 state.onlineUsers.push(state.userId)
-        
+
             if(room.members)
                 room.members.forEach(member => this.commit('handleUser', member))
         } else {
@@ -182,7 +185,7 @@ export const mutations = {
 
         if(!state.room.messages)
             state.room.messages = []
-        
+
         const lastGroup = state.room.messages[state.room.messages.length - 1], { id, author } = message
 
         if(message.author === state.userId)
@@ -208,7 +211,7 @@ export const mutations = {
         if(state.room.messages.length === 0) return
 
         const messageIds = state.room.messages.map(({ messageIds }) => messageIds)
-        
+
         let groupMessageIndex = -1, groupIndex = -1
 
         messageIds.forEach((ids, i) => {
@@ -230,7 +233,7 @@ export const mutations = {
      */
     handleUserJoin(state, user) {
         state.users[user.id] = user
-        
+
         if(state.room)
             if(state.room.members.indexOf(user.id) === -1)
                 state.room.members.push(user)
@@ -300,6 +303,7 @@ export const mutations = {
         if(save)
             cookies.set('allow_cookies', '1', {
                 expires: 365 * 10, // 10 years
+                // eslint-disable-next-line no-undef
                 domain: process.env.COOKIE_DOMAIN,
                 secure: isProduction()
             })
@@ -311,6 +315,7 @@ export const mutations = {
     setupWebSocket(state) {
         if(!state.token) return
 
+        // eslint-disable-next-line no-undef
         const { token } = state, ws = new WebSocket(process.env.WS_URL)
 
         ws.onerror = () => this.commit('setupReconnect')
@@ -322,7 +327,7 @@ export const mutations = {
                 json = JSON.parse(data)
             } catch(error) {
                 console.error(error)
-                
+
                 return console.error(error)
             }
 
@@ -364,16 +369,16 @@ export const mutations = {
                     this.commit('updateTypingStatus', d)
             } else if(op === 10) {
                 const { c_heartbeat_interval, c_reconnect_interval } = d
-                
+
                 this.commit('setupHeartbeat', c_heartbeat_interval)
                 if(state.wsReconnect) this.commit('invalidateReconnect')
 
                 state.wsReconnectInterval = c_reconnect_interval
-                
+
                 ws.send(JSON.stringify({ op: 2, d: { token } }))
             }
         }
-        
+
         state.ws = ws
     },
     disconnectWebSocket(state) {
@@ -387,10 +392,10 @@ export const mutations = {
 
         if(state.controllerId)
             state.controllerId = null
-        
+
         if(state.wsHeartbeat)
             this.commit('invalidateHeartbeat')
-        
+
         if(state.wsReconnect)
             this.commit('invalidateReconnect')
     },
@@ -438,6 +443,7 @@ export const mutations = {
         )
 
         cookies.erase('token', {
+            // eslint-disable-next-line no-undef
             domain: process.env.COOKIE_DOMAIN
         })
     }
@@ -455,7 +461,7 @@ export const actions = {
         }
     },
 
-    async fetchRoom({ commit }, id) {
+    async fetchRoom({ commit }) {
         try {
             const room = await this.$axios.$get(`room`)
 
@@ -480,7 +486,7 @@ export const actions = {
     async takeControl({ state, commit }) {
         try {
             await this.$axios.$post('room/controller/take')
-            
+
             commit('updateController', { u: state.userId })
         } catch(error) {
             console.error(error)
@@ -505,7 +511,7 @@ export const actions = {
         }
     },
 
-    async nuxtClientInit({ commit }, req) {
+    async nuxtClientInit({ commit }) {
         this.$axios.interceptors.response.use(response => {
             return response
         }, error => {
@@ -544,7 +550,7 @@ export const actions = {
 
             try {
                 const user = await this.$axios.$get('user/me')
-    
+
                 commit('handleSelfUser', user)
                 commit('handleUserId', user.id)
                 commit('handleRoom', user.room)

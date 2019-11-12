@@ -5,7 +5,7 @@ div.invite-wrapper {
 div.options {
     width: fit-content;
 
-    margin: auto;
+    margin: auto
 }
 
 div.options.is-horizontal {
@@ -15,7 +15,7 @@ div.options.is-horizontal {
 div.options div.option {
     width: 14em;
     height: fit-content;
-    
+
     padding: 2em;
 
     display: flex;
@@ -103,15 +103,38 @@ div.option h3.header.active {
     margin-bottom: 1em
 }
 
+div.option h3.header {
+    margin-bottom: 0.5em;
+    color: white
+}
+
 div.option h3.header:last-child {
     margin-bottom: 0
 }
 
 div.option p.description {
     margin-top: 0em;
-    color: #151515
+    color: #a7a7a7
 }
 
 div.home-room-wrapper {
     display: flex
+}
+
+img.icon {
+    filter: invert(1)
+}
+
+@media screen and (prefers-color-scheme: light) {
+    div.option h3.header {
+        color: black
+    }
+
+    img.icon {
+        filter: invert(0)
+    }
+
+    div.option p.description {
+        color: #151515
+    }
 }

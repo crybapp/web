@@ -1,15 +1,16 @@
 div.invite-wrapper {
-    display: flex;
+    display: flex
 }
 
 img.invite-image {
     width: 100px;
     height: 100px;
-    margin-top: -7.5px
+    margin-top: -7.5px;
+    filter: invert(1)
 }
 
 div.invite-details {
-    margin-left: 2em;
+    margin-left: 2em
 }
 
 img.invite-member-icon {
@@ -26,11 +27,11 @@ div.invite-member-icons {
     grid-row-gap: 10px;
     margin-top: 7em;
     position: absolute;
-    width: 100px;
+    width: 100px
 }
 
 div.invite-member-icon-wrapper {
-    display: flex;
+    display: flex
 }
 
 div.portal-indicator {
@@ -42,5 +43,11 @@ div.portal-indicator {
     margin-top: 8px;
     border-radius: 10px;
 
-    z-index: -1;
+    z-index: -1
+}
+
+@media screen and (prefers-color-scheme: light) {
+    img.invite-image {
+        filter: invert(0)
+    }
 }

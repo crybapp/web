@@ -1,6 +1,6 @@
 import { parse } from 'cookieparser'
 
-export default ({ store, redirect, req }) => {
+export default ({ redirect, req }) => {
     if(!req) return
     if(typeof req.headers.cookie !== 'string') return
 

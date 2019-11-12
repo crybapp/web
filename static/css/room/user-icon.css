@@ -14,12 +14,12 @@ div.user-icon div.user-name-wrapper {
     text-align: center;
     border-radius: 50px;
 
-    transition: all 0.2s;
+    transition: all 0.2s
 }
 
 div.user-icon:not(.has-control):hover div.user-name-wrapper {
     bottom: 2.15em;
-    opacity: 1;
+    opacity: 1
 }
 
 div.user-name-wrapper p.user-name {
@@ -37,4 +37,20 @@ div.chat-bar-wrapper input.disabled {
 
 div.watch {
     overflow: none
+}
+
+@media screen and (prefers-color-scheme: light) {
+    div.user-name-wrapper p.user-name {
+        color: white !important
+    }
+
+    div.user-icon div.user-name-wrapper {
+        background-color: black
+    }
+}
+
+@media only screen and (max-width: 768px) and (orientation: portrait) {
+    div.user-icon div.user-name-wrapper {
+        display: none
+    }
 }

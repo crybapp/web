@@ -6,7 +6,7 @@ div.content div.watch div.chat {
     bottom: 0px;
     width: 340px;
 
-    border-left: rgba(112, 128, 144, 0.25) 1px solid;
+    border-left: rgba(112, 128, 144, 0.25) 1px solid
 }
 
 div.chat p.chat-no-messages-warn {
@@ -44,7 +44,7 @@ div.chat-messages div.grouped-chat-wrapper {
 
 div.grouped-chat-wrapper img.chat-author-avatar {
     border-radius: 50%;
-    
+
     height: 50px;
     width: 50px;
 
@@ -58,11 +58,11 @@ div.grouped-chat-wrapper div.grouped-chat-messages-content {
 }
 
 div.grouped-chat-wrapper img.chat-author-avatar.has-controller {
-    box-shadow: 0 0 0 3px white;
+    box-shadow: 0 0 0 3px white
 }
 
 div.grouped-chat-messages-meta p.chat-author-name, div.chat-message p.chat-message-content {
-    margin: 0;
+    margin: 0
 }
 
 div.grouped-chat-messages-meta p.chat-author-name {
@@ -71,7 +71,7 @@ div.grouped-chat-messages-meta p.chat-author-name {
 }
 
 div.grouped-chat-messages-content div.grouped-chat-messages {
-    margin-top: 0.5em;
+    margin-top: 0.5em
 }
 
 div.chat-message:last-child p.chat-message-content {
@@ -80,11 +80,11 @@ div.chat-message:last-child p.chat-message-content {
 
 div.chat-message p.chat-message-content {
     margin-top: 0;
-    margin-bottom: 0.65em;
+    margin-bottom: 0.65em
 }
 
 div.chat-messages div.chat-message {
-    display: flex;
+    display: flex
 }
 
 div.chat-messages div.chat-message.is-loading {
@@ -97,17 +97,18 @@ div.chat-message div.chat-message-options {
     right: 0px;
     margin-right: 1.5em;
 
-    opacity: 0;
-
+    opacity: 0
 }
 
 div.chat-message:hover div.chat-message-options {
     display: flex;
-    
-    background-color: black;
+
     border-radius: 5px;
 
-    opacity: 1
+    opacity: 1;
+
+    -webkit-filter: invert(0);
+    filter: invert(0)
 }
 
 div.chat-message-options img.chat-message-option {
@@ -137,9 +138,61 @@ p.chat-typing-bar {
     margin-left: 1em;
 
     font-size: 14px;
-    color: #6d6d6d !important;
+    color: #6d6d6d !important
 }
 
 div.content div.watch div.player-footer, div.content div.watch div.chat {
-    background: black;
+    background: black
+}
+
+img.emoji {
+    height: 1em;
+    width: 1em;
+    margin: 0.05em 0.1em;
+    vertical-align: -0.1em
+}
+
+@media screen and (prefers-color-scheme: light) {
+    div.chat-messages div.grouped-chat-wrapper {
+        color: black
+    }
+
+    div.chat-message:hover div.chat-message-options {
+        -webkit-filter: invert(1);
+        filter: invert(1)
+    }
+
+    div.content div.watch div.player-footer, div.content div.watch div.chat {
+        background: white
+    }
+}
+
+@media only screen and (max-width: 768px) and (orientation: portrait) {
+    div.content div.watch div.chat {
+        left: 0;
+        width: 100%;
+
+        position: relative;
+
+        min-height: calc(55vh - 65px);
+        max-height: calc((91vh - 65px) - 56.25vw);
+        height: calc((36vh - 56.25vw) * 100)
+    }
+}
+
+@media only screen and (max-width: 768px) and (orientation: landscape) {
+    div.content div.watch div.chat:focus-within {
+        display: block;
+        visibility: hidden;
+
+        position: fixed;
+        top: 0px;
+        bottom: 0px;
+
+        width: 100%
+    }
+
+    div.content div.watch div.chat {
+        display: none
+    }
 }

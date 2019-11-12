@@ -1,7 +1,7 @@
 .loading {
-    background: linear-gradient(225deg,red,#d200ff,#0063ff,#00ffc1,#0bff66,#16ff00,#f0ff00,red) !important;
+    background: linear-gradient(225deg,red,#d000ffd2,#0062ffd3,#00c3ffda,#2ab301,#00ffeabd,#ff7b00ce,red) !important;
     background-size: 1600% 1600% !important;
-    
+
     transform: translateZ(0);
     animation: loadingAnimation 10s ease infinite
 }
@@ -36,13 +36,14 @@ input.input, button.button {
 
     transition: all 0.2s ease-in-out
 }
+
 input.input:hover, input.input:focus, button.button:not(.disabled):hover {
-    box-shadow: 0 0 0 1px black;
+    box-shadow: 0 0 0 1px black
 }
 
 button.button {
     cursor: pointer;
-    font-weight: 500;  
+    font-weight: 500;
     margin-left: 0.25em
 }
 
@@ -63,18 +64,42 @@ button.button.disabled {
 
 div.box {
     border-radius: 10px;
-    background-color: white;
-    box-shadow: 0 0 0 1px rgba(112, 128, 144, 0.25);
+    background-color: black;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.767);
 
     transition: all 0.1s ease-in-out
 }
 
 div.box:hover {
     /* background-color: #fffcfc; */
-    box-shadow: 0px 4px 10px #00000017 !important
+    box-shadow: 0px 0px 5px 5px #ffffff75 !important
 }
 
 div.box:active {
     /* background-color: #f9f8f8; */
-    box-shadow: 0px 6px 15px #00000017 !important
+    box-shadow: 0px 0px 5px 5px #ffffff75 !important
+}
+
+@media screen and (prefers-color-scheme: light) {
+    .loading {
+        background: linear-gradient(225deg,red,#d200ff,#0063ff,#00ffc1,#0bff66,#16ff00,#f0ff00,red) !important
+    }
+
+    div.box {
+        border-radius: 10px;
+        background-color: white;
+        box-shadow: 0 0 0 1px rgba(112, 128, 144, 0.25);
+
+        transition: all 0.1s ease-in-out
+    }
+
+    div.box:hover {
+        /* background-color: #fffcfc; */
+        box-shadow: 0px 4px 10px #00000017 !important
+    }
+
+    div.box:active {
+        /* background-color: #f9f8f8; */
+        box-shadow: 0px 6px 15px #00000017 !important
+    }
 }

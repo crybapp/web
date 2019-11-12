@@ -1,33 +1,65 @@
 <template>
     <div class="invite-page">
-        <div class="invite-wrapper" v-if=room>
-            <div class="portal-indicator loading" v-if="room.portal.status === 'open'"></div>
+        <div v-if="room" class="invite-wrapper">
+            <div v-if="room.portal.status === 'open'" class="portal-indicator loading" />
             <img src="/icons/tv.svg" class="invite-image">
             <div class="invite-member-icons">
-                <div class="invite-member-icon-wrapper" v-for="member in room.members" :key=member.id>
-                    <img class="invite-member-icon" :src=member.icon>
+                <div
+                    v-for="member in room.members"
+                    :key="member.id"
+                    class="invite-member-icon-wrapper"
+                >
+                    <img class="invite-member-icon" :src="member.icon">
                 </div>
-                <div class="invite-member-icons-overlay"></div>
+                <div class="invite-member-icons-overlay" />
             </div>
             <div class="invite-details">
-                <h1 class="title">Join {{ room.name }}</h1>
-                <p class="subtitle">Start watching along with {{ membersList }} instantly</p>
+                <h1 class="title">
+                    Join {{ room.name }}
+                </h1>
+                <p class="subtitle">
+                    Start watching along with {{ membersList }} instantly
+                </p>
                 <Form>
-                    <Button type="discord" :href=redirectUrl v-if=!user icon="/icons/discord-white.svg" hover="/icons/discord-colour.svg">
+                    <Button
+                        v-if="!user"
+                        type="discord"
+                        :href="redirectUrl"
+                        icon="/icons/discord-white.svg"
+                        hover="/icons/discord-colour.svg"
+                    >
                         Login with Discord
                     </Button>
-                    <Button v-else-if=!isSelfInInvitedRoom :loading=loading :disabled=isSelfInRoom @click.native=joinRoom()>{{ loading ? 'Accepting invite...' : 'Accept Invite' }}</Button>
-                    <Button v-else-if=isSelfInInvitedRoom href="/room">View Room</Button>
+                    <Button
+                        v-else-if="!isSelfInInvitedRoom"
+                        :loading="loading"
+                        :disabled="isSelfInRoom"
+                        @click.native="joinRoom()"
+                    >
+                        {{ loading ? 'Accepting invite...' : 'Accept Invite' }}
+                    </Button>
+                    <Button v-else-if="isSelfInInvitedRoom" href="/room">
+                        View Room
+                    </Button>
                 </Form>
-                <p class="disclaimer" v-if="isSelfInRoom && !isSelfInInvitedRoom">You're already in a room. You need to <a href="#" @click=leaveRoom()>leave the room you're in</a> before joining this one</p>
-                <p class="disclaimer" v-else-if=isSelfInInvitedRoom>You're already in this room</p>
-                <p class="error" v-if=error>{{ error }}</p>
+                <p v-if="isSelfInRoom && !isSelfInInvitedRoom" class="disclaimer">
+                    You're already in a room. You need to <a href="#" @click="leaveRoom()">leave the room you're in</a> before joining this one
+                </p>
+                <p v-else-if="isSelfInInvitedRoom" class="disclaimer">
+                    You're already in this room.
+                </p>
+                <p v-if="error" class="error">
+                    {{ error }}
+                </p>
             </div>
         </div>
-        <div class="invite-not-found" v-else>
-            <h1 class="title">Invite Not Found</h1>
-            <p class="subtitle">We couldn't find a room linked with this invite code. Make sure you have the right invite and try again!</p>
-            <p>If something seems fishy, <nuxt-link to="/support" target="_blank">contact support</nuxt-link>.</p>
+        <div v-else class="invite-not-found">
+            <h1 class="title">
+                Invite Not Found
+            </h1>
+            <p class="subtitle">
+                We couldn't find a room linked with this invite code. Make sure you have the right invite and try again!
+            </p>
         </div>
     </div>
 </template>
@@ -36,21 +68,10 @@
 
     import brand from '~/brand/config'
 
-    import Form from '~/components/form'
-    import Button from '~/components/button'
+    import Form from '~/components/Form'
+    import Button from '~/components/Button'
 
     export default {
-        async asyncData(context) {
-            try {
-                const redirectUrl = await context.$axios.$get(`/auth/discord/redirect?invite=${context.route.params.id}`),
-                    room = await context.$axios.$get(`/invite/${context.route.params.id}/peek`)
-
-                return { room, redirectUrl }
-            } catch(error) {
-                console.error(error)
-                return { room: null, redirectUrl: null }
-            }
-        },
         head() {
             let inviteHeaders = {}
 
@@ -70,6 +91,17 @@
             return {
                 title: this.room ? `Join ${this.room.name}` : 'Invite Not Found',
                 ...inviteHeaders
+            }
+        },
+        components: {
+            Form,
+            Button
+        },
+        data() {
+            return {
+                brand,
+                error: '',
+                loading: false
             }
         },
         computed: {
@@ -92,21 +124,25 @@
                 return this.user.room && this.user.room.id === this.room.id
             }
         },
-        data() {
-            return {
-                brand,
-                error: '',
-                loading: false
+        async asyncData(context) {
+            try {
+                const redirectUrl = await context.$axios.$get(`/auth/discord/redirect?invite=${context.route.params.id}`),
+                    room = await context.$axios.$get(`/invite/${context.route.params.id}/peek`)
+
+                return { room, redirectUrl }
+            } catch(error) {
+                console.error(error)
+                return { room: null, redirectUrl: null }
             }
         },
         methods: {
             async joinRoom() {
                 if(this.isSelfInRoom) return
-                
+
                 this.loading = true
 
                 try {
-                    const room = await this.$axios.$post(`/invite/${this.$route.params.id}`)
+                    await this.$axios.$post(`/invite/${this.$route.params.id}`)
 
                     this.$router.push('/room')
                 } catch(error) {
@@ -120,10 +156,6 @@
 
                 this.$store.dispatch('leaveRoom')
             }
-        },
-        components: {
-            Form,
-            Button
         }
     }
 </script>
