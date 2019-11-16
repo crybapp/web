@@ -40,8 +40,7 @@ export const getters = {
     messages: ({ room }) => room ? (room.messages || []) : [],
     controllerId: ({ controllerId }) => controllerId,
 
-    apertureWs: ({ apertureWs }) => apertureWs,
-    apertureToken: ({ apertureToken }) => apertureToken,
+    janusId: ({ janusId }) => janusId,
 
     ws: ({ ws }) => ws
 }
@@ -62,8 +61,7 @@ const initialState = {
     typingUsers: [],
     sendingMessages: [],
 
-    apertureWs: null,
-    apertureToken: null,
+    janusId: null,
 
     ws: null,
     wsHeartbeat: null,
@@ -161,11 +159,10 @@ export const mutations = {
     /**
      * Aperture
      */
-    updateAperture(state, config) {
+    updateJanus(state, config) {
         if(!state.room) return
 
-        state.apertureWs = config.ws
-        state.apertureToken = config.t
+        state.janusId = config.id
     },
 
     /**
@@ -342,8 +339,8 @@ export const mutations = {
                     this.commit('updateController', d)
                 if(t.split('_')[0] === 'PORTAL')
                     this.commit('updatePortal', d)
-                else if(t === 'APERTURE_CONFIG')
-                    this.commit('updateAperture', d)
+                else if(t === 'JANUS_CONFIG')
+                    this.commit('updateJanus', d)
                 else if(t === 'ROOM_DESTROY') {
                     this.commit('handleRoom', null)
                     this.app.router.push('/home')

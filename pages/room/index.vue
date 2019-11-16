@@ -26,7 +26,8 @@
             return {
                 title: this.error ? 'Room Not Found' : (this.room ? this.room.name : ''),
                 script: [
-                    { src: '/js/jsmpeg.min.js' }
+                    { src: '/js/adapter.js' },
+                    { src: '/js/janus.js'}
                 ]
             }
         },

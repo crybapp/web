@@ -8,10 +8,12 @@
             <br>
             Portal Status: {{ portal.status }}
         </p>
-        <canvas
+        <video
             ref="stream"
             class="player-stream"
             tabindex="1"
+            autoplay
+            playsinline
             @keydown="didKeyDown"
             @keyup="didKeyUp"
             @mousemove="didMouseMove"
@@ -56,7 +58,7 @@
             }
         },
         computed: {
-            ...mapGetters(['ws', 'userId', 'controllerId', 'portal', 'apertureWs', 'apertureToken']),
+            ...mapGetters(['ws', 'userId', 'controllerId', 'portal', 'janusId']),
 
             hasControl() {
                 return this.controllerId === this.userId
@@ -81,6 +83,11 @@
             let hidden,
                 visibilityChange
 
+            Janus.init({
+                debug: true,
+                dependencies: Janus.useDefaultDependencies()
+            })
+
             if(typeof document.hidden !== 'undefined') {
                 hidden = 'hidden'
                 visibilityChange = 'visibilitychange'
@@ -95,12 +102,12 @@
             if(typeof document.addEventListener !== 'undefined' && hidden !== undefined)
                 document.addEventListener(visibilityChange, () => this.handleVisibilityChange(hidden), false)
 
-            if(this.apertureWs && this.apertureToken)
+            if(this.janusId)
                 this.playStream()
 
             this.$store.subscribe(({ type }, { stream }) => {
                 switch(type) {
-                    case 'updateAperture':
+                    case 'updateJanus':
                         this.$nextTick(this.playStream)
 
                         break
@@ -117,9 +124,14 @@
 
             playStream() {
                 if(typeof window === 'undefined') return
-                if(!JSMpeg) return // TODO: Add a popup that allows the user to retry playing the stream once the jsmpeg script has loaded
+                this.janus = new Janus({
+                    server: 'http://localhost:8088/janus',
+                    success: this.janusSessionConnected,
+                    error: this.janusError,
+                    destroy: this.janusDestroyed
+                })
 
-                if(this.player) this.player.destroy()
+                /*if(this.player) this.player.destroy()
 
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
                     canvas: this.$refs.stream,
@@ -130,7 +142,65 @@
 
                 if (this.player.audioOut && !this.player.audioOut.unlocked) {
                     this.showMutedPopup = true
+                }*/
+            },
+
+            janusSessionConnected() {
+                this.janus.attach({
+                    plugin: "janus.plugin.streaming",
+                    success: this.janusHandleCreated,
+                    error: this.janusError,
+                    onmessage: this.janusHandleMessages,
+                    onremotestream: this.janusHandleIncomingStream
+                })
+            },
+
+            janusHandleCreated(handle) {
+                this.janusHandle = handle
+                this.janusHandle.send({message: {
+                    request: 'watch',
+                    id: this.janusId,
+                    offer_audio: true,
+                    offer_video: true
+                }})
+            },
+
+            janusHandleMessages(msg, jsep) {
+                if(jsep !== undefined && jsep !== null) {
+                    this.janusHandle.createAnswer({
+                        jsep: jsep,
+                        media: {
+                            audioSend: false,
+                            videoSend: false
+                        },
+                        success: this.janusHandleAnswerSuccess,
+                        error: this.janusError
+                    })
                 }
+            },
+
+            janusHandleAnswerSuccess(localJsep) {
+                this.janusHandle.send({
+                    message: {
+                        request: "start"
+                    },
+                    jsep: localJsep
+                })
+            },
+
+            janusHandleIncomingStream(stream) {
+                console.log(this.$refs.stream)
+                console.log(stream)
+                this.$refs.stream.srcObject = stream
+                Janus.attachMediaStream(this.$refs.stream, stream)
+            },
+
+            janusError(reason) {
+                console.log(reason)
+            },
+
+            janusDestroyed() {
+                return
             },
 
             handleVisibilityChange(hidden) {
