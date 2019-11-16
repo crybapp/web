@@ -26,7 +26,7 @@ export default {
          * Other Config
          */
         SHOW_PLAYER_DEVTOOLS: (process.env.SHOW_PLAYER_DEVTOOLS === 'true' ||
-                                process.env.NODE_ENV === 'development'),
+            process.env.NODE_ENV !== 'production'),
         AUDIO_BITRATE: process.env.AUDIO_BITRATE,
         VIDEO_BITRATE: process.env.VIDEO_BITRATE
     },
@@ -34,6 +34,7 @@ export default {
         baseURL: process.env.API_BASE_URL
     },
     build: {
-        extractCSS: true
+        extractCSS: true,
+        publicPath: (process.env.PUBLIC_PATH === 'true' || '/_cryb/')
     }
 }
