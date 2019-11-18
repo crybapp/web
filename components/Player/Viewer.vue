@@ -10,6 +10,7 @@
         </p>
         <video
             ref="stream"
+            id="remoteStream"
             class="player-stream"
             tabindex="1"
             autoplay
@@ -54,7 +55,8 @@
             return {
                 brand,
                 activeKeyEvent: null,
-                showMutedPopup: false
+                showMutedPopup: false,
+                remoteStream: undefined
             }
         },
         computed: {
@@ -151,7 +153,8 @@
                     success: this.janusHandleCreated,
                     error: this.janusError,
                     onmessage: this.janusHandleMessages,
-                    onremotestream: this.janusHandleIncomingStream
+                    onremotestream: this.janusHandleIncomingStream,
+                    oncleanup: this.janusHandleCleanup
                 })
             },
 
@@ -159,9 +162,7 @@
                 this.janusHandle = handle
                 this.janusHandle.send({message: {
                     request: 'watch',
-                    id: this.janusId,
-                    offer_audio: true,
-                    offer_video: true
+                    id: this.janusId
                 }})
             },
 
@@ -189,10 +190,23 @@
             },
 
             janusHandleIncomingStream(stream) {
-                console.log(this.$refs.stream)
-                console.log(stream)
-                this.$refs.stream.srcObject = stream
-                Janus.attachMediaStream(this.$refs.stream, stream)
+                console.log("::::::: RECEIVED JANUS STREAM :::::::")
+                this.remoteStream = stream
+                var videoTracks = stream.getVideoTracks()
+                console.log("Video Tracks: " + videoTracks.length)
+                var audioTracks = stream.getAudioTracks()
+                console.log("Audio Tracks: "+ audioTracks.length)
+                if(videoTracks.length > 0) {
+                    console.log("Janus video track found.")
+                    console.log(stream.getVideoTracks())
+                    document.getElementById('remoteStream').srcObject = stream
+                }
+                                
+                console.log("::::::: JANUS STREAM FINISHED PROCESSING :::::::")
+            },
+
+            janusHandleCleanup() {
+                console.log("::: Janus cleanup received :::")
             },
 
             janusError(reason) {
