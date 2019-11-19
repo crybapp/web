@@ -127,7 +127,7 @@
             playStream() {
                 if(typeof window === 'undefined') return
                 this.janus = new Janus({
-                    server: 'http://localhost:8088/janus',
+                    server: `${process.env.JANUS_URL}/janus`,
                     success: this.janusSessionConnected,
                     error: this.janusError,
                     destroy: this.janusDestroyed
@@ -190,15 +190,15 @@
             },
 
             janusHandleIncomingStream(stream) {
-                console.log("::::::: RECEIVED JANUS STREAM :::::::")
+                console.debug("::::::: RECEIVED JANUS STREAM :::::::")
                 this.remoteStream = stream
                 var videoTracks = stream.getVideoTracks()
-                console.log("Video Tracks: " + videoTracks.length)
+                console.debug("Video Tracks: " + videoTracks.length)
                 var audioTracks = stream.getAudioTracks()
-                console.log("Audio Tracks: "+ audioTracks.length)
+                console.debug("Audio Tracks: "+ audioTracks.length)
                 if(videoTracks.length > 0) {
-                    console.log("Janus video track found.")
-                    console.log(stream.getVideoTracks())
+                    console.debug("Janus video track found.")
+                    console.debug(stream.getVideoTracks())
                     document.getElementById('remoteStream').srcObject = stream
                 }
                                 
