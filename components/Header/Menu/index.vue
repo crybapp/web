@@ -22,10 +22,10 @@ export default {
         }
     },
     methods: {
-        toggleMenu() {
+        toggleMenu(hide=false) {
             this.visible = !this.visible
 
-            if(this.type)
+            if(this.type && (hide && this.visible))
                 this.$router.push(this.visible ? `#${this.type}-menu` : '')
         }
     }

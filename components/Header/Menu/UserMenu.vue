@@ -96,7 +96,7 @@
                 try {
                     const updatedUser = await this.$axios.$post('user/profile/refresh')
 
-                    this.$refs.menu.toggleMenu()
+                    this.$refs.menu.toggleMenu(true)
                     this.$store.commit('handleSelfUser', updatedUser)
                 } catch(error) {
                     alert(error)
@@ -113,7 +113,7 @@
                     await this.$axios.$post('room/leave')
 
                     this.$router.push('/home')
-                    this.$refs.menu.toggleMenu()
+                    this.$refs.menu.toggleMenu(true)
                     this.$store.commit('handleRoom', null)
                 } catch(error) {
                     console.error(error)
@@ -131,7 +131,7 @@
                 try {
                     await this.$router.push('invites')
 
-                    this.$refs.menu.toggleMenu()
+                    this.$refs.menu.toggleMenu(true)
                 } catch(error) {
                     alert(error)
                 }
