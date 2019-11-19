@@ -98,10 +98,7 @@
                     await this.$copyText(`${process.env.BASE_WEB_URL}/i/${this.room.invites[0].code}`)
 
                     this.hint = 'Copied!'
-                    setTimeout(() => {
-                        this.$refs.menu.toggleMenu()
-                        this.hint = 'Click to copy link'
-                    }, 500)
+                    setTimeout(() => this.hint = 'Click to copy link', 500)
                 } catch(error) {
                     alert(error)
                 }
