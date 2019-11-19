@@ -35,6 +35,6 @@ export default {
     },
     build: {
         extractCSS: true,
-        publicPath: (process.env.PUBLIC_PATH === 'true' || '/_cryb/')
+        publicPath: (process.env.PUBLIC_PATH || '/_cryb/')
     }
 }
