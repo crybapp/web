@@ -8,7 +8,8 @@
         </p>
         <a
             class="invite-link"
-            href="#"
+            :href="inviteLink"
+            onclick="return false"
             @click="copyInviteLink()"
         >
             {{ inviteLink }}
