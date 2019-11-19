@@ -60,6 +60,9 @@
             <p class="subtitle">
                 We couldn't find a room linked with this invite code. Make sure you have the right invite and try again!
             </p>
+            <p class="disclaimer">
+                You may want to <nuxt-link to="/home">go home</nuxt-link> now.
+            </p>
         </div>
     </div>
 </template>
