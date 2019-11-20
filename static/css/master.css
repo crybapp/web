@@ -87,7 +87,7 @@ div.header div.gradient:hover {
     opacity: 1
 }
 
-div.header div.gradient:hover + img.logo {
+div.header div.gradient:hover + .logo {
     visibility: hidden
 }
 
