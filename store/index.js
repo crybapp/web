@@ -147,6 +147,11 @@ export const mutations = {
             state.controllerId = null
         }
     },
+    handleRoomType(state, type) {
+        if(!state.room) return
+
+        state.room.type = type
+    },
 
     /**
      * Portal
@@ -349,6 +354,8 @@ export const mutations = {
                     this.app.router.push('/home')
                 } else if(t === 'INVITE_UPDATE')
                     this.commit('handleInvite', d)
+                else if(t === 'ROOM_TYPE_UPDATE')
+                    this.commit('handleRoomType', d.t)
                 // USER
                 else if(t === 'USER_JOIN')
                     this.commit('handleUserJoin', d)

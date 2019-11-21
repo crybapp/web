@@ -177,6 +177,15 @@ div.player-tooltip a.player-tooltip-action {
     }
 }
 
+div.player-wrapper.is-picking-type {
+    display: flex
+}
+
+div.player-wrapper div.type-picker {
+    width: fit-content;
+    margin: auto;
+}
+
 @media only screen and (max-width: 768px) and (orientation: landscape) {
     div.content div.watch div.player-wrapper {
         width: 100vw;

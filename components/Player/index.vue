@@ -1,103 +1,108 @@
 <template>
-    <div v-if="room" class="player-wrapper">
-        <div v-if="!showViewer" class="player stream-loading">
-            <video
-                class="static-placeholder"
-                src="/static-placeholder.mp4"
-                autoplay
-                muted
-                loop
-            />
-            <p v-if="showPlayerDevtools" class="player-dev">
-                Portal ID: {{ portal.id || 'N/A' }}
-                <br>
-                Portal Status: {{ portalStatus }}
-            </p>
-            <!-- Portal is not open and there is only one person in the room -->
-            <div v-if="(portalStatus === 'waiting' || portalStatus === 'closed') && room.members.length === 1" class="player-msg">
-                <h1 class="title">
-                    And so it begins...
-                </h1>
-                <p class="body">
-                    Add a friend or two to get the party started! Once someone else joins this room, we'll queue up your room for a virtual browser.
-                </p>
+    <!-- The room object is present and the room type is not set -->
+    <div v-if="room && !room.type" class="player-wrapper" :class="{ 'is-picking-type': !room.type }">
+        <div class="type-picker">
+            <h1 class="title">What's on the agenda today?</h1>
+            <p class="subtitle">Share a virtual browser or watch YouTube in sync - the choice is yours</p>
+            <div class="options has-link horizontal" v-if=!room.type>
+                <a :href="`#${type}`" @click=updateRoomType(type) v-for="(type, i) in room.types" :key=i>
+                    <div class="box option" :class="{ 'loading': changingRoomType === type, 'disabled': room.allowedTypes.indexOf(type) === -1 || changingRoomType || !isRoomOwner }">
+                        <div class="option-inner">
+                            <img :src="`/icons/${icons[type]}`" class="icon" v-if=icons[type]>
+                            <h3 class="header">
+                                {{ titles[type] }}
+                            </h3>
+                            <p class="description">
+                                {{ descriptions[type] }}
+                            </p>
+                        </div>
+                    </div>
+                </a>
             </div>
-            <!-- Portal is not open but there are more than one members in the room -->
-            <div v-else-if="(portalStatus === 'waiting' || portalStatus === 'closed') && room.members.length > 1" class="player-msg">
-                <h1 class="title">
-                    Hold your rabbits...
-                </h1>
-                <p class="body">
-                    We're waiting for the right gears to align so we can get your browser ready - hold tight!
-                    <br>
-                    If this is taking a little long, restart the room.
-                </p>
-            </div>
-            <!-- A portal has been placed into the queue -->
-            <div v-else-if="portalStatus === 'in-queue'" class="player-msg">
-                <h1 class="title">
-                    You're in the queue!
-                </h1>
-                <p class="body">
-                    There are a couple rooms infront of you waiting for a virtual browser, it shouldn't take too long.
-                </p>
-            </div>
-            <!-- The portal is either being created or starting -->
-            <div v-else-if="portalStatus === 'creating' || portalStatus === 'starting'" class="player-msg">
-                <h1 class="title">
-                    We're {{ portalStatus }} your browser now
-                </h1>
-                <p class="body">
-                    Normally this takes a couple seconds, hang tight!
-                    <br>
-                    If you have any issues either refresh the page or ask the room owner to restart the browser.
-                </p>
-            </div>
-            <!-- The portal is created and the stream between the client and the aperture is being established -->
-            <div v-else-if="portalStatus === 'open'" class="player-msg">
-                <h1 class="title">
-                    Strap in...
-                </h1>
-                <p class="body">
-                    Everything is ready - we're just getting the stream between you and the VM started!
-                </p>
-            </div>
-            <div class="loading-wrapper">
-                <div class="loading" />
-            </div>
+            <p class="disclaimer" v-if=!isRoomOwner>{{ roomOwner ? roomOwner.name : 'The owner of this room' }} is currently picking a Room type - hold tight!</p>
         </div>
-        <Viewer v-else />
+    </div>
+    <!-- The room object is present and the room type is vm -->
+    <div class="player-wrapper" v-else-if="room && room.type === 'vm'">
+        <VMPlayer />
+    </div>
+    <!-- The room object is present and the room type is media -->
+    <div class="player-wrapper" v-else-if="room && room.type === 'media'">
+        <MediaPlayer />
+    </div>
+    <!-- The room object is present but the room type is not known -->
+    <div class="player-wrapper" v-else-if=room>
+
+    </div>
+    <!-- The room object is not present -->
+    <div class="player-wrapper" v-else>
+
     </div>
 </template>
 <script>
     import { mapGetters } from 'vuex'
 
-    import Viewer from '~/components/Player/Viewer'
+    import VMPlayer from '~/components/Player/VM'
+    import MediaPlayer from '~/components/Player/Media'
 
     export default {
-        components: {
-            Viewer
-        },
         computed: {
-            ...mapGetters(['user', 'room', 'portal', 'stream', 'apertureWs', 'apertureToken']),
+            ...mapGetters(['room', 'user']),
 
-            showViewer() {
-                return this.portalStatus === 'open' && this.apertureWs && this.apertureToken
+            roomOwner() {
+                return typeof this.room.owner === 'string' ? null : this.room.owner
             },
-            showPlayerDevtools() {
-                return process.env.SHOW_PLAYER_DEVTOOLS
-            },
-
-            portalStatus() {
-                return this.portal.status
-            },
-
-            isSelfRoomOwner() {
-                return this.room.owner.id === this.user.id
+            isRoomOwner() {
+                return typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id === this.user.id 
             }
+        },
+        data() {
+            return {
+                changingRoomType: false,
+                changingRoomTypeTo: null,
+
+                titles: {
+                    vm: 'Virtual Browser',
+                    media: 'Synced Media'
+                },
+                descriptions: {
+                    vm: 'Share a virtual browser to watch anything with friends',
+                    media: 'Watch YouTube, SoundCloud and more in sync with friends'
+                },
+                icons: {
+                    vm: 'computer-chip.svg',
+                    media: 'panel-play.svg'
+                }
+            }
+        },
+        methods: {
+            async updateRoomType(type) {
+                if(!this.isRoomOwner) return
+                if(this.changingRoomType) return
+                if(this.room.allowedTypes.indexOf(type) === -1) return
+
+                this.changingRoomType = true
+                this.changingRoomTypeTo = type
+
+                try {
+                    await this.$axios.$patch('/room/type', { type })
+
+                    this.$store.commit('handleRoomType', type)
+                } catch(error) {
+                    alert(error)
+                }
+
+                this.changingRoomType = false
+                this.changingRoomTypeTo = null
+            }
+        },
+        components: {
+            VMPlayer,
+            MediaPlayer
         }
     }
 </script>
 <style src="~/static/css/room/player.css">
 /* Manage scoping properly */
 </style>
+<style src="~/static/css/home.css" scoped></style>

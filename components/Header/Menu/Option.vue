@@ -12,7 +12,7 @@
             <img
                 v-if="icon"
                 class="menu-option-icon"
-                :class="{ 'align-top': icon === 'door' }"
+                :class="{ 'align-top': html }"
                 :src="`/icons/${icon}.svg`"
             >
             <p v-if="!html" class="menu-option-content">

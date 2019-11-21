@@ -4,8 +4,9 @@ div.invite-wrapper {
 
 div.options {
     width: fit-content;
-
-    margin: auto
+    
+    margin: auto;
+    display: flex
 }
 
 div.options.is-horizontal {
@@ -41,9 +42,9 @@ div.options.has-link a:first-child {
     margin-left: 0
 }
 
-div.options a div.option {
+/* div.options a div.option {
     margin-top: 2em
-}
+} */
 
 div.options.is-horizontal a div.option {
     margin-top: 0
@@ -61,15 +62,17 @@ div.option div.option-inner {
     width: 100%
 }
 
-a.disabled div.option, div.option.disabled {
-    opacity: 0.65
+div.options div.option.disabled {
+    opacity: 0.65;
+    cursor: not-allowed !important;
+    /* pointer-events: none */
 }
 
 div.option div.option-inner.active div.input, div.option div.option-inner.active div.button {
     width: calc(100% - 10px*2)
 }
 
-div.options div.option:hover, div.options div.option:active {
+div.options div.option:not(.disabled):hover, div.options div.option:not(.disabled):active {
     border-color: rgba(0, 0, 0, 0)
 }
 

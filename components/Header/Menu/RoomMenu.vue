@@ -36,6 +36,26 @@
                 {{ refreshingInvite ? 'Refreshing...' : refreshInviteTooltip }}
             </MenuOption>
         </MenuSection>
+        <MenuSection>
+            <MenuOption
+                v-if=room.type
+                name="changeRoomType"
+                icon="cards"
+                :loading="changingRoomType"
+                :disabled="changingRoomType || destroyingRoom"
+                :html="true"
+            >
+                <p class="menu-option-content menu-option-title">
+                    Room Type
+                </p>
+                <p class="menu-option-content menu-option-subtitle">
+                    {{ roomTypeTitle }}
+                </p>
+                <p class="menu-option-content menu-option-hint">
+                    {{ changingRoomType ? `Leaving ${roomTypeTitle}` : 'Click to change room type' }}
+                </p>
+            </MenuOption>
+        </MenuSection>
         <MenuOption
             v-if="room.portal.status === 'open'"
             name="restartPortal"
@@ -64,7 +84,11 @@
 
     export default {
         computed: {
-            ...mapGetters(['room'])
+            ...mapGetters(['room']),
+
+            roomTypeTitle() {
+                return this.types.titles[this.room.type]
+            }
         },
         data() {
             return {
@@ -76,7 +100,20 @@
 
                 restartingPortal: false,
 
-                destroyingRoom: false
+                destroyingRoom: false,
+
+                changingRoomType: false,
+
+                types: {
+                    titles: {
+                        vm: 'Virtual Browser',
+                        media: 'Synced Media'
+                    },
+                    icons: {
+                        vm: 'computer-chip.svg',
+                        media: 'panel-play.svg'
+                    }
+                }
             }
         },
         methods: {
@@ -120,6 +157,22 @@
 
                 this.refreshingInvite = false
             },
+            async editRoomType() {
+                if(!confirm(`Are you sure you want to leave ${this.roomTypeTitle}?`)) return
+
+                this.changingRoomType = true
+
+                try {
+                    await this.$axios.$patch('/room/type', { type: null })
+
+                    this.$refs.menu.toggleMenu()
+                    this.$store.commit('handleRoomType', null)
+                } catch(error) {
+                    alert(error)
+                }
+
+                this.changingRoomType = false
+            },
             async destroyRoom() {
                 if(!confirm('Are you sure you want to delete this room? This action is irreversible.')) return
 
@@ -146,6 +199,8 @@
                     this.refreshInvite()
                 else if(name === 'restartPortal')
                     this.restartPortal()
+                else if(name === 'changeRoomType')
+                    this.editRoomType()
                 else if(name === 'destroyRoom')
                     this.destroyRoom()
             }

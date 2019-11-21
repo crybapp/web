@@ -70,11 +70,11 @@ div.box {
     transition: all 0.1s ease-in-out
 }
 
-div.box:hover {
+div.box:not(.disabled):hover {
     box-shadow: 0 0 10px rgba(112, 128, 144, 0.25) !important
 }
 
-div.box:active {
+div.box:not(.disabled):active {
     box-shadow: 0 0 15px rgba(112, 128, 144, 0.25) !important
 }
 
@@ -87,12 +87,12 @@ div.box:active {
         transition: all 0.1s ease-in-out
     }
 
-    div.box:hover {
+    div.box:not(.disabled):hover {
         /* background-color: #fffcfc; */
         box-shadow: 0px 4px 10px #00000017 !important
     }
 
-    div.box:active {
+    div.box:not(.disabled):active {
         /* background-color: #f9f8f8; */
         box-shadow: 0px 6px 15px #00000017 !important
     }
