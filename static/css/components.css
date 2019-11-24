@@ -26,6 +26,7 @@ input.input, button.button {
     border: 0;
     outline: 0;
 
+    width: auto;
     padding: 18px;
 
     font-size: 20px;

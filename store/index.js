@@ -154,6 +154,15 @@ export const mutations = {
     },
 
     /**
+     * Media
+     */
+    updateMedia(state, media) {
+        if(!state.room) return
+
+        state.room.media = media
+    },
+
+    /**
      * Portal
      */
     updatePortal(state, allocation) {
@@ -356,6 +365,8 @@ export const mutations = {
                     this.commit('handleInvite', d)
                 else if(t === 'ROOM_TYPE_UPDATE')
                     this.commit('handleRoomType', d.t)
+                else if(t === 'MEDIA_UPDATE')
+                    this.commit('updateMedia', d)
                 // USER
                 else if(t === 'USER_JOIN')
                     this.commit('handleUserJoin', d)

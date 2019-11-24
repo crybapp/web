@@ -28,6 +28,12 @@
         head() {
             const script = []
 
+            // Future support for YouTube Embed API
+            // if(this.room)
+            //     script.push({
+            //         src: 'https://www.youtube.com/iframe_api'
+            //     })
+
             if(this.brand.ga_tracking_id)
                 script.push({
                     src: `https://www.googletagmanager.com/gtag/js?id=${this.brand.ga_tracking_id}`

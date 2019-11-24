@@ -11,7 +11,7 @@ a.input-wrapper div.input {
     font-weight: 600;
     border-radius: 5px;
 
-    width: fit-content;
+    width: auto;
     display: flex;
 
     transition: all 0.2s ease-in-out
@@ -39,6 +39,8 @@ div.input input.input-inner {
     border: 0;
     padding: 0;
     outline: 0;
+
+    width: 100%;
 
     background-color: rgba(0, 0, 0, 0);
     color: white;

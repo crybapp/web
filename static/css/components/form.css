@@ -9,3 +9,7 @@ div.form * {
 div.form *:first-child {
     margin-left: 0
 }
+
+div.form .is-expanded {
+    flex-grow: 1;
+}
