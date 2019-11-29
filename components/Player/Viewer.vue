@@ -141,7 +141,7 @@
             playStream() {
                 if(typeof window === 'undefined') return
                 this.janus = new Janus({
-                    server: "https://janus.noot.vip/janus/",
+                    server: `${process.env.JANUS_URL}/janus`,
                     success: this.janusSessionConnected,
                     error: this.janusError,
                     destroy: this.janusDestroyed
