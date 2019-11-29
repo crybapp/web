@@ -13,7 +13,7 @@
             id="remoteStream"
             class="player-stream"
             tabindex="1"
-            autoplay
+            controls autoplay
             playsinline
             @keydown="didKeyDown"
             @keyup="didKeyUp"
@@ -23,6 +23,32 @@
             @mousewheel="didMouseWheel"
             @contextmenu="handleRightClick"
         />
+        <script>
+            var fs = document.getElementById("remoteStream");
+            //Sets the volume to 30% by default
+            fs.volume = 0.3;
+            //Function in case we want to do a fullscreen button later on (where UserIcons are)
+            function openFullscreen() {
+            if (fs.requestFullscreen) {
+                fs.requestFullscreen();
+            } else if (fs.mozRequestFullScreen) {
+                fs.mozRequestFullScreen();
+            } else if (fs.webkitRequestFullscreen) {
+                fs.webkitRequestFullscreen();
+            } else if (fs.msRequestFullscreen) {
+                fs.msRequestFullscreen();
+            }
+            }
+            //Short term fix: It auto plays if paused (when trying to control vm)
+            fs.addEventListener("click", function() {
+            if (fs.paused == true){
+                fs.play();
+            } else {
+                fs.pause();
+            }
+        });
+        </script>
+        
         <div v-if="showMutedPopup" class="player-tooltips">
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
