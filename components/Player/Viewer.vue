@@ -107,9 +107,10 @@
             if(typeof document.addEventListener !== 'undefined' && hidden !== undefined)
                 document.addEventListener(visibilityChange, () => this.handleVisibilityChange(hidden), false)
 
-            if(this.janusId)
+            if(this.janusId) {
                 this.playStream()
                 fs.volume = 0.3;
+            }
 
             this.$store.subscribe(({ type }, { stream }) => {
                 switch(type) {
@@ -124,10 +125,10 @@
             fs.addEventListener("click", function() {
             if (fs.paused == true){
                 fs.play();
-            } else {
-                fs.pause();
-            }
-        });
+                } else {
+                    fs.pause();
+                }
+            });
 
             if(this.$refs.stream)
                 this.$refs.stream.onpaste = this.didPaste
@@ -140,7 +141,7 @@
             playStream() {
                 if(typeof window === 'undefined') return
                 this.janus = new Janus({
-                    server: `${process.env.JANUS_URL}/janus`,
+                    server: "https://janus.noot.vip/janus/",
                     success: this.janusSessionConnected,
                     error: this.janusError,
                     destroy: this.janusDestroyed
