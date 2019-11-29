@@ -13,6 +13,7 @@
             id="remoteStream"
             class="player-stream"
             tabindex="1"
+            controls 
             autoplay
             playsinline
             @keydown="didKeyDown"
@@ -23,6 +24,7 @@
             @mousewheel="didMouseWheel"
             @contextmenu="handleRightClick"
         />
+
         <div v-if="showMutedPopup" class="player-tooltips">
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
@@ -82,6 +84,7 @@
             }
         },
         mounted() {
+            var fs = document.getElementById("remoteStream");
             let hidden,
                 visibilityChange
 
@@ -104,8 +107,10 @@
             if(typeof document.addEventListener !== 'undefined' && hidden !== undefined)
                 document.addEventListener(visibilityChange, () => this.handleVisibilityChange(hidden), false)
 
-            if(this.janusId)
+            if(this.janusId) {
                 this.playStream()
+                fs.volume = 0.3;
+            }
 
             this.$store.subscribe(({ type }, { stream }) => {
                 switch(type) {
@@ -115,6 +120,15 @@
                         break
                 }
             })
+            
+            //Short term fix: It auto plays if paused (when trying to control vm)
+            fs.addEventListener("click", function() {
+            if (fs.paused == true){
+                fs.play();
+                } else {
+                    fs.pause();
+                }
+            });
 
             if(this.$refs.stream)
                 this.$refs.stream.onpaste = this.didPaste
