@@ -13,7 +13,8 @@
             id="remoteStream"
             class="player-stream"
             tabindex="1"
-            controls autoplay
+            controls 
+            autoplay
             playsinline
             @keydown="didKeyDown"
             @keyup="didKeyUp"
@@ -23,32 +24,7 @@
             @mousewheel="didMouseWheel"
             @contextmenu="handleRightClick"
         />
-        <script>
-            var fs = document.getElementById("remoteStream");
-            //Sets the volume to 30% by default
-            fs.volume = 0.3;
-            //Function in case we want to do a fullscreen button later on (where UserIcons are)
-            function openFullscreen() {
-            if (fs.requestFullscreen) {
-                fs.requestFullscreen();
-            } else if (fs.mozRequestFullScreen) {
-                fs.mozRequestFullScreen();
-            } else if (fs.webkitRequestFullscreen) {
-                fs.webkitRequestFullscreen();
-            } else if (fs.msRequestFullscreen) {
-                fs.msRequestFullscreen();
-            }
-            }
-            //Short term fix: It auto plays if paused (when trying to control vm)
-            fs.addEventListener("click", function() {
-            if (fs.paused == true){
-                fs.play();
-            } else {
-                fs.pause();
-            }
-        });
-        </script>
-        
+
         <div v-if="showMutedPopup" class="player-tooltips">
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
@@ -108,6 +84,7 @@
             }
         },
         mounted() {
+            var fs = document.getElementById("remoteStream");
             let hidden,
                 visibilityChange
 
@@ -132,6 +109,7 @@
 
             if(this.janusId)
                 this.playStream()
+                fs.volume = 0.3;
 
             this.$store.subscribe(({ type }, { stream }) => {
                 switch(type) {
@@ -141,6 +119,15 @@
                         break
                 }
             })
+            
+            //Short term fix: It auto plays if paused (when trying to control vm)
+            fs.addEventListener("click", function() {
+            if (fs.paused == true){
+                fs.play();
+            } else {
+                fs.pause();
+            }
+        });
 
             if(this.$refs.stream)
                 this.$refs.stream.onpaste = this.didPaste
@@ -153,7 +140,7 @@
             playStream() {
                 if(typeof window === 'undefined') return
                 this.janus = new Janus({
-                    server: `${process.env.JANUS_URL}/janus`,
+                    server: "https://janus.noot.vip/janus/",
                     success: this.janusSessionConnected,
                     error: this.janusError,
                     destroy: this.janusDestroyed
