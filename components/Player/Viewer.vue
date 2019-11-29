@@ -87,7 +87,7 @@
 
             Janus.init({
                 debug: true,
-                dependencies: Janus.useDefaultDependencies()
+                dependencies: Janus.useDefaultDependencies()	
             })
 
             if(typeof document.hidden !== 'undefined') {
@@ -126,8 +126,24 @@
 
             playStream() {
                 if(typeof window === 'undefined') return
+		if(!Janus) {
+			this.$nextTick(this.playStream)
+			return
+		}
                 this.janus = new Janus({
                     server: `${process.env.JANUS_URL}/janus`,
+		    iceServers: [
+			{
+			    urls:"turn:turn1.solcode.dev:443",
+			    username:"solcryb",
+			    credential: "crybsol"	
+			},
+			{
+			    urls:"turn:turn1.solcode.dev:443?transport=tcp",
+			    username: "solcryb",
+		            credential: "crybsol"
+			}
+		    ],
                     success: this.janusSessionConnected,
                     error: this.janusError,
                     destroy: this.janusDestroyed
@@ -190,19 +206,23 @@
             },
 
             janusHandleIncomingStream(stream) {
-                console.debug("::::::: RECEIVED JANUS STREAM :::::::")
-                this.remoteStream = stream
-                var videoTracks = stream.getVideoTracks()
-                console.debug("Video Tracks: " + videoTracks.length)
-                var audioTracks = stream.getAudioTracks()
-                console.debug("Audio Tracks: "+ audioTracks.length)
-                if(videoTracks.length > 0) {
-                    console.debug("Janus video track found.")
-                    console.debug(stream.getVideoTracks())
-                    document.getElementById('remoteStream').srcObject = stream
-                }
+		try {
+                    console.debug("::::::: RECEIVED JANUS STREAM :::::::")
+                    this.remoteStream = stream
+                    var videoTracks = stream.getVideoTracks()
+                    console.debug("Video Tracks: " + videoTracks.length)
+                    var audioTracks = stream.getAudioTracks()
+                    console.debug("Audio Tracks: "+ audioTracks.length)
+                    if(videoTracks.length > 0) {
+                        console.debug("Janus video track found.")
+                        console.debug(stream.getVideoTracks())
+                        document.getElementById('remoteStream').srcObject = stream
+                    }
                                 
-                console.log("::::::: JANUS STREAM FINISHED PROCESSING :::::::")
+                    console.log("::::::: JANUS STREAM FINISHED PROCESSING :::::::")
+		} catch(error) {
+		    console.error(error)
+		}
             },
 
             janusHandleCleanup() {

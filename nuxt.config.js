@@ -21,6 +21,7 @@ export default {
          */
         WS_URL: process.env.API_WS_URL,
         BASE_WEB_URL: process.env.WEB_BASE_URL,
+	JANUS_URL: process.env.JANUS_URL,
 
         /**
          * Other Config
