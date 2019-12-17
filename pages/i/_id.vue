@@ -81,7 +81,7 @@
             if(this.room)
                 inviteHeaders = {
                     meta: [
-                        { name: 'description', content: `You've been invted to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
+                        { name: 'description', content: `You've been invited to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
 
                         { property: 'og:title', content: `Join ${this.room.name} on ${this.brand.name}` },
                         { property: 'og:description', content: `You've been invted to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
