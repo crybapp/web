@@ -199,7 +199,7 @@
                 }
 
                 var janusConfig = {
-                    server: `${process.env.JANUS_URL}/janus`,
+                    server: `${process.env.JANUS_URL}:${process.env.JANUS_PORT}/janus`,
                     //Temporary Public TURN servers.
                     iceServers: [
                         {
