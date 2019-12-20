@@ -81,7 +81,7 @@
             }
         },
         computed: {
-            ...mapGetters(['ws', 'userId', 'controllerId', 'portal', 'janusId', 'janusIp', 'apertureWs', 'apertureToken', 'viewerMuted', 'viewerVolume']),
+            ...mapGetters(['ws', 'userId', 'controllerId', 'portal', 'janusId', 'janusAddress', 'apertureWs', 'apertureToken', 'viewerMuted', 'viewerVolume']),
 
             hasControl() {
                 return this.controllerId === this.userId
@@ -199,7 +199,7 @@
                 }
 
                 var janusConfig = {
-                    server: `https://janus.solcode.dev/janus`,
+                    server: `${process.env.JANUS_URL}:${process.env.JANUS_PORT}/janus`,
                     //Temporary Public TURN servers.
                     iceServers: [
                         {
@@ -314,6 +314,14 @@
                 event.preventDefault()
                 const { keyCode, ctrlKey, shiftKey } = event
                 this.activeKeyEvent = event
+
+                if(keyCode === 86 && ctrlKey === true) {
+                    navigator.clipboard.readText().then(clipText => {
+                        this.emitEvent({clipText}, 'PASTE_TEXT')
+                    })
+
+                    return
+                }
 
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_DOWN')
             },

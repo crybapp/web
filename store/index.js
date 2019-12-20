@@ -40,8 +40,9 @@ export const getters = {
     messages: ({ room }) => room ? (room.messages || []) : [],
     controllerId: ({ controllerId }) => controllerId,
 
-    //apertureWs: ({ apertureWs }) => apertureWs,
-    //apertureToken: ({ apertureToken }) => apertureToken,
+    apertureWs: ({ apertureWs }) => apertureWs,
+    apertureToken: ({ apertureToken }) => apertureToken,
+
     janusId: ({ janusId }) => janusId,
     janusIp: ({ janusIp }) => janusIp,
 
