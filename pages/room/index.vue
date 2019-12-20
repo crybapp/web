@@ -17,17 +17,19 @@
 </template>
 <script>
     import Chat from '~/components/Chat'
-
     import Player from '~/components/Player'
     import PlayerFooter from '~/components/Player/Footer'
 
     export default {
         head() {
+
             return {
                 title: this.error ? 'Room Not Found' : (this.room ? this.room.name : ''),
-                script: [
+                script: process.env.ENABLE_JANUS ? [
                     { src: '/js/adapter.js' },
                     { src: '/js/janus.js'}
+                ] : [
+                    { src: '/js/jsmpeg.min.js'}
                 ]
             }
         },
@@ -52,6 +54,6 @@
         },
         beforeDestroy() {
             this.$store.commit('disconnectWebSocket')
-        }
+        },
     }
 </script>
