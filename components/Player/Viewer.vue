@@ -16,6 +16,8 @@
             tabindex="1" 
             autoplay
             playsinline
+            width="1280px"
+            height="720px"
             @keydown="didKeyDown"
             @keyup="didKeyUp"
             @mousemove="didMouseMove"
@@ -266,16 +268,12 @@
             janusHandleIncomingStream(stream) {
 		        try {
                     this.remoteStream = stream
-                    var videoTracks = stream.getVideoTracks()
-                    console.debug("Video Tracks: " + videoTracks.length)
-                    var audioTracks = stream.getAudioTracks()
-                    console.debug("Audio Tracks: "+ audioTracks.length)
-                    if(videoTracks.length > 0) {
-                        var width = videoTracks[0].getSettings().width;
-                        var height = videoTracks[0].getSettings().height;
-                        this.$refs.stream.style.width = width
-                        this.$refs.stream.style.height = height
+                    if(stream.getVideoTracks().length > 0) {
                         this.$refs.stream.srcObject = stream
+
+                        setTimeout(() => {
+                            this.janusHandleCreated(this.janusHandle)
+                        }, 1800000)
                     }
                 } catch(error) {
                     console.error(error)
