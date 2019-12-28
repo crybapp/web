@@ -1,0 +1,20 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2.0.0
+    - name: GitHub Docker Action
+      uses: matootie/github-docker@v1.0.1
+      with:
+        username: neoncloth
+        personalAccessToken: ${{ secrets.personalAccessToken }}
+        imageName: master
+        imageTag: latest
