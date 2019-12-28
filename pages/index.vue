@@ -25,7 +25,7 @@
                     <p v-else class="disclaimer">
                         Uh-oh! Looks like we can't find a redirect URL for Login with Discord.
                         <br>
-                        If this is your site, make sure the environment variables for both API and Web are setup correctly.
+                        If this is your site, make sure the environment variables for both API and Web are setup correctly
                     </p>
                 </div>
                 <div v-else class="continue">
