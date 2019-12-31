@@ -191,7 +191,7 @@ export const mutations = {
         if(message.author === state.userId)
             state.sendingMessages.splice(state.sendingMessages.indexOf(message.content), 1)
         else
-            this.commit('updateTypingStatus', { u: message.author, typing: false})
+            this.commit('updateTypingStatus', { u: message.author, typing: false })
 
         if(lastGroup && lastGroup.author === author) {
             state.room.messages[state.room.messages.length - 1].messages.push(message)
@@ -337,42 +337,57 @@ export const mutations = {
                 console.log(op, d, t)
 
             if(op === 0) {
-                // ROOM
-                if(t === 'CONTROLLER_UPDATE')
-                    this.commit('updateController', d)
                 if(t.split('_')[0] === 'PORTAL')
-                    this.commit('updatePortal', d)
-                else if(t === 'APERTURE_CONFIG')
-                    this.commit('updateAperture', d)
-                else if(t === 'ROOM_DESTROY') {
-                    this.commit('handleRoom', null)
-                    this.app.router.push('/home')
-                } else if(t === 'INVITE_UPDATE')
-                    this.commit('handleInvite', d)
-                // USER
-                else if(t === 'USER_JOIN')
-                    this.commit('handleUserJoin', d)
-                else if(t === 'USER_UPDATE')
-                    this.commit('handleUser', d)
-                else if(t === 'USER_LEAVE')
-                    this.commit('handleUserLeave', d)
-                else if(t === 'OWNER_UPDATE')
-                    this.commit('handleOwnerUpdate', d)
-                else if(t === 'PRESENCE_UPDATE')
-                    this.commit('updatePresence', d)
-                // MESSAGE
-                else if(t === 'MESSAGE_CREATE')
-                    this.commit('pushMessage', d)
-                else if(t === 'MESSAGE_DESTROY')
-                    this.commit('pullMessage', d.id)
-                else if(t === 'TYPING_UPDATE')
-                    this.commit('updateTypingStatus', d)
+                    return this.commit('updatePortal', d)
+
+                switch(t) {
+                    // ROOM
+                    case 'CONTROLLER_UPDATE':
+                        this.commit('updateController', d)
+                        break
+                    case 'APERTURE_CONFIG':
+                        this.commit('updateAperture', d)
+                        break
+                    case 'ROOM_DESTROY':
+                        this.commit('handleRoom', null)
+                        this.app.router.push('/home')
+                        break
+                    case 'INVITE_UPDATE':
+                        this.commit('handleInvite', d)
+                        break
+                    // USER
+                    case 'USER_JOIN':
+                        this.commit('handleUserJoin', d)
+                        break
+                    case 'USER_UPDATE':
+                        this.commit('handleUser', d)
+                        break
+                    case 'USER_LEAVE':
+                        this.commit('handleUserLeave', d)
+                        break
+                    case 'OWNER_UPDATE':
+                        this.commit('handleOwnerUpdate', d)
+                        break
+                    case 'PRESENCE_UPDATE':
+                        this.commit('updatePresence', d)
+                        break
+                    // MESSAGE
+                    case 'MESSAGE_CREATE':
+                        this.commit('pushMessage', d)
+                        break
+                    case 'MESSAGE_DESTROY':
+                        this.commit('pullMessage', d.id)
+                        break
+                    case 'TYPING_UPDATE':
+                        this.commit('updateTypingStatus', d)
+                        break
+                }
             } else if(op === 10) {
                 const { c_heartbeat_interval, c_reconnect_interval } = d
 
                 this.commit('setupHeartbeat', c_heartbeat_interval)
-                if(state.wsReconnect) this.commit('invalidateReconnect')
 
+                if(state.wsReconnect) this.commit('invalidateReconnect')
                 state.wsReconnectInterval = c_reconnect_interval
 
                 ws.send(JSON.stringify({ op: 2, d: { token } }))
