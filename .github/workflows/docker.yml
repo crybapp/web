@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Master CI
 
 on:
   push:
@@ -9,10 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2.0.0
-    - name: GitHub Docker Action
-      uses: matootie/github-docker@v1.0.1
-      with:
-        personalAccessToken: ${{ secrets.GITHUB_TOKEN }}
-        imageName: web-master
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+      - name: Build and Push Dockerfile
+        uses: matootie/github-docker@v2.0.0
+        with:
+          imageName: ${{ github.event.repository.name }}-master
+          accessToken: ${{ secrets.GITHUB_TOKEN }}

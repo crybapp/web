@@ -106,7 +106,7 @@
             try {
                 const redirectUrl = await context.$axios.$get('auth/discord/redirect')
 
-                return {redirectUrl}
+                return { redirectUrl }
             } catch (error) {
                 console.error(error)
                 return null

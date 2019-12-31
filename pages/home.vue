@@ -45,7 +45,7 @@
                 <p class="subtitle">
                     It's never been easier to join or start a room with your friends.
                     <br>
-                    Select an option below to get started
+                    Select an option below to get started:
                 </p>
                 <div class="options has-link is-horizontal">
                     <nuxt-link to="#join-room" @click.native="showJoinRoomModal()">
