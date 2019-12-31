@@ -14,7 +14,5 @@ jobs:
     - name: GitHub Docker Action
       uses: matootie/github-docker@v1.0.1
       with:
-        username: neoncloth
-        personalAccessToken: ${{ secrets.personalAccessToken }}
+        personalAccessToken: ${{ secrets.GITHUB_TOKEN }}
         imageName: web-master
-        imageTag: latest
