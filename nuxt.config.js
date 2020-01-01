@@ -25,8 +25,7 @@ export default {
         /**
          * Other Config
          */
-        SHOW_PLAYER_DEVTOOLS: (process.env.SHOW_PLAYER_DEVTOOLS === 'true' ||
-            process.env.NODE_ENV !== 'production'),
+        SHOW_PLAYER_DEVTOOLS: (process.env.SHOW_PLAYER_DEVTOOLS === 'true'),
         AUDIO_BITRATE: process.env.AUDIO_BITRATE,
         VIDEO_BITRATE: process.env.VIDEO_BITRATE
     },

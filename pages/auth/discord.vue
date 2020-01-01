@@ -26,7 +26,7 @@ export default {
 
             this.$store.commit('handleToken', { token, save: true })
             this.$store.dispatch('fetchUser')
-            this.$router.push(state ? `/i/${state.split('=')[1]}` : '/home')
+            setTimeout(() => this.$router.push(state ? `/i/${state.split('=')[1]}` : '/home'), 250)
         } catch(error) {
             this.message = 'An error occurred while authenticating. Please go home and try logging in again.'
         }
