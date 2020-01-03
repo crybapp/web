@@ -123,4 +123,3 @@
         },
     }
 </script>
-<style src="~/static/css/room/user-icon.css" scoped></style>

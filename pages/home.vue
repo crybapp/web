@@ -48,7 +48,7 @@
                     Select an option below to get started:
                 </p>
                 <div class="options has-link is-horizontal">
-                    <nuxt-link to="#join-room" @click.native="showJoinRoomModal()">
+                    <nuxt-link class="is-wrapper" to="#join-room" @click.native="showJoinRoomModal()">
                         <div class="box option join-room">
                             <div class="option-inner">
                                 <img src="/icons/panel-arrow-right.svg" class="icon">
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                     </nuxt-link>
-                    <nuxt-link to="#create-room" @click.native="showCreateRoomModal()">
+                    <nuxt-link class="is-wrapper" to="#create-room" @click.native="showCreateRoomModal()">
                         <div class="box option create-room">
                             <div class="option-inner">
                                 <img src="/icons/add.svg" class="icon">
@@ -167,5 +167,3 @@
         }
     }
 </script>
-
-<style src="~/static/css/home.css" scoped></style>

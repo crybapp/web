@@ -88,4 +88,3 @@
         }
     }
 </script>
-<style src="~/static/css/room/chat-bar.css" scoped></style>

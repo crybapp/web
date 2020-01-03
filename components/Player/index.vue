@@ -98,6 +98,3 @@
         }
     }
 </script>
-<style src="~/static/css/room/player.css">
-/* Manage scoping properly */
-</style>

@@ -35,5 +35,8 @@ export default {
     build: {
         extractCSS: true,
         publicPath: (process.env.PUBLIC_PATH || '/_cryb/')
-    }
+    },
+    css: [
+        '@cryb/borealis'
+    ]
 }

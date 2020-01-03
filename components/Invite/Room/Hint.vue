@@ -53,4 +53,3 @@
         }
     }
 </script>
-<style src="~/static/css/room/invite-hint.css" scoped></style>

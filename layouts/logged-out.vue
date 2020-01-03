@@ -43,6 +43,3 @@
         }
     }
 </script>
-
-<style src="~/static/css/master.css"></style>
-<style src="~/static/css/components.css"></style>

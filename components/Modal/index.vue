@@ -24,4 +24,3 @@
         }
     }
 </script>
-<style src="~/static/css/components/modal.css" scoped></style>

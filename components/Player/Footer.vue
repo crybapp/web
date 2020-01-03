@@ -49,6 +49,3 @@
         }
     }
 </script>
-<style src="~/static/css/room/footer.css">
-/* Manage scoping properly */
-</style>

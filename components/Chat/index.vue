@@ -54,6 +54,3 @@
         }
     }
 </script>
-<style src="~/static/css/room/chat.css">
-/* Manage scoping properly */
-</style>

@@ -46,4 +46,3 @@
         }
     }
 </script>
-<style src="~/static/css/components/input.css" scoped></style>

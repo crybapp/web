@@ -189,4 +189,3 @@
         }
     }
 </script>
-<style src="~/static/css/invite.css" scoped></style>

@@ -28,4 +28,3 @@
         ]
     }
 </script>
-<style src="~/static/css/components/button.css" scoped></style>
