@@ -43,6 +43,12 @@ export const getters = {
     apertureWs: ({ apertureWs }) => apertureWs,
     apertureToken: ({ apertureToken }) => apertureToken,
 
+    janusId: ({ janusId }) => janusId,
+    janusIp: ({ janusIp }) => janusIp,
+
+    viewerMuted: ({ viewerMuted }) => viewerMuted,
+    viewerVolume: ({ viewerVolume }) => (viewerVolume/100),
+
     ws: ({ ws }) => ws
 }
 
@@ -64,6 +70,11 @@ const initialState = {
 
     apertureWs: null,
     apertureToken: null,
+    janusId: null,
+    janusIp: null, 
+    
+    viewerMuted: false,
+    viewerVolume: 30, 
 
     ws: null,
     wsHeartbeat: null,
@@ -158,14 +169,31 @@ export const mutations = {
         state.room.portal = allocation
     },
 
-    /**
-     * Aperture
-     */
     updateAperture(state, config) {
         if(!state.room) return
 
         state.apertureWs = config.ws
         state.apertureToken = config.t
+    },
+
+    /**
+     * Janus
+     */
+    updateJanus(state, config) {
+        if(!state.room) return
+
+        state.janusId = config.id
+        state.janusIp = config.ip
+    },
+
+    /**
+     * Viewer State
+     */
+    setMutedStatus(state, isMuted) {
+        state.viewerMuted = isMuted
+    },
+    setViewerVolume(state, newVolume) {
+        state.viewerVolume = newVolume
     },
 
     /**
@@ -342,6 +370,8 @@ export const mutations = {
                     this.commit('updateController', d)
                 if(t.split('_')[0] === 'PORTAL')
                     this.commit('updatePortal', d)
+                else if(t === 'JANUS_CONFIG')
+                    this.commit('updateJanus', d)
                 else if(t === 'APERTURE_CONFIG')
                     this.commit('updateAperture', d)
                 else if(t === 'ROOM_DESTROY') {
