@@ -8,10 +8,16 @@
             <br>
             Portal Status: {{ portal.status }}
         </p>
-        <canvas
+        <video
+            v-if="isJanusEnabled"
             ref="stream"
+            id="remoteStream"
             class="player-stream"
-            tabindex="1"
+            tabindex="1" 
+            autoplay
+            playsinline
+            width="1280px"
+            height="720px"
             @keydown="didKeyDown"
             @keyup="didKeyUp"
             @mousemove="didMouseMove"
@@ -20,6 +26,23 @@
             @mousewheel="didMouseWheel"
             @contextmenu="handleRightClick"
         />
+        <canvas
+            v-else
+            ref="stream"
+            id="remoteStream"
+            class="player-stream"
+            tabindex="1" 
+            autoplay
+            playsinline
+            @keydown="didKeyDown"
+            @keyup="didKeyUp"
+            @mousemove="didMouseMove"
+            @mousedown="didMouseDown"
+            @mouseup="didMouseUp"
+            @mousewheel="didMouseWheel"
+            @contextmenu="handleRightClick"
+        />
+
         <div v-if="showMutedPopup" class="player-tooltips">
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
@@ -48,15 +71,19 @@
         components: {
             Button
         },
+        props: {
+            volume: Number
+        },
         data() {
             return {
                 brand,
                 activeKeyEvent: null,
-                showMutedPopup: false
+                showMutedPopup: false,
+                remoteStream: undefined
             }
         },
         computed: {
-            ...mapGetters(['ws', 'userId', 'controllerId', 'portal', 'apertureWs', 'apertureToken']),
+            ...mapGetters(['ws', 'userId', 'controllerId', 'portal', 'janusId', 'janusAddress', 'apertureWs', 'apertureToken', 'viewerMuted', 'viewerVolume']),
 
             hasControl() {
                 return this.controllerId === this.userId
@@ -75,11 +102,19 @@
 
             showPlayerDevtools() {
                 return process.env.SHOW_PLAYER_DEVTOOLS && this.portal
+            },
+            isJanusEnabled() {
+                return process.env.ENABLE_JANUS
             }
         },
         mounted() {
             let hidden,
                 visibilityChange
+
+            Janus.init({
+                debug: true,
+                dependencies: Janus.useDefaultDependencies()	
+            })
 
             if(typeof document.hidden !== 'undefined') {
                 hidden = 'hidden'
@@ -95,20 +130,37 @@
             if(typeof document.addEventListener !== 'undefined' && hidden !== undefined)
                 document.addEventListener(visibilityChange, () => this.handleVisibilityChange(hidden), false)
 
-            if(this.apertureWs && this.apertureToken)
+            if(this.janusId) {
                 this.playStream()
+            }
 
             this.$store.subscribe(({ type }, { stream }) => {
                 switch(type) {
+                    case 'updateJanus':
                     case 'updateAperture':
                         this.$nextTick(this.playStream)
-
+                        break
+                    case 'setMutedStatus':
+                        this.setStreamMutedStatus()
+                        break
+                    case 'setViewerVolume':
+                        this.setStreamVolume()
                         break
                 }
             })
 
             if(this.$refs.stream)
                 this.$refs.stream.onpaste = this.didPaste
+            
+            if(this.viewerMuted) {
+                this.$refs.stream.volume = 0.0
+            } else {
+                this.$refs.stream.volume = this.viewerVolume
+            }
+
+            this.$root.$on('toggle-fullscreen', () => {
+                this.$refs.stream.requestFullscreen()
+            })
         },
         methods: {
             unmute() {
@@ -117,8 +169,11 @@
 
             playStream() {
                 if(typeof window === 'undefined') return
-                if(!JSMpeg) return // TODO: Add a popup that allows the user to retry playing the stream once the jsmpeg script has loaded
 
+                this.isJanusEnabled ? this.playJanusStream() : this.playJsmpegStream()
+            },
+
+            playJsmpegStream() {
                 if(this.player) this.player.destroy()
 
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
@@ -134,6 +189,110 @@
                 if (this.player.audioOut && !this.player.audioOut.unlocked) {
                     this.showMutedPopup = true
                 }
+            },
+
+            //TODO: Create iceServer configuration. Request from API?
+            /*
+            * We should, ideally, have the API/Portals server handle gathering TURN/STUN information and receive the values here. 
+            * this will allow us to enable TURN REST API in order to obtain short-lived session and keep TURN server access limited to Cryb.
+            * this needs to be accompanied by the ability to request an ICE restart in order to switch the TURN sessions. 
+            */
+            playJanusStream() {
+                if(!Janus) {
+                    this.$nextTick(this.playJanusStream)
+                    return
+                }
+
+                var janusConfig = {
+                    server: `${process.env.JANUS_URL}:${process.env.JANUS_PORT}/janus`,
+                    //Temporary Public TURN servers.
+                    iceServers: [
+                        {
+                            urls:"turn:turn1.solcode.dev:443",
+                            username:"solcryb",
+                            credential: "crybsol"	
+                        },
+                        {
+                            urls:"turn:turn1.solcode.dev:443?transport=tcp",
+                            username: "solcryb",
+                                credential: "crybsol"
+                        }
+                    ],
+                    success: this.janusSessionConnected,
+                    error: this.janusError,
+                    destroy: this.janusDestroyed
+                }
+
+                this.janus = new Janus(janusConfig)
+            },
+
+            janusSessionConnected() {
+                this.janus.attach({
+                    plugin: "janus.plugin.streaming",
+                    success: this.janusHandleCreated,
+                    error: this.janusError,
+                    onmessage: this.janusHandleMessages,
+                    onremotestream: this.janusHandleIncomingStream,
+                    oncleanup: this.janusHandleCleanup
+                })
+            },
+
+            janusHandleCreated(handle) {
+                this.janusHandle = handle
+                this.janusHandle.send({message: {
+                    request: 'watch',
+                    id: this.janusId
+                }})
+            },
+
+            janusHandleMessages(msg, jsep) {
+                if(jsep !== undefined && jsep !== null) {
+                    this.janusHandle.createAnswer({
+                        jsep: jsep,
+                        media: {
+                            audioSend: false,
+                            videoSend: false
+                        },
+                        success: this.janusHandleAnswerSuccess,
+                        error: this.janusError
+                    })
+                }
+            },
+
+            janusHandleAnswerSuccess(localJsep) {
+                this.janusHandle.send({
+                    message: {
+                        request: "start"
+                    },
+                    jsep: localJsep
+                })
+            },
+
+            janusHandleIncomingStream(stream) {
+		        try {
+                    this.remoteStream = stream
+                    if(stream.getVideoTracks().length > 0) {
+                        this.$refs.stream.srcObject = stream
+
+                        setTimeout(() => {
+                            this.janusHandleCreated(this.janusHandle)
+                        }, 1800000)
+                    }
+                } catch(error) {
+                    console.error(error)
+                }
+            },
+
+            janusHandleCleanup() {
+                console.log("::: Janus cleanup received :::")
+            },
+
+            janusError(reason) {
+                console.log(reason)
+            },
+
+            janusDestroyed() {
+                return
             },
 
             handleVisibilityChange(hidden) {
@@ -156,6 +315,14 @@
                 event.preventDefault()
                 const { keyCode, ctrlKey, shiftKey } = event
                 this.activeKeyEvent = event
+
+                if(keyCode === 86 && ctrlKey === true) {
+                    navigator.clipboard.readText().then(clipText => {
+                        this.emitEvent({clipText}, 'PASTE_TEXT')
+                    })
+
+                    return
+                }
 
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_DOWN')
             },
@@ -223,7 +390,19 @@
                     yPos = clientY - rect.top
 
                 return Math.round(this.streamHeight * (yPos / elem.clientHeight))
-            }
+            },
+            setStreamMutedStatus() {
+                if(this.viewerMuted === true) {
+                    this.$refs.stream.volume = 0.0
+                } else {
+                    this.$refs.stream.volume = this.viewerVolume
+                }
+            },
+            setStreamVolume() {
+                if(!this.viewerMuted) {
+                    this.$refs.stream.volume = this.viewerVolume
+                }
+            },
         }
     }
 </script>

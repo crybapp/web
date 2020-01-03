@@ -16,6 +16,56 @@ div.content div.watch div.player-footer {
     height: 180px
 }
 
+div.control-bar {
+    position: absolute;
+    height: auto; 
+    width: 100%;
+    background-color: black;
+}
+
+div.mute-button {
+    display: inline-block;
+    fill: white;
+    background-color: black;
+    margin: 4px 0 0 90%;
+    cursor: pointer;
+}
+
+div.fullscreen-button {
+    display: inline-block;
+    fill: white;
+    background-color: black;
+    cursor: pointer;
+}
+
+.volume-slider {
+    transform: translate(0, -340%);
+    width: 5%;
+    height: 3px;
+    background: white;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.volume-slider:focus {
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: white;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: white;
+}
+
 div.player-footer div.user-icons {
     display: flex;
 
@@ -132,6 +182,31 @@ div.user-control-indicator:hover:not(.non-interactable) img.user-control-icon.ha
 
     div.user-icon div.user-control-indicator {
         box-shadow: 0 0 0px 5px black
+    }
+    div.control-bar {
+        background-color: white;
+    }
+    
+    div.mute-button {
+        fill: black;
+        background-color: white;
+    }
+    
+    div.fullscreen-button {
+        fill: black;
+        background-color: white;
+    }
+    
+    .volume-slider {
+        background: black;
+    }
+    
+    .volume-slider::-webkit-slider-thumb {
+        background: black;
+    }
+    
+    .volume-slider::-moz-range-thumb {
+        background: black;
     }
 }
 

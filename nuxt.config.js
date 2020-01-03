@@ -21,10 +21,14 @@ export default {
          */
         WS_URL: process.env.API_WS_URL,
         BASE_WEB_URL: process.env.WEB_BASE_URL,
+        JANUS_PORT: process.env.JANUS_PORT,
+        JANUS_URL: process.env.JANUS_URL,
+
 
         /**
          * Other Config
          */
+        ENABLE_JANUS: (process.env.ENABLE_JANUS == 'true'),
         SHOW_PLAYER_DEVTOOLS: (process.env.SHOW_PLAYER_DEVTOOLS === 'true'),
         AUDIO_BITRATE: process.env.AUDIO_BITRATE,
         VIDEO_BITRATE: process.env.VIDEO_BITRATE

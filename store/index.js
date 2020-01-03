@@ -42,6 +42,12 @@ export const getters = {
     apertureWs: ({ apertureWs }) => apertureWs,
     apertureToken: ({ apertureToken }) => apertureToken,
 
+    janusId: ({ janusId }) => janusId,
+    janusIp: ({ janusIp }) => janusIp,
+
+    viewerMuted: ({ viewerMuted }) => viewerMuted,
+    viewerVolume: ({ viewerVolume }) => (viewerVolume/100),
+
     ws: ({ ws }) => ws
 }
 
@@ -63,6 +69,11 @@ const initialState = {
 
     apertureWs: null,
     apertureToken: null,
+    janusId: null,
+    janusIp: null, 
+    
+    viewerMuted: false,
+    viewerVolume: 30, 
 
     ws: null,
     wsHeartbeat: null,
@@ -158,14 +169,31 @@ export const mutations = {
         state.room.portal = allocation
     },
 
-    /**
-     * Aperture
-     */
     updateAperture(state, config) {
         if(!state.room) return
 
         state.apertureWs = config.ws
         state.apertureToken = config.t
+    },
+
+    /**
+     * Janus
+     */
+    updateJanus(state, config) {
+        if(!state.room) return
+
+        state.janusId = config.id
+        state.janusIp = config.ip
+    },
+
+    /**
+     * Viewer State
+     */
+    setMutedStatus(state, isMuted) {
+        state.viewerMuted = isMuted
+    },
+    setViewerVolume(state, newVolume) {
+        state.viewerVolume = newVolume
     },
 
     /**
@@ -341,12 +369,14 @@ export const mutations = {
 
             if(op === 0) {
                 if(t.split('_')[0] === 'PORTAL')
-                    return this.commit('updatePortal', d)
-
+                    this.commit('updatePortal', d)
                 switch(t) {
                     // ROOM
                     case 'CONTROLLER_UPDATE':
                         this.commit('updateController', d)
+                        break
+                    case'JANUS_CONFIG':
+                        this.commit('updateJanus', d)
                         break
                     case 'APERTURE_CONFIG':
                         this.commit('updateAperture', d)
@@ -361,29 +391,21 @@ export const mutations = {
                     // USER
                     case 'USER_JOIN':
                         this.commit('handleUserJoin', d)
-                        break
                     case 'USER_UPDATE':
                         this.commit('handleUser', d)
-                        break
                     case 'USER_LEAVE':
                         this.commit('handleUserLeave', d)
-                        break
                     case 'OWNER_UPDATE':
                         this.commit('handleOwnerUpdate', d)
-                        break
                     case 'PRESENCE_UPDATE':
                         this.commit('updatePresence', d)
-                        break
                     // MESSAGE
                     case 'MESSAGE_CREATE':
                         this.commit('pushMessage', d)
-                        break
                     case 'MESSAGE_DESTROY':
                         this.commit('pullMessage', d.id)
-                        break
                     case 'TYPING_UPDATE':
                         this.commit('updateTypingStatus', d)
-                        break
                 }
             } else if(op === 10) {
                 const { c_heartbeat_interval, c_reconnect_interval } = d
