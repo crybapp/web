@@ -1,21 +1,16 @@
 <template>
-    <div class="header-menu-wrapper">
+    <div class="menu-wrapper" :class="{ visible }">
         <div
             class="menu-cover"
-            :class="{ visible }"
             @click="toggleMenu()"
         />
-        <div class="header-menu" :class="{ visible, 'is-dark': dark, 'user-menu': type === 'user', 'room-menu': type === 'room' }">
+        <div class="menu">
             <slot />
         </div>
     </div>
 </template>
 <script>
 export default {
-    props: [
-        'type',
-        'dark'
-    ],
     data() {
         return {
             visible: false

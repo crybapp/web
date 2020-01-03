@@ -1,29 +1,27 @@
 <template>
     <div
         v-if="author"
-        class="grouped-chat-wrapper"
+        class="grouped-chat-messages"
         @mouseover="hover = true"
         @mouseleave="hover = false"
     >
         <img
             v-if="userIcon"
             :src="userIcon"
-            class="chat-author-avatar"
+            class="chat-messages-author-avatar"
             :class="{ 'has-controller': hasController }"
         >
-        <div class="grouped-chat-messages-content">
+        <div class="chat-messages">
             <div class="grouped-chat-messages-meta">
-                <p class="chat-author-name">
+                <p class="chat-messages-author-name">
                     {{ author.name }}
                 </p>
             </div>
-            <div class="grouped-chat-messages">
-                <Message
-                    v-for="message in messages"
-                    :key="message.id"
-                    :message="message"
-                />
-            </div>
+            <Message
+                v-for="message in messages"
+                :key="message.id"
+                :message="message"
+            />
         </div>
     </div>
 </template>

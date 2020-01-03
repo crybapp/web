@@ -20,7 +20,7 @@
         </div>
         <div
             class="user-control-indicator"
-            :class="{ 'visible': hasControl, 'non-interactable': !interactable }"
+            :class="{ 'visible': hasControl, 'is-interactable': interactable }"
             :title="indicatorHoverTitle"
             @click="didClickControlIcon()"
         >

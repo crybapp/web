@@ -1,7 +1,7 @@
 <template>
     <div class="root">
-        <Header :dark="isDarkTheme" />
-        <div class="content" :class="{ 'is-dark': isDarkTheme, 'is-center': !isRoomPage }">
+        <Header />
+        <div class="content" :class="{ 'is-center': !isRoomPage }">
             <nuxt />
             <GoogleAnalytics v-if="brand.ga_tracking_id" />
         </div>
@@ -55,9 +55,6 @@
 
             isRoomPage() {
                 return this.$route.name === 'room'
-            },
-            isDarkTheme() {
-                return this.isRoomPage
             }
         }
     }

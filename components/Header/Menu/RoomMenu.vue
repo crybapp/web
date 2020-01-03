@@ -4,7 +4,6 @@
         ref="menu"
         class="room-menu"
         type="room"
-        :dark="true"
     >
         <MenuOption to="/home" icon="home">
             Go Home
@@ -154,9 +153,6 @@
             Menu,
             MenuOption,
             MenuSection
-        },
-        props: [
-            'dark'
-        ]
+        }
     }
 </script>

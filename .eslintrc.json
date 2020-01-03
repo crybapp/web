@@ -15,6 +15,7 @@
     "parser": "babel-eslint"
   },
   "rules": {
+
     "curly": ["error", "multi"],
     "linebreak-style": ["error", "unix"],
     "no-cond-assign": "error",
@@ -24,8 +25,16 @@
     }],
     "semi": "off",
     "vue/html-indent": ["warn", 4],
-    "vue/max-attributes-per-line": ["warn", {
-      "singleline": 2
-    }]
+    "vue/max-attributes-per-line": ["off"],
+	"vue/html-self-closing": ["off", {
+		"html": {
+			"void": "never",
+			"normal": "always",
+			"component": "always"
+		  },
+		  "svg": "always",
+		  "math": "always"
+	}],
+	"vue/html-quotes": ["off", "double"]
   }
 }

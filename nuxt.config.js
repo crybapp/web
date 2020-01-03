@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+const borealis = (process.env.BOREALIS_REPOSITORY && process.env.NODE_ENV === 'development') ? process.env.BOREALIS_REPOSITORY : '@cryb/borealis'
+
 export default {
     loading: false,
     modules: [
@@ -35,8 +37,8 @@ export default {
     build: {
         extractCSS: true,
         publicPath: (process.env.PUBLIC_PATH || '/_cryb/')
-    },
-    css: [
-        '@cryb/borealis'
-    ]
+	},
+	css: [
+		borealis
+	]
 }

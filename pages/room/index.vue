@@ -1,5 +1,5 @@
 <template>
-    <div class="watch-wrapper">
+    <div class="room-wrapper">
         <div v-if="error" class="center error">
             <h1 class="title">
                 Room Not Found
@@ -8,7 +8,7 @@
                 We couldn't find this room. Check the invite again, or <nuxt-link to="/home">go home</nuxt-link>.
             </p>
         </div>
-        <div v-else-if="room" class="watch">
+        <div v-else-if=room class="room">
             <Player />
             <PlayerFooter />
             <Chat />

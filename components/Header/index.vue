@@ -1,17 +1,15 @@
 <template>
-    <div class="header" :class="{ 'is-dark': dark }">
+    <div class="header">
         <div class="left">
-            <nuxt-link :to="shouldShowRoomMenu ? '#room-menu' : (token ? '/home' : '/')" @click.native="toggleRoomMenu()">
+            <nuxt-link class="is-wrapper" :to="shouldShowRoomMenu ? '#room-menu' : (token ? '/home' : '/')" @click.native="toggleRoomMenu()">
                 <div class="gradient loading" />
                 <picture class="logo">
                     <source srcset="/img/logo.svg" media="(prefers-color-scheme: light)">
                     <img src="/img/logo-light.svg" class="logo">
                 </picture>
             </nuxt-link>
-            <h1 v-if="title" class="title">
-                {{ title }}
-            </h1>
-            <RoomMenu ref="roomMenu" :dark="dark" />
+            <h1 v-if="title" class="header-title">{{ title }}</h1>
+            <RoomMenu ref="roomMenu" />
         </div>
         <div v-if="user" class="right">
             <img
@@ -20,7 +18,7 @@
                 class="profile-image"
                 @click="toggleUserMenu()"
             >
-            <UserMenu ref="userMenu" :dark="dark" />
+            <UserMenu ref="userMenu" />
         </div>
         <div v-else-if="token" class="right">
             <Button @click.native="logout()">
@@ -44,7 +42,6 @@
             RoomMenu
         },
         props: [
-            'dark',
             'loading'
         ],
         computed: {

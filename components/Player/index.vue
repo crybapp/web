@@ -2,7 +2,7 @@
     <div v-if="room" class="player-wrapper">
         <div v-if="!showViewer" class="player stream-loading">
             <video
-                class="static-placeholder"
+                class="stream"
                 src="/static-placeholder.mp4"
                 autoplay
                 muted
@@ -14,7 +14,7 @@
                 Portal Status: {{ portalStatus }}
             </p>
             <!-- Portal is not open and there is only one person in the room -->
-            <div v-if="(portalStatus === 'waiting' || portalStatus === 'closed') && room.members.length === 1" class="player-msg">
+            <div v-if="(portalStatus === 'waiting' || portalStatus === 'closed') && room.members.length === 1" class="player-message">
                 <h1 class="title">
                     And so it begins...
                 </h1>
@@ -23,7 +23,7 @@
                 </p>
             </div>
             <!-- Portal is not open but there are more than one members in the room -->
-            <div v-else-if="(portalStatus === 'waiting' || portalStatus === 'closed') && room.members.length > 1" class="player-msg">
+            <div v-else-if="(portalStatus === 'waiting' || portalStatus === 'closed') && room.members.length > 1" class="player-message">
                 <h1 class="title">
                     Hold your rabbits...
                 </h1>
@@ -34,7 +34,7 @@
                 </p>
             </div>
             <!-- A portal has been placed into the queue -->
-            <div v-else-if="portalStatus === 'in-queue'" class="player-msg">
+            <div v-else-if="portalStatus === 'in-queue'" class="player-message">
                 <h1 class="title">
                     You're in the queue!
                 </h1>
@@ -43,7 +43,7 @@
                 </p>
             </div>
             <!-- The portal is either being created or starting -->
-            <div v-else-if="portalStatus === 'creating' || portalStatus === 'starting'" class="player-msg">
+            <div v-else-if="portalStatus === 'creating' || portalStatus === 'starting'" class="player-message">
                 <h1 class="title">
                     We're {{ portalStatus }} your browser now
                 </h1>
@@ -54,7 +54,7 @@
                 </p>
             </div>
             <!-- The portal is created and the stream between the client and the aperture is being established -->
-            <div v-else-if="portalStatus === 'open'" class="player-msg">
+            <div v-else-if="portalStatus === 'open'" class="player-message">
                 <h1 class="title">
                     Strap in...
                 </h1>

@@ -4,7 +4,6 @@
         ref="menu"
         class="user-menu"
         type="user"
-        :dark="dark"
     >
         <MenuSection>
             <MenuOption :html="true" :disabled="true">
@@ -76,9 +75,6 @@
             MenuOption,
             MenuSection
         },
-        props: [
-            'dark'
-        ],
         data() {
             return {
                 leavingRoom: false,

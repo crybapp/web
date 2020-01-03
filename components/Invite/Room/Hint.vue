@@ -1,9 +1,9 @@
 <template>
     <div class="invite-hint">
-        <h3 class="title">
+        <h3 class="invite-hint-title">
             Rooms are better with friends
         </h3>
-        <p class="subtitle">
+        <p class="invite-hint-subtitle">
             Copy and share this link with your friends
         </p>
         <a
