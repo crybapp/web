@@ -3,7 +3,7 @@
         <div class="left">
             <nuxt-link :to="shouldShowRoomMenu ? '#room-menu' : (token ? '/home' : '/')" @click.native="toggleRoomMenu()">
                 <div class="gradient loading" />
-                <picture>
+                <picture class="logo">
                     <source srcset="/img/logo.svg" media="(prefers-color-scheme: light)">
                     <img src="/img/logo-light.svg" class="logo">
                 </picture>
@@ -62,12 +62,12 @@
             },
 
             isUserMenuVisible() {
-                if(!this.$refs.userMenu.$children[0]) return false
+                if(!this.$refs.userMenu || !this.$refs.userMenu.$children[0]) return false
 
                 return this.$refs.userMenu.$children[0].visible
             },
             isRoomMenuVisible() {
-                if(!this.$refs.roomMenu.$children[0]) return false
+                if(!this.$refs.userMenu || !this.$refs.roomMenu.$children[0]) return false
 
                 return this.$refs.roomMenu.$children[0].visible
             },
@@ -75,7 +75,8 @@
                 if(!this.user) return false
                 if(!this.room) return false
 
-                return this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id) && this.$route.name === 'room'
+                return (this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id)
+                        && this.$route.name === 'room')
             }
         },
         mounted() {

@@ -64,6 +64,7 @@ video.static-placeholder {
 
 p.player-dev {
     position: absolute;
+    color: white;
     background-color: rgba(0,0,0,0.72157);
 
     top: 0px;

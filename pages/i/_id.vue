@@ -22,7 +22,18 @@
                 </p>
                 <Form>
                     <Button
-                        v-if="!user"
+                        v-if="user && !isSelfInInvitedRoom"
+                        :loading="loading"
+                        :disabled="isSelfInRoom"
+                        @click.native="joinRoom()"
+                    >
+                        {{ loading ? 'Accepting invite...' : 'Accept Invite' }}
+                    </Button>
+                    <Button v-else-if="user && isSelfInInvitedRoom" href="/room">
+                        View Room
+                    </Button>
+                    <Button
+                        v-else-if="!token && redirectUrl"
                         type="discord"
                         :href="redirectUrl"
                         icon="/icons/discord-white.svg"
@@ -30,24 +41,24 @@
                     >
                         Login with Discord
                     </Button>
-                    <Button
-                        v-else-if="!isSelfInInvitedRoom"
-                        :loading="loading"
-                        :disabled="isSelfInRoom"
-                        @click.native="joinRoom()"
-                    >
-                        {{ loading ? 'Accepting invite...' : 'Accept Invite' }}
-                    </Button>
-                    <Button v-else-if="isSelfInInvitedRoom" href="/room">
-                        View Room
-                    </Button>
                 </Form>
+                <p v-if="reqFailed" class="disclaimer">
+                    An error has occurred trying to contact this instance's API.
+                </p>
+                <p v-else-if="!redirectUrl" class="disclaimer">
+                    Uh-oh! Looks like we can't find a redirect URL for Login with Discord.
+                </p>
+                <p v-else-if="token && !user" class="disclaimer">
+                    Please wait...
+                </p>
+
                 <p v-if="isSelfInRoom && !isSelfInInvitedRoom" class="disclaimer">
                     You're already in a room. You need to <a href="#" @click="leaveRoom()">leave the room you're in</a> before joining this one
                 </p>
                 <p v-else-if="isSelfInInvitedRoom" class="disclaimer">
                     You're already in this room.
                 </p>
+
                 <p v-if="error" class="error">
                     {{ error }}
                 </p>
@@ -59,6 +70,9 @@
             </h1>
             <p class="subtitle">
                 We couldn't find a room linked with this invite code. Make sure you have the right invite and try again!
+            </p>
+            <p class="disclaimer">
+                You may want to <nuxt-link to="/home">go home</nuxt-link> now.
             </p>
         </div>
     </div>
@@ -78,7 +92,7 @@
             if(this.room)
                 inviteHeaders = {
                     meta: [
-                        { name: 'description', content: `You've been invted to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
+                        { name: 'description', content: `You've been invited to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
 
                         { property: 'og:title', content: `Join ${this.room.name} on ${this.brand.name}` },
                         { property: 'og:description', content: `You've been invted to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
@@ -101,11 +115,12 @@
             return {
                 brand,
                 error: '',
-                loading: false
+                loading: false,
+                reqFailed: false
             }
         },
         computed: {
-            ...mapGetters(['user']),
+            ...mapGetters(['token', 'user']),
 
             membersList() {
                 const memberLimit = 3, members = this.room.members.slice(0, 3)
@@ -122,6 +137,21 @@
                 if(!this.user) return false
 
                 return this.user.room && this.user.room.id === this.room.id
+            }
+        },
+        async mounted() {
+            if(this.token && !this.user) {
+                try {
+                    await this.$axios.$get('user/me')
+                    // fetch user if it worked
+                    // ToDo: avoid doing 2 requests for this
+                    this.$store.dispatch('fetchUser')
+                } catch(error) {
+                    if (error.response && error.response.data.response === 'USER_NO_AUTH')
+                        this.$store.commit('logout')
+                    else
+                        this.reqFailed = true
+                }
             }
         },
         async asyncData(context) {

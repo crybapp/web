@@ -1,7 +1,6 @@
 import { parse } from 'cookieparser'
 import cookies from 'browser-cookies'
 
-// eslint-disable-next-line no-undef
 const isProduction = () => process.env.NODE_ENV === 'production'
 
 export const getters = {
@@ -82,13 +81,16 @@ export const mutations = {
     handleUser(state, user) {
         state.users[user.id] = user
     },
+
     handleSelfUser(state, user) {
         state.user = user
         state.users[user.id] = user
     },
+
     handleUserId(state, userId) {
         state.userId = userId
     },
+
     handleToken(state, { token, save }) {
         state.token = token
 
@@ -98,13 +100,11 @@ export const mutations = {
             if(token)
                 cookies.set('token', token, {
                     expires: 365,
-                    // eslint-disable-next-line no-undef
                     domain: process.env.COOKIE_DOMAIN,
                     secure: isProduction()
                 })
             else
                 cookies.erase('token', {
-                    // eslint-disable-next-line no-undef
                     domain: process.env.COOKIE_DOMAIN
                 })
     },
@@ -191,7 +191,7 @@ export const mutations = {
         if(message.author === state.userId)
             state.sendingMessages.splice(state.sendingMessages.indexOf(message.content), 1)
         else
-            this.commit('updateTypingStatus', { u: message.author, typing: false})
+            this.commit('updateTypingStatus', { u: message.author, typing: false })
 
         if(lastGroup && lastGroup.author === author) {
             state.room.messages[state.room.messages.length - 1].messages.push(message)
@@ -203,9 +203,11 @@ export const mutations = {
                 messageIds: [id]
             })
     },
+
     pushSendingMessage(state, { content }) {
         state.sendingMessages.push(content)
     },
+
     pullMessage(state, messageId) {
         if(!state.room) return
         if(state.room.messages.length === 0) return
@@ -238,6 +240,7 @@ export const mutations = {
             if(state.room.members.indexOf(user.id) === -1)
                 state.room.members.push(user)
     },
+
     handleUserLeave(state, { u: userId }) {
         if(state.userId === userId) return
 
@@ -249,6 +252,7 @@ export const mutations = {
         if(state.onlineMembers)
             state.onlineMembers.splice(state.onlineMembers.indexOf(userId), 1)
     },
+
     handleOwnerUpdate(state, { u: userId }) {
         if(!state.room) return
 
@@ -267,6 +271,7 @@ export const mutations = {
 
         state.ws.send(JSON.stringify({ op: 0, d: { typing }, t: 'TYPING_UPDATE' }))
     },
+
     updateTypingStatus(state, { typing, u: userId }) {
         if(userId === state.userId) return
 
@@ -303,7 +308,6 @@ export const mutations = {
         if(save)
             cookies.set('allow_cookies', '1', {
                 expires: 365 * 10, // 10 years
-                // eslint-disable-next-line no-undef
                 domain: process.env.COOKIE_DOMAIN,
                 secure: isProduction()
             })
@@ -315,7 +319,6 @@ export const mutations = {
     setupWebSocket(state) {
         if(!state.token) return
 
-        // eslint-disable-next-line no-undef
         const { token } = state, ws = new WebSocket(process.env.WS_URL)
 
         ws.onerror = () => this.commit('setupReconnect')
@@ -337,42 +340,57 @@ export const mutations = {
                 console.log(op, d, t)
 
             if(op === 0) {
-                // ROOM
-                if(t === 'CONTROLLER_UPDATE')
-                    this.commit('updateController', d)
                 if(t.split('_')[0] === 'PORTAL')
-                    this.commit('updatePortal', d)
-                else if(t === 'APERTURE_CONFIG')
-                    this.commit('updateAperture', d)
-                else if(t === 'ROOM_DESTROY') {
-                    this.commit('handleRoom', null)
-                    this.app.router.push('/home')
-                } else if(t === 'INVITE_UPDATE')
-                    this.commit('handleInvite', d)
-                // USER
-                else if(t === 'USER_JOIN')
-                    this.commit('handleUserJoin', d)
-                else if(t === 'USER_UPDATE')
-                    this.commit('handleUser', d)
-                else if(t === 'USER_LEAVE')
-                    this.commit('handleUserLeave', d)
-                else if(t === 'OWNER_UPDATE')
-                    this.commit('handleOwnerUpdate', d)
-                else if(t === 'PRESENCE_UPDATE')
-                    this.commit('updatePresence', d)
-                // MESSAGE
-                else if(t === 'MESSAGE_CREATE')
-                    this.commit('pushMessage', d)
-                else if(t === 'MESSAGE_DESTROY')
-                    this.commit('pullMessage', d.id)
-                else if(t === 'TYPING_UPDATE')
-                    this.commit('updateTypingStatus', d)
+                    return this.commit('updatePortal', d)
+
+                switch(t) {
+                    // ROOM
+                    case 'CONTROLLER_UPDATE':
+                        this.commit('updateController', d)
+                        break
+                    case 'APERTURE_CONFIG':
+                        this.commit('updateAperture', d)
+                        break
+                    case 'ROOM_DESTROY':
+                        this.commit('handleRoom', null)
+                        this.app.router.push('/home')
+                        break
+                    case 'INVITE_UPDATE':
+                        this.commit('handleInvite', d)
+                        break
+                    // USER
+                    case 'USER_JOIN':
+                        this.commit('handleUserJoin', d)
+                        break
+                    case 'USER_UPDATE':
+                        this.commit('handleUser', d)
+                        break
+                    case 'USER_LEAVE':
+                        this.commit('handleUserLeave', d)
+                        break
+                    case 'OWNER_UPDATE':
+                        this.commit('handleOwnerUpdate', d)
+                        break
+                    case 'PRESENCE_UPDATE':
+                        this.commit('updatePresence', d)
+                        break
+                    // MESSAGE
+                    case 'MESSAGE_CREATE':
+                        this.commit('pushMessage', d)
+                        break
+                    case 'MESSAGE_DESTROY':
+                        this.commit('pullMessage', d.id)
+                        break
+                    case 'TYPING_UPDATE':
+                        this.commit('updateTypingStatus', d)
+                        break
+                }
             } else if(op === 10) {
                 const { c_heartbeat_interval, c_reconnect_interval } = d
 
                 this.commit('setupHeartbeat', c_heartbeat_interval)
-                if(state.wsReconnect) this.commit('invalidateReconnect')
 
+                if(state.wsReconnect) this.commit('invalidateReconnect')
                 state.wsReconnectInterval = c_reconnect_interval
 
                 ws.send(JSON.stringify({ op: 2, d: { token } }))
@@ -381,6 +399,7 @@ export const mutations = {
 
         state.ws = ws
     },
+
     disconnectWebSocket(state) {
         if(state.ws) {
             state.ws.close(1000)
@@ -408,6 +427,7 @@ export const mutations = {
             state.ws.send(JSON.stringify({ op: 1, d: {} }))
         }, interval)
     },
+
     invalidateHeartbeat(state) {
         if(!state.wsHeartbeat) return
 
@@ -424,6 +444,7 @@ export const mutations = {
             this.commit('setupWebSocket')
         }, state.wsReconnectInterval)
     },
+
     invalidateReconnect(state) {
         if(!state.wsReconnect) return
 
@@ -443,7 +464,6 @@ export const mutations = {
         )
 
         cookies.erase('token', {
-            // eslint-disable-next-line no-undef
             domain: process.env.COOKIE_DOMAIN
         })
     }
@@ -456,6 +476,7 @@ export const actions = {
 
             commit('handleSelfUser', user)
             commit('handleUserId', user.id)
+            commit('handleRoom', user.room)
         } catch(error) {
             console.error(error)
         }
@@ -470,6 +491,7 @@ export const actions = {
             console.error(error)
         }
     },
+
     async leaveRoom({ commit }) {
         try {
             await this.$axios.$post('room/leave')
@@ -492,6 +514,7 @@ export const actions = {
             console.error(error)
         }
     },
+
     async giveControl({ commit }, userId) {
         try {
             await this.$axios.$post(`/room/controller/give/${userId}`)
@@ -501,6 +524,7 @@ export const actions = {
             console.error(error)
         }
     },
+
     async releaseControl({ commit }) {
         try {
             await this.$axios.$post('room/controller/release')
@@ -512,32 +536,13 @@ export const actions = {
     },
 
     async nuxtClientInit({ commit }) {
-        this.$axios.interceptors.response.use(response => {
-            return response
-        }, error => {
-            if (error.response && error.response.status === 401) {
-                // Invalid token, we should logout
-                console.warn('Token seems to be invalid - logging out...')
-                commit('logout')
-            } else console.error(error)
-        })
-
         const token = cookies.get('token')
 
         if(token)
             commit('handleToken', { token, save: false })
     },
-    async nuxtServerInit({ commit }, { req }) {
-        this.$axios.interceptors.response.use(response => {
-            return response
-        }, error => {
-            if (error.response && error.response.status === 401) {
-                // Invalid token, we should logout
-                console.warn('Token seems to be invalid - logging out...')
-                commit('logout')
-            } else console.error(error)
-        })
 
+    async nuxtServerInit({ commit }, { req }) {
         if(typeof req.headers.cookie !== 'string') return
 
         const { token, allow_cookies } = parse(req.headers.cookie)
@@ -555,7 +560,7 @@ export const actions = {
                 commit('handleUserId', user.id)
                 commit('handleRoom', user.room)
             } catch(error) {
-                return console.error(error)
+                console.error(error)
             }
         }
     }

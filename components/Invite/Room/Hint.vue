@@ -8,7 +8,8 @@
         </p>
         <a
             class="invite-link"
-            href="#"
+            :href="inviteLink"
+            onclick="return false"
             @click="copyInviteLink()"
         >
             {{ inviteLink }}
@@ -44,7 +45,7 @@
                     await this.$copyText(this.inviteLink)
 
                     this.hint = ' - copied!'
-                    this.hintTimeout = setTimeout(() => this.hint = '', 1500)
+                    this.hintTimeout = setTimeout(() => this.hint = '', 1250)
                 } catch(error) {
                     alert(error)
                 }
