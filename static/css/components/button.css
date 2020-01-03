@@ -9,7 +9,6 @@ a.button-wrapper div.button {
     padding: 10px;
 
     background-color: black;
-    box-shadow: 0 0 0 1px grey;
 
     font-weight: 600;
     border-radius: 5px;
@@ -21,12 +20,18 @@ a.button-wrapper div.button {
 }
 
 a.button-wrapper div.button.disabled {
-    color: black;
     opacity: 0.35;
+    color: black;
+    
     background-color: white;
+    box-shadow: 0 0 0 1px black;
 
     cursor: not-allowed
 }
+
+/* a.button-wrapper div.button:not(.disabled) {
+    box-shadow: 0 0 0 1px grey
+} */
 
 div.button img.button-icon, div.button img.button-icon-hover {
     height: 25px;
@@ -50,13 +55,15 @@ div.button p.button-content {
 }
 
 a.button-wrapper div.button:not(.disabled):not(.loading):hover {
-    background-color: #080808;
-    box-shadow: 0px 0px 5px 5px #ffffff75 !important
+    box-shadow: 0 0 0 1px white
+    /* background-color: #080808; */
+    /* box-shadow: 0px 0px 5px 5px #ffffff75 !important */
 }
 
 a.button-wrapper div.button:not(.disabled):not(.loading):active {
-    background-color: #2c2c2c;
-    box-shadow: 0px 6px 15px #00000017 !important
+    /* background-color: #2c2c2c; */
+    /* box-shadow: 0px 6px 15px #00000017 !important */
+    box-shadow: 0 0 10px rgba(112, 128, 144, 0.25) !important
 }
 
 div.button:not(.discord):not(.disabled):not(.loading):hover p.button-content {
@@ -89,7 +96,7 @@ p.button-content {
 
 @media screen and (prefers-color-scheme: light) {
     a.button-wrapper div.button {
-        box-shadow: 0 0 0 1px rgba(112, 128, 144, 0.25)
+        /* box-shadow: 0 0 0 1px rgba(112, 128, 144, 0.25) */
     }
 
     a.button-wrapper div.button:not(.disabled):not(.loading):hover {
@@ -104,5 +111,11 @@ p.button-content {
     a.button-wrapper div.button:not(.disabled):not(.loading):active {
         background-color: #ececec;
         box-shadow: 0px 6px 15px #00000017 !important
+    }
+}
+
+@media screen and (prefers-color-scheme: dark) {
+    a.button-wrapper div.button {
+        box-shadow: 0 0 0 1px grey
     }
 }

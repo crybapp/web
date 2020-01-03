@@ -45,7 +45,7 @@
                 <p class="subtitle">
                     It's never been easier to join or start a room with your friends.
                     <br>
-                    Select an option below to get started
+                    Select an option below to get started:
                 </p>
                 <div class="options has-link is-horizontal">
                     <nuxt-link to="#join-room" @click.native="showJoinRoomModal()">
@@ -69,7 +69,7 @@
                                     Create a Room
                                 </h3>
                                 <p class="description">
-                                    Need a room where you can watch anything with your friends? This is the place to go
+                                    Need a room where you can watch anything with your friends? This is the place to go.
                                 </p>
                             </div>
                         </div>
@@ -135,7 +135,7 @@
             }
         },
         mounted() {
-            if(!this.$refs.joinRoomModal && !this.$refs.joinRoomModal) return
+            if(!this.$refs.createRoomModal && !this.$refs.joinRoomModal) return
 
             this.$refs.createRoomModal.visible = this.$route.hash === '#create-room'
             this.$refs.joinRoomModal.visible = this.$route.hash === '#join-room'

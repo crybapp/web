@@ -41,11 +41,11 @@ div.watch {
 
 @media screen and (prefers-color-scheme: light) {
     div.user-name-wrapper p.user-name {
-        color: white !important
+        color: black !important
     }
 
     div.user-icon div.user-name-wrapper {
-        background-color: black
+        /* background-color: black */
     }
 }
 
