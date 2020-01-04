@@ -13,15 +13,11 @@
                     {{ brand.name }} makes it easy to start up a room, add your friends, and browse the web
                 </p>
                 <div v-if="user" class="continue">
-                    <Button
-                        href="/home"
-                        icon="/icons/user-white.svg"
-                        hover="/icons/user.svg"
-                    >
+                    <Button href="/home" icon="/icons/user-white.svg" hover="/icons/user.svg">
                         Continue to {{ brand.name }}
                     </Button>
                 </div>
-                <div v-else-if="!token" class="login">
+                <div v-else-if=!token class="login">
                     <Button v-if=redirectUrl theme="discord" :href=redirectUrl icon="/icons/discord-white.svg" hover-icon="/icons/discord-colour.svg">
                         Login with Discord
                     </Button>
@@ -29,7 +25,7 @@
                         Uh-oh! Looks like we can't find a redirect URL for Login with Discord
                     </p>
                 </div>
-                <div v-else-if="reqFailed">
+                <div v-else-if=reqFailed>
                     <p class="disclaimer">
                         An error has occurred trying to contact this instance's API
                     </p>

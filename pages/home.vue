@@ -1,5 +1,5 @@
 <template>
-    <div v-if="user" class="home">
+    <div v-if=user class="home">
         <div v-if=room class="in-room">
             <h1 class="title">
                 Let's jump back into watching

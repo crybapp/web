@@ -1,21 +1,9 @@
 <template>
     <div class="chat-message" :class="{ 'is-sending': loading || isMessageSending }">
-        <p class="chat-message-content" v-html="getEmojifiedMessageContent" />
+        <p class="chat-message-content" v-html=getEmojifiedMessageContent />
         <div v-if="!isMessageSending" class="chat-message-options">
-            <img
-                v-if="!isAuthorSelf"
-                class="chat-message-option chat-message-report"
-                src="/icons/message-exclaimation.svg"
-                title="Report message"
-                @click="report()"
-            >
-            <img
-                v-if="isAuthorSelf || isSelfRoomOwner"
-                class="chat-message-option chat-message-delete"
-                src="/icons/trash-full.svg"
-                title="Delete message"
-                @click="destroy()"
-            >
+            <img v-if=!isAuthorSelf class="chat-message-option chat-message-report" src="/icons/message-exclaimation.svg" title="Report message" @click=report()>
+            <img v-if="isAuthorSelf || isSelfRoomOwner" class="chat-message-option chat-message-delete" src="/icons/trash-full.svg" title="Delete message" @click=destroy()>
         </div>
     </div>
 </template>

@@ -11,17 +11,8 @@
             When you create a room, you'll be able to add your friends and browse the internet
         </p>
         <Form>
-            <Input
-                v-model=roomName
-                placeholder="Room Name"
-                :disabled=loading
-                @keydown.enter=createRoom()
-            />
-            <Button
-                :loading=loading
-                :disabled="loading || !isRoomNameValid"
-                @click.native=createRoom()
-            >
+            <Input v-model=roomName placeholder="Room Name" :disabled=loading @keydown.enter=createRoom() />
+            <Button :loading=loading :disabled="loading || !isRoomNameValid" @click.native=createRoom()>
                 {{ loading ? 'Creating room...' : 'Create Room' }}
             </Button>
         </Form>

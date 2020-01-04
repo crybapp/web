@@ -6,12 +6,7 @@
         <p class="invite-hint-subtitle">
             Copy and share this link with your friends
         </p>
-        <a
-            class="invite-link"
-            :href="inviteLink"
-            onclick="return false"
-            @click="copyInviteLink()"
-        >
+        <a class="invite-link" :href=inviteLink onclick="return false" @click=copyInviteLink()>
             {{ inviteLink }}
         </a>
         <span class="hint" :class="{ visible: hint }">

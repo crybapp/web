@@ -1,9 +1,6 @@
 <template>
-    <div
-        class="player"
-        :class="{ 'capture-events': hasControl }"
-    >
-        <p v-if="showPlayerDevtools" class="player-dev">
+    <div class="player" :class="{ 'capture-events': hasControl }">
+        <p v-if=showPlayerDevtools class="player-dev">
             Portal ID: {{ portal.id }}
             <br>
             Portal Status: {{ portal.status }}
@@ -12,15 +9,15 @@
             ref="stream"
             class="player-stream"
             tabindex="1"
-            @keydown="didKeyDown"
-            @keyup="didKeyUp"
-            @mousemove="didMouseMove"
-            @mousedown="didMouseDown"
-            @mouseup="didMouseUp"
-            @mousewheel="didMouseWheel"
-            @contextmenu="handleRightClick"
+            @keydown=didKeyDown
+            @keyup=didKeyUp
+            @mousemove=didMouseMove
+            @mousedown=didMouseDown
+            @mouseup=didMouseUp
+            @mousewheel=didMouseWheel
+            @contextmenu=handleRightClick
         />
-        <div v-if="showMutedPopup" class="player-tooltips">
+        <div v-if=showMutedPopup class="player-tooltips">
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
                     <p class="player-tooltip-title">
@@ -30,7 +27,7 @@
                         Your browser requires user interaction in order to let us play video with audio!
                     </p>
                 </div>
-                <Button @click.native="unmute()">
+                <Button @click.native=unmute()>
                     Unmute
                 </Button>
             </div>

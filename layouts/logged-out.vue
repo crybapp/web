@@ -1,7 +1,7 @@
 <template>
     <div class="root">
         <nuxt />
-        <GoogleAnalytics v-if="this.brand.ga_tracking_id" />
+        <GoogleAnalytics v-if=brand.ga_tracking_id />
     </div>
 </template>
 <script>

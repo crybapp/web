@@ -1,35 +1,14 @@
 <template>
-    <div
-        v-if="member"
-        class="user-icon"
-        :class="{ 'passable': canPassControl, 'offline': !isUserOnline, 'has-control': hasControl }"
-        @click="didClickUserIcon()"
-        @mouseover="hover = true"
-        @mouseleave="hover = false"
-    >
-        <img
-            v-if="userIcon"
-            :src="userIcon"
-            class="user-icon-avatar"
-            :title="userHoverTitle"
-        >
+    <div v-if=member class="user-icon" :class="{ 'passable': canPassControl, 'offline': !isUserOnline, 'has-control': hasControl }" @click=didClickUserIcon() @mouseover="hover = true" @mouseleave="hover = false">
+        <img v-if=userIcon :src=userIcon class="user-icon-avatar" :title=userHoverTitle />
         <div class="user-name-wrapper">
             <p class="user-name">
                 {{ member.name }}
             </p>
         </div>
-        <div
-            class="user-control-indicator"
-            :class="{ 'visible': hasControl, 'is-interactable': interactable }"
-            :title="indicatorHoverTitle"
-            @click="didClickControlIcon()"
-        >
-            <img class="user-control-icon has-control" src="/icons/cursor-a.svg">
-            <img
-                v-if="interactable"
-                class="user-control-icon remove-control"
-                src="/icons/multiply.svg"
-            >
+        <div class="user-control-indicator" :class="{ 'visible': hasControl, 'is-interactable': interactable }" :title=indicatorHoverTitle @click=didClickControlIcon()>
+            <img class="user-control-icon has-control" src="/icons/cursor-a.svg" />
+            <img v-if=interactable class="user-control-icon remove-control" src="/icons/multiply.svg" />
         </div>
     </div>
 </template>

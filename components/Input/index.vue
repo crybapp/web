@@ -1,13 +1,5 @@
 <template>
-    <input
-        ref="input"
-        class="input"
-        type="text"
-        :value=value
-        :placeholder=placeholder
-        @input=didUpdateInput()
-        @keydown.enter=didPressEnter
-    >
+    <input ref="input" class="input" type="text" :value=value :placeholder=placeholder @input=didUpdateInput() @keydown.enter=didPressEnter />
 </template>
 <script>
     export default {

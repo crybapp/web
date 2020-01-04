@@ -3,7 +3,7 @@
         <Header />
         <div class="content" :class="{ 'is-center': !isRoomPage }">
             <nuxt />
-            <GoogleAnalytics v-if="brand.ga_tracking_id" />
+            <GoogleAnalytics v-if=brand.ga_tracking_id />
         </div>
         <Footer v-if=!isRoomPage />
     </div>

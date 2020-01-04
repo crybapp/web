@@ -1,6 +1,6 @@
 <template>
     <div class="room-wrapper">
-        <div v-if="error" class="center error">
+        <div v-if=error class="center error">
             <h1 class="title">
                 Room Not Found
             </h1>

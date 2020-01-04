@@ -1,6 +1,6 @@
 <template>
     <div class="room-join" :class="{ 'has-icon': modal && !loading }">
-        <nuxt-link v-if=modal to="" @click.native="$parent.$parent.hideModals()">
+        <nuxt-link v-if=modal to="" @click.native=$parent.$parent.hideModals()>
             <img src="/icons/circle-close.svg" class="close-button">
             <img src="/icons/circle-close-filled.svg" class="close-button-hover">
         </nuxt-link>
@@ -11,21 +11,12 @@
             You're in the right place! Paste in your invite code or link below to get started
         </p>
         <Form>
-            <Input
-                v-model="invite"
-                placeholder="Invite Code or Link"
-                :disabled="loading"
-                @keydown.enter="joinRoom()"
-            />
-            <Button
-                :loading="loading"
-                :disabled="!isRoomInviteValid"
-                @click.native="joinRoom()"
-            >
+            <Input v-model=invite placeholder="Invite Code or Link" :disabled=loading @keydown.enter=joinRoom() />
+            <Button :loading=loading :disabled=!isRoomInviteValid @click.native=joinRoom()>
                 {{ loading ? 'Finding room...' : 'Find Room' }}
             </Button>
         </Form>
-        <p v-if="error" class="error">
+        <p v-if=error class="error">
             {{ error }}
         </p>
     </div>

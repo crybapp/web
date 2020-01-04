@@ -1,21 +1,7 @@
 <template>
     <div class="chat-bar-wrapper">
-        <input
-            ref="input"
-            v-model="content"
-            type="text"
-            class="chat-bar"
-            :class="{ 'disabled': sending }"
-            placeholder="Say something cool..."
-            @keyup="didPressKey"
-            @keyup.enter="sendMessage()"
-        >
-        <div
-            class="send-button"
-            :class="{ 'is-loading': sending, disabled: sending || !canSendMessage }"
-            title="Send Message"
-            @click="sendMessage()"
-        >
+        <input ref="input" v-model=content type="text" class="chat-bar" :class="{ 'disabled': sending }" placeholder="Say something cool..." @keyup=didPressKey @keyup.enter=sendMessage() />
+        <div class="send-button" :class="{ 'is-loading': sending, disabled: sending || !canSendMessage }" title="Send Message" @click=sendMessage()>
             <img src="/icons/airplane.svg" class="send-button-icon">
         </div>
     </div>

@@ -1,6 +1,6 @@
 <template>
     <div class="error">
-        <h1 v-if="error.statusCode" class="title">
+        <h1 v-if=error.statusCode class="title">
             {{ error.statusCode }}
         </h1>
         <h1 v-else class="title">

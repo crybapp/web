@@ -1,7 +1,9 @@
 <template>
     <div class="chat">
-        <p v-if="!messages || messages.length === 0" class="chat-no-messages">Nobody said nothing. Maybe say something?</p>
-        <div v-else-if=messages class="grouped-chat-messages-wrapper" :class="{ 'users-are-typing': typingUsers.length > 0 }" ref="messagesView">
+        <p v-if="!messages || messages.length === 0" class="chat-no-messages">
+            Nobody said nothing. Maybe say something?
+        </p>
+        <div v-else-if=messages ref="messagesView" class="grouped-chat-messages-wrapper" :class="{ 'users-are-typing': typingUsers.length > 0 }">
             <GroupedChatMessage v-for="(group, i) in messages" :key=group.id :group=group :is-last-group="i === messages.length - 1" />
         </div>
         <ChatTypingBar />

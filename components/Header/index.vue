@@ -9,14 +9,16 @@
                 </picture>
             </nuxt-link>
 
-            <h1 v-if=title class="header-title">{{ title }}</h1>
+            <h1 v-if=title class="header-title">
+                {{ title }}
+            </h1>
             <RoomMenu ref="roomMenu" />
         </div>
-        <div v-if="user" class="right">
+        <div v-if=user class="right">
             <img v-if=userIcon :src=userIcon class="profile-image" @click=toggleUserMenu()>
             <UserMenu ref="userMenu" />
         </div>
-        <div v-else-if="token" class="right">
+        <div v-else-if=token class="right">
             <Button @click.native="logout()">
                 Logout
             </Button>

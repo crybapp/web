@@ -1,6 +1,6 @@
 <template>
     <div class="menu-wrapper" :class="{ visible }">
-        <div class="menu-cover" @click="toggleMenu()"></div>
+        <div class="menu-cover" @click=toggleMenu() />
         <div class="menu" :class="{ 'is-header': header, 'is-left': left, 'is-right': right }">
             <slot />
         </div>

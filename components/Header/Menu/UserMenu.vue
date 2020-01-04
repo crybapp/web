@@ -11,7 +11,7 @@
             <MenuOption v-if="user.room && this.$route.name !== 'room'" to="/room" icon="preview">
                 View Room
             </MenuOption>
-            <MenuOption v-if="user.room" name="leave-room" icon="panel-arrow-left" :loading=leavingRoom :disabled=leavingRoom>
+            <MenuOption v-if=user.room name="leave-room" icon="panel-arrow-left" :loading=leavingRoom :disabled=leavingRoom>
                 {{ leavingRoom ? 'Leaving...' : 'Leave Room' }}
             </MenuOption>
             <MenuOption v-if=!user.room to="/room/join" icon="panel-arrow-right">
