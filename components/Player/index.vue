@@ -19,7 +19,7 @@
                     And so it begins...
                 </h1>
                 <p class="body">
-                    Add a friend or two to get the party started! Once someone else joins this room, we'll queue up your room for a virtual browser.
+                    Add a friend or two to get the party started! Once someone else joins this room, we'll queue up your room for a virtual browser
                 </p>
             </div>
             <!-- Portal is not open but there are more than one members in the room -->
@@ -30,7 +30,7 @@
                 <p class="body">
                     We're waiting for the right gears to align so we can get your browser ready - hold tight!
                     <br>
-                    If this is taking a little long, restart the room.
+                    If this is taking a little long, restart the room
                 </p>
             </div>
             <!-- A portal has been placed into the queue -->
@@ -39,7 +39,7 @@
                     You're in the queue!
                 </h1>
                 <p class="body">
-                    There are a couple rooms infront of you waiting for a virtual browser, it shouldn't take too long.
+                    There are a couple rooms infront of you waiting for a virtual browser, it shouldn't take too long
                 </p>
             </div>
             <!-- The portal is either being created or starting -->
@@ -50,7 +50,7 @@
                 <p class="body">
                     Normally this takes a couple seconds, hang tight!
                     <br>
-                    If you have any issues either refresh the page or ask the room owner to restart the browser.
+                    If you have any issues either refresh the page or ask the room owner to restart the browser
                 </p>
             </div>
             <!-- The portal is created and the stream between the client and the aperture is being established -->
@@ -59,7 +59,7 @@
                     Strap in...
                 </h1>
                 <p class="body">
-                    Everything is ready - we're just getting the stream between you and the VM started!
+                    Everything is ready - we're just getting the stream between you and the VM started
                 </p>
             </div>
             <div class="loading-wrapper">

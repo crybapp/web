@@ -1,6 +1,6 @@
 <template>
     <div class="room-create" :class="{ 'has-icon': modal && !loading }">
-        <nuxt-link to="" @click.native="$parent.$parent.hideModals()">
+        <nuxt-link v-if=modal to="" @click.native=$parent.$parent.hideModals()>
             <img src="/icons/circle-close.svg" class="close-button">
             <img src="/icons/circle-close-filled.svg" class="close-button-hover">
         </nuxt-link>
@@ -8,24 +8,24 @@
             Create a Room
         </h1>
         <p class="subtitle">
-            When you create a room, you'll be able to add your friends and browse the internet.
+            When you create a room, you'll be able to add your friends and browse the internet
         </p>
         <Form>
             <Input
-                v-model="roomName"
+                v-model=roomName
                 placeholder="Room Name"
-                :disabled="loading"
-                @keydown.enter="createRoom()"
+                :disabled=loading
+                @keydown.enter=createRoom()
             />
             <Button
-                :disabled="!isRoomNameValid"
-                :loading="loading"
-                @click.native="createRoom()"
+                :loading=loading
+                :disabled="loading || !isRoomNameValid"
+                @click.native=createRoom()
             >
                 {{ loading ? 'Creating room...' : 'Create Room' }}
             </Button>
         </Form>
-        <p v-if="error" class="error">
+        <p v-if=error class="error">
             {{ error }}
         </p>
     </div>
@@ -63,8 +63,8 @@
         },
         methods: {
             async createRoom() {
-                if(this.loading) return
-                if(!this.isRoomNameValid) return
+                if (this.loading) return
+                if (!this.isRoomNameValid) return
 
                 this.error = null
                 this.loading = true

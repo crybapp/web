@@ -38,7 +38,7 @@
         },
         methods: {
             async copyInviteLink() {
-                if(this.hintTimeout)
+                if (this.hintTimeout)
                     clearTimeout(this.hintTimeout)
 
                 try {

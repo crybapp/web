@@ -9,6 +9,8 @@
 <script>
 	export default {
 		props: [
+			'type',
+
 			'header',
 			'left',
 			'right'
@@ -22,7 +24,7 @@
 			toggleMenu() {
 				this.visible = !this.visible
 
-				if(this.type)
+				if (this.type)
 					this.$router.push(this.visible ? `#${this.type}-menu` : '')
 			}
 		}

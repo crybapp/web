@@ -1,27 +1,13 @@
 <template>
-    <a class="input-wrapper" :href="href">
-        <div class="input" :class="{ 'discord': type === 'discord', disabled }">
-            <img
-                v-if="icon"
-                :src="icon"
-                class="input-icon"
-            >
-            <img
-                v-if="icon && hover"
-                :src="hover"
-                class="input-icon-hover"
-            >
-            <input
-                ref="input"
-                class="input-inner"
-                type="text"
-                :value="value"
-                :placeholder="placeholder"
-                @input="didUpdateInput()"
-                @keydown.enter="didPressEnter"
-            >
-        </div>
-    </a>
+    <input
+        ref="input"
+        class="input"
+        type="text"
+        :value=value
+        :placeholder=placeholder
+        @input=didUpdateInput()
+        @keydown.enter=didPressEnter
+    >
 </template>
 <script>
     export default {

@@ -16,7 +16,7 @@
         head() {
             const script = []
 
-            if(this.brand.ga_tracking_id)
+            if (this.brand.ga_tracking_id)
                 script.push({
                     src: `https://www.googletagmanager.com/gtag/js?id=${this.brand.ga_tracking_id}`
                 })

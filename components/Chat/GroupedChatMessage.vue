@@ -50,26 +50,26 @@
                 return this.users[this.group.author]
             },
             messages() {
-                if(!this.isAuthorSelf || !this.isLastGroup) return this.group.messages
+                if (!this.isAuthorSelf || !this.isLastGroup) return this.group.messages
 
                 return [...this.group.messages, ...this.sendingMessages]
             },
 
             userIcon() {
-                if(!this.author) return null
+                if (!this.author) return null
 
-                if(this.hover) return this.author.icon
+                if (this.hover) return this.author.icon
 
                 return this.author.icon.replace('.gif', '.png')
             },
 
             isAuthorSelf() {
-                if(!this.author) return
+                if (!this.author) return
 
                 return this.group.author === this.userId
             },
             hasController() {
-                if(!this.author) return false
+                if (!this.author) return false
 
                 return this.author.id === this.controllerId
             }

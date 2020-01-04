@@ -1,5 +1,5 @@
 <template>
-    <Menu v-if=user ref="menu" class="user-menu" type="user">
+    <Menu v-if=user ref="menu" type="user" :header="true" :right="true">
         <MenuSection>
             <MenuOption :html="true" :disabled="true">
                 <p class="menu-option-content menu-option-title">
@@ -70,7 +70,7 @@
                 this.reloadingProfile = false
             },
             async leaveRoom() {
-                if(!confirm('Are you sure you want to leave this room? Once you leave this room, you cannot join back without an invite')) return
+                if (!confirm('Are you sure you want to leave this room? Once you leave this room, you cannot join back without an invite')) return
 
                 this.leavingRoom = true
 
@@ -83,7 +83,7 @@
                 } catch(error) {
                     console.error(error)
 
-                    if(error && error.response && error.response.status === 410)
+                    if (error && error.response && error.response.status === 410)
                         this.$store.commit('handleRoom', null)
                 }
 
@@ -109,15 +109,15 @@
             },
 
             didClickOption(name) {
-                if(!name) return this.$refs.menu.toggleMenu()
+                if (!name) return this.$refs.menu.toggleMenu()
 
-                if(name === 'reload-profile')
+                if (name === 'reload-profile')
                     this.reloadProfile()
-                else if(name === 'leave-room')
+                else if (name === 'leave-room')
                     this.leaveRoom()
-                else if(name === 'invite-friends')
+                else if (name === 'invite-friends')
                     this.inviteFriends()
-                else if(name === 'logout')
+                else if (name === 'logout')
                     this.logout()
             }
         }

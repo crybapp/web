@@ -22,22 +22,16 @@
                     </Button>
                 </div>
                 <div v-else-if="!token" class="login">
-                    <Button
-                        v-if="redirectUrl"
-                        type="discord"
-                        :href="redirectUrl"
-                        icon="/icons/discord-white.svg"
-                        hover="/icons/discord-colour.svg"
-                    >
+                    <Button v-if=redirectUrl theme="discord" :href=redirectUrl icon="/icons/discord-white.svg" hover-icon="/icons/discord-colour.svg">
                         Login with Discord
                     </Button>
                     <p v-else class="disclaimer">
-                        Uh-oh! Looks like we can't find a redirect URL for Login with Discord.
+                        Uh-oh! Looks like we can't find a redirect URL for Login with Discord
                     </p>
                 </div>
                 <div v-else-if="reqFailed">
                     <p class="disclaimer">
-                        An error has occurred trying to contact this instance's API.
+                        An error has occurred trying to contact this instance's API
                     </p>
                 </div>
                 <div v-else>
@@ -46,6 +40,7 @@
                     </p>
                 </div>
             </div>
+            <Footer />
         </div>
         <div v-if="hasLandingVideo" class="right">
             <iframe
@@ -67,10 +62,13 @@
 
     import Button from '~/components/Button'
 
+    import Footer from '~/components/Footer'
+
     export default {
         layout: 'logged-out',
         middleware: 'logged-out',
         components: {
+			Footer,
             Button
         },
         data() {
@@ -87,7 +85,7 @@
             }
         },
         async mounted() {
-            if(this.token && !this.user) {
+            if (this.token && !this.user) 
                 try {
                     await this.$axios.$get('user/me')
                     // fetch user and redirect automatically if it worked
@@ -100,7 +98,7 @@
                     else
                         this.reqFailed = true
                 }
-            }
+            
         },
         async asyncData(context) {
             try {

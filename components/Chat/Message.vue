@@ -41,7 +41,7 @@
                 return this.$parent.isAuthorSelf
             },
             isSelfRoomOwner() {
-                if(!this.room) return
+                if (!this.room) return
 
                 return this.userId === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id)
             },

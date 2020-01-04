@@ -1,5 +1,5 @@
 <template>
-    <Menu v-if=room ref="menu" class="room-menu" :header="true" :left="true">
+    <Menu v-if=room ref="menu" type="room" :header="true" :left="true">
         <MenuOption to="/home" icon="home">
             Go Home
         </MenuOption>
@@ -82,7 +82,7 @@
             },
             async refreshInvite() {
                 this.refreshingInvite = true
-                if(this.refreshInviteTimeout) clearTimeout(this.refreshInviteTimeout)
+                if (this.refreshInviteTimeout) clearTimeout(this.refreshInviteTimeout)
 
                 try {
                     const invite = await this.$axios.$post('room/invite/refresh')
@@ -98,7 +98,7 @@
                 this.refreshingInvite = false
             },
             async destroyRoom() {
-                if(!confirm('Are you sure you want to delete this room? This action is irreversible.')) return
+                if (!confirm('Are you sure you want to delete this room? This action is irreversible.')) return
 
                 this.destroyingRoom = true
                 this.refreshingInvite = false
@@ -115,15 +115,15 @@
             },
 
             didClickOption(name) {
-                if(!name) return this.$refs.menu.toggleMenu()
+                if (!name) return this.$refs.menu.toggleMenu()
 
-                if(name === 'copyInvite')
+                if (name === 'copyInvite')
                     this.copyInvite()
-                else if(name === 'refreshInvite')
+                else if (name === 'refreshInvite')
                     this.refreshInvite()
-                else if(name === 'restartPortal')
+                else if (name === 'restartPortal')
                     this.restartPortal()
-                else if(name === 'destroyRoom')
+                else if (name === 'destroyRoom')
                     this.destroyRoom()
             }
         }

@@ -1,6 +1,6 @@
 <template>
     <div class="room-join" :class="{ 'has-icon': modal && !loading }">
-        <nuxt-link to="" @click.native="$parent.$parent.hideModals()">
+        <nuxt-link v-if=modal to="" @click.native="$parent.$parent.hideModals()">
             <img src="/icons/circle-close.svg" class="close-button">
             <img src="/icons/circle-close-filled.svg" class="close-button-hover">
         </nuxt-link>
@@ -8,7 +8,7 @@
             Join Room
         </h1>
         <p class="subtitle">
-            If your friend sent you an invite to a room, you're in the right place. Copy the invite into the box below and we'll get you sorted in no time!
+            You're in the right place! Paste in your invite code or link below to get started
         </p>
         <Form>
             <Input
@@ -62,8 +62,8 @@
         },
         methods: {
             async joinRoom() {
-                if(this.loading) return
-                if(!this.isRoomInviteValid) return
+                if (this.loading) return
+                if (!this.isRoomInviteValid) return
 
                 this.loading = true
 

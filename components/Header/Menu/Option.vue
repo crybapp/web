@@ -25,9 +25,9 @@
         ],
         methods: {
             didClickOption() {
-                if(this.$parent.$parent.didClickOption)
+                if (this.$parent.$parent.didClickOption)
                     this.$parent.$parent.didClickOption(this.name)
-                else if(this.$parent.$parent.$parent.didClickOption)
+                else if (this.$parent.$parent.$parent.didClickOption)
                     this.$parent.$parent.$parent.didClickOption(this.name)
             }
         }

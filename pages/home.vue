@@ -98,42 +98,42 @@
             },
 
             isJoinRoomModalVisible() {
-                if(!this.$refs.joinRoomModal) return false
+                if (!this.$refs.joinRoomModal) return false
 
                 return this.$refs.joinRoomModal.visible
             },
             isCreateRoomModalVisible() {
-                if(!this.$refs.createRoomModal) return false
+                if (!this.$refs.createRoomModal) return false
 
                 return this.$refs.createRoomModal.visible
             }
         },
         mounted() {
-            if(!this.$refs.createRoomModal && !this.$refs.joinRoomModal) return
+            if (!this.$refs.createRoomModal && !this.$refs.joinRoomModal) return
 
             this.$refs.createRoomModal.visible = this.$route.hash === '#create-room'
             this.$refs.joinRoomModal.visible = this.$route.hash === '#join-room'
         },
         methods: {
             leaveRoom() {
-                if(!confirm('Are you sure you want to leave this room? Once you leave this room, you cannot join back without an invite.')) return
+                if (!confirm('Are you sure you want to leave this room? Once you leave this room, you cannot join back without an invite.')) return
 
                 this.leavingRoom = true
                 this.$store.dispatch('leaveRoom')
             },
 
             showCreateRoomModal() {
-                if(!this.$refs.createRoomModal) return
+                if (!this.$refs.createRoomModal) return
 
                 this.$refs.createRoomModal.visible = true
             },
             showJoinRoomModal() {
-                if(!this.$refs.joinRoomModal) return
+                if (!this.$refs.joinRoomModal) return
 
                 this.$refs.joinRoomModal.visible = true
             },
             hideModals() {
-                if(!this.$refs.joinRoomModal && !this.$refs.joinRoomModal) return
+                if (!this.$refs.joinRoomModal && !this.$refs.joinRoomModal) return
 
                 this.$refs.createRoomModal.visible = false
                 this.$refs.joinRoomModal.visible = false

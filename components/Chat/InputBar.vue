@@ -41,9 +41,9 @@
         },
         methods: {
             async sendMessage() {
-                if(this.sending) return
-                if(this.content.length === 0) return
-                if(this.content.length > 255) return alert('This message is longer than 255 characters, please shorten it before trying again.')
+                if (this.sending) return
+                if (this.content.length === 0) return
+                if (this.content.length > 255) return alert('This message is longer than 255 characters, please shorten it before trying again.')
 
                 const content = sanitizeHtml(this.content, { allowedTags: [], allowedAttributes: {} })
 
@@ -55,7 +55,7 @@
 
                 this.$store.commit('pushSendingMessage', { content })
 
-                if(content.trim().toLowerCase() === 'something cool')
+                if (content.trim().toLowerCase() === 'something cool')
                     alert('You are not very funny. At all.')
 
                 try {
@@ -67,10 +67,10 @@
                 }
             },
             didPressKey(e) {
-                if(e.keyCode === 8) return
-                if(this.content.length === 0) return
+                if (e.keyCode === 8) return
+                if (this.content.length === 0) return
 
-                if(this.typingTimer)
+                if (this.typingTimer)
                     clearInterval(this.typingTimer)
                 else
                     this.$store.commit('setTypingStatus', true)
@@ -80,7 +80,7 @@
             didEndTyping(broadcast) {
                 this.$store.commit('setTypingStatus', false)
 
-                if(this.typingTimer) {
+                if (this.typingTimer) {
                     clearInterval(this.typingTimer)
                     this.typingTimer = null
                 }
