@@ -12,7 +12,7 @@
         >
         <div
             class="send-button"
-            :class="{ loading: sending, disabled: sending || !canSendMessage }"
+            :class="{ 'is-loading': sending, disabled: sending || !canSendMessage }"
             title="Send Message"
             @click="sendMessage()"
         >

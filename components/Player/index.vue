@@ -2,7 +2,7 @@
     <div v-if="room" class="player-wrapper">
         <div v-if="!showViewer" class="player stream-loading">
             <video
-                class="stream"
+                class="stream is-placeholder"
                 src="/static-placeholder.mp4"
                 autoplay
                 muted

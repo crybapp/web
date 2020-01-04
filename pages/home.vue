@@ -21,8 +21,8 @@
 						</p> -->
                     </div>
                 </nuxt-link>
-                <nuxt-link class="is-wrapper" to="#leave-room">
-                    <div class="box option is-hoverable">
+                <nuxt-link class="is-wrapper" to="#leave-room" @click.native=leaveRoom()>
+                    <div class="box option is-hoverable" :class="{ 'is-loading': leavingRoom, 'is-disabled': leavingRoom }">
                         <img src="/icons/add.svg" alt="" class="icon" />
                         <h3 class="header">
                             {{ leavingRoom ? 'Leaving' : 'Leave' }} {{ room.name }}{{ leavingRoom ? '...' : '' }}
@@ -42,7 +42,7 @@
                 It's never been easier to join or start a room with your friends.<br>Select an option below to get started
             </p>
             <div class="options">
-                <nuxt-link class="is-wrapper" to="#join-room">
+                <nuxt-link class="is-wrapper" to="/room/join">
                     <div class="box option is-hoverable">
                         <img src="/icons/panel-arrow-right.svg" alt="" class="icon" />
                         <h3 class="header">
@@ -53,7 +53,7 @@
                         </p>
                     </div>
                 </nuxt-link>
-                <nuxt-link class="is-wrapper" to="#create-room">
+                <nuxt-link class="is-wrapper" to="/room/create">
                     <div class="box option is-hoverable">
                         <img src="/icons/add.svg" alt="" class="icon" />
                         <h3 class="header">
@@ -71,16 +71,7 @@
 <script>
     import { mapGetters } from 'vuex'
 
-    import Modal from '~/components/Modal'
-    import JoinRoom from '~/components/Room/Join'
-    import CreateRoom from '~/components/Room/Create'
-
     export default {
-        components: {
-            Modal,
-            JoinRoom,
-            CreateRoom
-        },
         data() {
             return {
                 leavingRoom: false

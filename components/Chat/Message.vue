@@ -1,8 +1,5 @@
 <template>
-    <div
-        class="chat-message"
-        :class="{ 'is-loading': loading || isMessageSending }"
-    >
+    <div class="chat-message" :class="{ 'is-sending': loading || isMessageSending }">
         <p class="chat-message-content" v-html="getEmojifiedMessageContent" />
         <div v-if="!isMessageSending" class="chat-message-options">
             <img

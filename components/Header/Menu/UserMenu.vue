@@ -1,10 +1,5 @@
 <template>
-    <Menu
-        v-if="user"
-        ref="menu"
-        class="user-menu"
-        type="user"
-    >
+    <Menu v-if=user ref="menu" class="user-menu" type="user">
         <MenuSection>
             <MenuOption :html="true" :disabled="true">
                 <p class="menu-option-content menu-option-title">
@@ -13,50 +8,24 @@
             </MenuOption>
         </MenuSection>
         <MenuSection>
-            <MenuOption
-                v-if="user.room && this.$route.name !== 'room'"
-                to="/room"
-                icon="preview"
-            >
+            <MenuOption v-if="user.room && this.$route.name !== 'room'" to="/room" icon="preview">
                 View Room
             </MenuOption>
-            <MenuOption
-                v-if="user.room"
-                name="leave-room"
-                icon="panel-arrow-left"
-                :loading="leavingRoom"
-            >
+            <MenuOption v-if="user.room" name="leave-room" icon="panel-arrow-left" :loading=leavingRoom :disabled=leavingRoom>
                 {{ leavingRoom ? 'Leaving...' : 'Leave Room' }}
             </MenuOption>
-
-            <MenuOption
-                v-if="!user.room"
-                to="/room/join"
-                icon="panel-arrow-right"
-            >
+            <MenuOption v-if=!user.room to="/room/join" icon="panel-arrow-right">
                 Join Room
             </MenuOption>
-            <MenuOption
-                v-if="!user.room"
-                to="/room/create"
-                icon="add"
-            >
+            <MenuOption v-if=!user.room to="/room/create" icon="add">
                 Create Room
             </MenuOption>
         </MenuSection>
         <MenuSection>
-            <MenuOption
-                name="reload-profile"
-                icon="user"
-                :loading="reloadingProfile"
-            >
+            <MenuOption name="reload-profile" icon="user" :loading=reloadingProfile :disabled=reloadingProfile>
                 {{ reloadingProfile ? 'Reloading...' : 'Reload Profile' }}
             </MenuOption>
-            <MenuOption
-                to="/"
-                name="logout"
-                icon="log-out"
-            >
+            <MenuOption to="/" name="logout" icon="log-out">
                 Logout
             </MenuOption>
         </MenuSection>

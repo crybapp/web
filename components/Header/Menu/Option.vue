@@ -1,25 +1,14 @@
 <template>
-    <nuxt-link
-        class="is-wrapper"
-        :to="to || ''"
-        :class="{ disabled }"
-    >
+    <nuxt-link class="is-wrapper" :to="to || ''" :class="{ disabled }">
         <div class="menu-option-wrapper">
-            <div
-                class="menu-option"
-                :class="{ 'has-icon': icon, loading, disabled }"
-                @click="didClickOption()"
-            >
-                <img
-                    v-if="icon"
-                    class="menu-option-icon"
-                    :class="{ 'align-top': icon === 'door' }"
-                    :src="`/icons/${icon}.svg`"
-                >
-                <p v-if="!html" class="menu-option-content">
+            <div class="menu-option" :class="{ 'has-icon': icon, 'is-loading': loading, 'is-disabled': disabled }" @click="didClickOption()">
+                <img v-if=icon class="menu-option-icon" :class="{ 'align-top': icon === 'door' }" :src="`/icons/${icon}.svg`">
+                <p v-if=!html class="menu-option-content">
                     <slot />
                 </p>
-                <slot v-else />
+                <div v-else class="menu-option-content">
+                    <slot />
+                </div>
             </div>
         </div>
     </nuxt-link>

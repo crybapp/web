@@ -1,20 +1,10 @@
 <template>
-    <Menu
-        v-if="room"
-        ref="menu"
-        class="room-menu"
-        type="room"
-    >
+    <Menu v-if=room ref="menu" class="room-menu" :header="true" :left="true">
         <MenuOption to="/home" icon="home">
             Go Home
         </MenuOption>
         <MenuSection>
-            <MenuOption
-                v-if="room.invites"
-                name="copyInvite"
-                icon="door"
-                :html="true"
-            >
+            <MenuOption v-if=room.invites name="copyInvite" icon="door" :html="true">
                 <p class="menu-option-content menu-option-title">
                     Invite Code
                 </p>
@@ -25,31 +15,14 @@
                     {{ hint }}
                 </p>
             </MenuOption>
-            <MenuOption
-                v-if="room.invites"
-                name="refreshInvite"
-                icon="die-3"
-                :loading="refreshingInvite"
-                :disabled="refreshingInvite || destroyingRoom"
-            >
+            <MenuOption v-if=room.invites name="refreshInvite" icon="die-3" :loading=refreshingInvite :disabled="refreshingInvite || destroyingRoom">
                 {{ refreshingInvite ? 'Refreshing...' : refreshInviteTooltip }}
             </MenuOption>
         </MenuSection>
-        <MenuOption
-            v-if="room.portal.status === 'open'"
-            name="restartPortal"
-            icon="cube"
-            :loading="restartingPortal"
-            :disabled="restartingPortal"
-        >
+        <MenuOption v-if="room.portal.status === 'open'" name="restartPortal" icon="cube" :loading=restartingPortal :disabled=restartingPortal>
             {{ restartingPortal ? 'Restarting...' : 'Restart Browser' }}
         </MenuOption>
-        <MenuOption
-            name="destroyRoom"
-            icon="circle-close"
-            :loading="destroyingRoom"
-            :disabled="refreshingInvite || destroyingRoom"
-        >
+        <MenuOption name="destroyRoom" icon="circle-close" :loading=destroyingRoom :disabled="refreshingInvite || destroyingRoom">
             {{ destroyingRoom ? 'Deleting...' : 'Delete Room' }}
         </MenuOption>
     </Menu>
@@ -64,6 +37,11 @@
     export default {
         computed: {
             ...mapGetters(['room'])
+        },
+        components: {
+            Menu,
+            MenuOption,
+            MenuSection
         },
         data() {
             return {
@@ -148,11 +126,6 @@
                 else if(name === 'destroyRoom')
                     this.destroyRoom()
             }
-        },
-        components: {
-            Menu,
-            MenuOption,
-            MenuSection
         }
     }
 </script>
