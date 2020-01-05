@@ -285,13 +285,12 @@ export const mutations = {
      * Presence
      */
     updatePresence(state, { u: userId, presence }) {
-        if (userId === state.userId) return
+		if (userId === state.userId) return
 
-        if (presence === 'online')
-            if (state.onlineUsers.indexOf(userId) === -1)
-                state.onlineUsers.push(userId)
-        else
-            state.onlineUsers.splice(state.onlineUsers.indexOf(userId), 1)
+		if(presence === 'online' && state.onlineUsers.indexOf(userId) === -1)
+			state.onlineUsers.push(userId)
+		else
+			state.onlineUsers.splice(state.onlineUsers.indexOf(userId), 1)
     },
 
     /**
