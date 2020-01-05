@@ -37,7 +37,8 @@
                 return typeof this.message === 'string'
             },
             getEmojifiedMessageContent() {
-                var content;
+				var content
+
                 if (typeof this.message === 'string')
                     content = this.message
                 else
@@ -45,7 +46,9 @@
 
                 content = sanitizeHtml(content, { allowedTags: [], allowedAttributes: {} })
 
-                return twemoji.parse(emoji.emojify(content))
+                return twemoji.parse(emoji.emojify(content), {
+					className: 'chat-message-emoji'
+				})
             }
         },
         methods: {
