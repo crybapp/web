@@ -710,10 +710,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cryb/borealis@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@cryb/borealis/-/borealis-0.0.5.tgz#0cc2f151f50dae8e24c533fdda1b13021693d3d5"
-  integrity sha512-hJRC+QwbwgINkCouyHCTCmLiRE9qBku6lGDpI8IF5HY9I+vaWTz3I/YZoqBcnRj+NTyOZ5BtFYu+BDaW1Ev/hw==
+"@cryb/borealis@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@cryb/borealis/-/borealis-1.0.1.tgz#f5e44343c4409849d40a858c66be5487feba4c9b"
+  integrity sha512-sykBTqDl8HRWqFquqAMaIyvBGRhY4IvGwoJA7DKQWvQh+8K30OFfHapr/pd+iSFUlytme0HQmsbCwcVIXhDaJw==
 
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
