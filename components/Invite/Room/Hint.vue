@@ -1,17 +1,12 @@
 <template>
     <div class="invite-hint">
-        <h3 class="title">
+        <h3 class="invite-hint-title">
             Rooms are better with friends
         </h3>
-        <p class="subtitle">
+        <p class="invite-hint-subtitle">
             Copy and share this link with your friends
         </p>
-        <a
-            class="invite-link"
-            :href="inviteLink"
-            onclick="return false"
-            @click="copyInviteLink()"
-        >
+        <a class="invite-link" :href=inviteLink onclick="return false" @click=copyInviteLink()>
             {{ inviteLink }}
         </a>
         <span class="hint" :class="{ visible: hint }">
@@ -38,7 +33,7 @@
         },
         methods: {
             async copyInviteLink() {
-                if(this.hintTimeout)
+                if (this.hintTimeout)
                     clearTimeout(this.hintTimeout)
 
                 try {
@@ -53,4 +48,3 @@
         }
     }
 </script>
-<style src="~/static/css/room/invite-hint.css" scoped></style>

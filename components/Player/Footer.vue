@@ -42,13 +42,10 @@
                 return [...online, ...offline]
             },
             memberIds() {
-                if(!this.room || !this.room.members) return []
+                if (!this.room || !this.room.members) return []
 
                 return [...new Set(this.room.members.map(({ id }) => id))]
             }
         }
     }
 </script>
-<style src="~/static/css/room/footer.css">
-/* Manage scoping properly */
-</style>

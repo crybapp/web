@@ -1,28 +1,24 @@
 <template>
-    <div class="header" :class="{ 'is-dark': dark }">
+    <div class="header">
         <div class="left">
-            <nuxt-link :to="shouldShowRoomMenu ? '#room-menu' : (token ? '/home' : '/')" @click.native="toggleRoomMenu()">
+            <nuxt-link class="is-wrapper" :to="shouldShowRoomMenu ? '#room-menu' : (token ? '/home' : '/')" @click.native=toggleRoomMenu()>
                 <div class="gradient loading" />
                 <picture class="logo">
                     <source srcset="/img/logo.svg" media="(prefers-color-scheme: light)">
                     <img src="/img/logo-light.svg" class="logo">
                 </picture>
             </nuxt-link>
-            <h1 v-if="title" class="title">
+
+            <h1 v-if=title class="header-title">
                 {{ title }}
             </h1>
-            <RoomMenu ref="roomMenu" :dark="dark" />
+            <RoomMenu ref="roomMenu" />
         </div>
-        <div v-if="user" class="right">
-            <img
-                v-if="userIcon"
-                :src="userIcon"
-                class="profile-image"
-                @click="toggleUserMenu()"
-            >
-            <UserMenu ref="userMenu" :dark="dark" />
+        <div v-if=user class="right">
+            <img v-if=userIcon :src=userIcon class="profile-image" @click=toggleUserMenu()>
+            <UserMenu ref="userMenu" />
         </div>
-        <div v-else-if="token" class="right">
+        <div v-else-if=token class="right">
             <Button @click.native="logout()">
                 Logout
             </Button>
@@ -44,45 +40,44 @@
             RoomMenu
         },
         props: [
-            'dark',
             'loading'
         ],
         computed: {
             ...mapGetters(['user', 'token', 'room']),
             title() {
-                if(this.$route.name === 'room' && this.room)
+                if (this.$route.name === 'room' && this.room)
                     return this.room.name
 
                 return null
             },
             userIcon() {
-                if(!this.user) return null
+                if (!this.user) return null
 
                 return this.user.icon.replace('.gif', '.png')
             },
 
             isUserMenuVisible() {
-                if(!this.$refs.userMenu || !this.$refs.userMenu.$children[0]) return false
+                if (!this.$refs.userMenu || !this.$refs.userMenu.$children[0]) return false
 
                 return this.$refs.userMenu.$children[0].visible
             },
             isRoomMenuVisible() {
-                if(!this.$refs.userMenu || !this.$refs.roomMenu.$children[0]) return false
+                if (!this.$refs.userMenu || !this.$refs.roomMenu.$children[0]) return false
 
                 return this.$refs.roomMenu.$children[0].visible
             },
             shouldShowRoomMenu() {
-                if(!this.user) return false
-                if(!this.room) return false
+                if (!this.user) return false
+                if (!this.room) return false
 
                 return (this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id)
                         && this.$route.name === 'room')
             }
         },
         mounted() {
-            if(this.$route.hash === '#user-menu')
+            if (this.$route.hash === '#user-menu')
                 this.toggleUserMenu(true)
-            else if(this.$route.hash === '#room-menu')
+            else if (this.$route.hash === '#room-menu')
                 this.toggleRoomMenu(true)
         },
         methods: {
@@ -92,20 +87,20 @@
             },
 
             toggleUserMenu(userAction) {
-                if(!this.isUserMenuVisible && this.isRoomMenuVisible && userAction)
+                if (!this.isUserMenuVisible && this.isRoomMenuVisible && userAction)
                     this.toggleRoomMenu(false)
 
                 this.$refs.userMenu.$children[0].toggleMenu()
-                this.$router.push(this.isUserMenuVisible ? '#user-menu' : '')
+                // this.$router.push(this.isUserMenuVisible ? '#user-menu' : '')
             },
             toggleRoomMenu(userAction) {
-                if(!this.isRoomMenuVisible && this.isUserMenuVisible && userAction)
+                if (!this.isRoomMenuVisible && this.isUserMenuVisible && userAction)
                     this.toggleUserMenu(false)
 
-                if(!this.shouldShowRoomMenu) return
+                if (!this.shouldShowRoomMenu) return
 
                 this.$refs.roomMenu.$children[0].toggleMenu()
-                this.$router.push(this.isRoomMenuVisible ? '#room-menu' : '')
+                // this.$router.push(this.isRoomMenuVisible ? '#room-menu' : '')
             }
         }
     }

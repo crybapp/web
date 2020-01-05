@@ -1,29 +1,13 @@
 <template>
-    <div
-        v-if="author"
-        class="grouped-chat-wrapper"
-        @mouseover="hover = true"
-        @mouseleave="hover = false"
-    >
-        <img
-            v-if="userIcon"
-            :src="userIcon"
-            class="chat-author-avatar"
-            :class="{ 'has-controller': hasController }"
-        >
-        <div class="grouped-chat-messages-content">
+    <div v-if=author class="grouped-chat-messages" @mouseover="hover = true" @mouseleave="hover = false">
+        <img v-if=userIcon :src=userIcon class="chat-messages-author-avatar" :class="{ 'has-controller': hasController }">
+        <div class="chat-messages">
             <div class="grouped-chat-messages-meta">
-                <p class="chat-author-name">
+                <p class="chat-messages-author-name">
                     {{ author.name }}
                 </p>
             </div>
-            <div class="grouped-chat-messages">
-                <Message
-                    v-for="message in messages"
-                    :key="message.id"
-                    :message="message"
-                />
-            </div>
+            <Message v-for="message in messages" :key=message.id :message=message />
         </div>
     </div>
 </template>
@@ -52,26 +36,26 @@
                 return this.users[this.group.author]
             },
             messages() {
-                if(!this.isAuthorSelf || !this.isLastGroup) return this.group.messages
+                if (!this.isAuthorSelf || !this.isLastGroup) return this.group.messages
 
                 return [...this.group.messages, ...this.sendingMessages]
             },
 
             userIcon() {
-                if(!this.author) return null
+                if (!this.author) return null
 
-                if(this.hover) return this.author.icon
+                if (this.hover) return this.author.icon
 
                 return this.author.icon.replace('.gif', '.png')
             },
 
             isAuthorSelf() {
-                if(!this.author) return
+                if (!this.author) return
 
                 return this.group.author === this.userId
             },
             hasController() {
-                if(!this.author) return false
+                if (!this.author) return false
 
                 return this.author.id === this.controllerId
             }

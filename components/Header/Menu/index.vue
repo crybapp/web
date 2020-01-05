@@ -1,33 +1,32 @@
 <template>
-    <div class="header-menu-wrapper">
-        <div
-            class="menu-cover"
-            :class="{ visible }"
-            @click="toggleMenu()"
-        />
-        <div class="header-menu" :class="{ visible, 'is-dark': dark, 'user-menu': type === 'user', 'room-menu': type === 'room' }">
+    <div class="menu-wrapper" :class="{ visible }">
+        <div class="menu-cover" @click=toggleMenu() />
+        <div class="menu" :class="{ 'is-header': header, 'is-left': left, 'is-right': right }">
             <slot />
         </div>
     </div>
 </template>
 <script>
-export default {
-    props: [
-        'type',
-        'dark'
-    ],
-    data() {
-        return {
-            visible: false
-        }
-    },
-    methods: {
-        toggleMenu() {
-            this.visible = !this.visible
+	export default {
+		props: [
+			'type',
 
-            if(this.type)
-                this.$router.push(this.visible ? `#${this.type}-menu` : '')
-        }
-    }
-}
+			'header',
+			'left',
+			'right'
+		],
+		data() {
+			return {
+				visible: false
+			}
+		},
+		methods: {
+			toggleMenu() {
+				this.visible = !this.visible
+
+				if (this.type)
+					this.$router.push(this.visible ? `#${this.type}-menu` : '')
+			}
+		}
+	}
 </script>

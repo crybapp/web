@@ -1,9 +1,6 @@
 <template>
-    <div
-        class="player"
-        :class="{ 'capture-events': hasControl }"
-    >
-        <p v-if="showPlayerDevtools" class="player-dev">
+    <div class="player" :class="{ 'capture-events': hasControl }">
+        <p v-if=showPlayerDevtools class="player-dev">
             Portal ID: {{ portal.id }}
             <br>
             Portal Status: {{ portal.status }}
@@ -12,15 +9,15 @@
             ref="stream"
             class="player-stream"
             tabindex="1"
-            @keydown="didKeyDown"
-            @keyup="didKeyUp"
-            @mousemove="didMouseMove"
-            @mousedown="didMouseDown"
-            @mouseup="didMouseUp"
-            @mousewheel="didMouseWheel"
-            @contextmenu="handleRightClick"
+            @keydown=didKeyDown
+            @keyup=didKeyUp
+            @mousemove=didMouseMove
+            @mousedown=didMouseDown
+            @mouseup=didMouseUp
+            @mousewheel=didMouseWheel
+            @contextmenu=handleRightClick
         />
-        <div v-if="showMutedPopup" class="player-tooltips">
+        <div v-if=showMutedPopup class="player-tooltips">
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
                     <p class="player-tooltip-title">
@@ -30,7 +27,7 @@
                         Your browser requires user interaction in order to let us play video with audio!
                     </p>
                 </div>
-                <Button @click.native="unmute()">
+                <Button @click.native=unmute()>
                     Unmute
                 </Button>
             </div>
@@ -63,12 +60,12 @@
             },
 
             streamWidth() {
-                if(!this.player) return 1280
+                if (!this.player) return 1280
 
                 return this.player.video.destination.width
             },
             streamHeight() {
-                if(!this.player) return 720
+                if (!this.player) return 720
 
                 return this.player.video.destination.height
             },
@@ -81,21 +78,21 @@
             let hidden,
                 visibilityChange
 
-            if(typeof document.hidden !== 'undefined') {
+            if (typeof document.hidden !== 'undefined') {
                 hidden = 'hidden'
                 visibilityChange = 'visibilitychange'
-            } else if(typeof document.msHidden !== 'undefined') {
+            } else if (typeof document.msHidden !== 'undefined') {
                 hidden = 'msHidden'
                 visibilityChange = 'msvisibilitychange'
-            } else if(typeof document.webkitHidden !== 'undefined') {
+            } else if (typeof document.webkitHidden !== 'undefined') {
                 hidden = 'webkitHidden'
                 visibilityChange = 'webkitvisibilitychange'
             }
 
-            if(typeof document.addEventListener !== 'undefined' && hidden !== undefined)
+            if (typeof document.addEventListener !== 'undefined' && hidden !== undefined)
                 document.addEventListener(visibilityChange, () => this.handleVisibilityChange(hidden), false)
 
-            if(this.apertureWs && this.apertureToken)
+            if (this.apertureWs && this.apertureToken)
                 this.playStream()
 
             this.$store.subscribe(({ type }, { stream }) => {
@@ -107,7 +104,7 @@
                 }
             })
 
-            if(this.$refs.stream)
+            if (this.$refs.stream)
                 this.$refs.stream.onpaste = this.didPaste
         },
         methods: {
@@ -116,10 +113,10 @@
             },
 
             playStream() {
-                if(typeof window === 'undefined') return
-                if(!JSMpeg) return // TODO: Add a popup that allows the user to retry playing the stream once the jsmpeg script has loaded
+                if (typeof window === 'undefined') return
+                if (!JSMpeg) return // TODO: Add a popup that allows the user to retry playing the stream once the jsmpeg script has loaded
 
-                if(this.player) this.player.destroy()
+                if (this.player) this.player.destroy()
 
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
                     canvas: this.$refs.stream,
@@ -137,7 +134,7 @@
             },
 
             handleVisibilityChange(hidden) {
-                if(document[hidden] && this.activeKeyEvent)
+                if (document[hidden] && this.activeKeyEvent)
                     this.didKeyUp(this.activeKeyEvent)
             },
 
@@ -197,9 +194,9 @@
             emitEvent(d, t) {
                 const { ws, hasControl } = this
 
-                if(!ws) return
-                if(!hasControl) return
-                if(ws.readyState !== ws.OPEN) return
+                if (!ws) return
+                if (!hasControl) return
+                if (ws.readyState !== ws.OPEN) return
 
                 ws.send(JSON.stringify({ op: 0, d, t }))
             },

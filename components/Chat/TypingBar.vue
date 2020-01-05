@@ -1,5 +1,5 @@
 <template>
-    <p v-if="areUsersTyping" class="chat-typing-bar">
+    <p v-if=areUsersTyping class="chat-typing-bar">
         {{ typingTooltip }}
     </p>
 </template>

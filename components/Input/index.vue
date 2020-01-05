@@ -1,27 +1,5 @@
 <template>
-    <a class="input-wrapper" :href="href">
-        <div class="input" :class="{ 'discord': type === 'discord', disabled }">
-            <img
-                v-if="icon"
-                :src="icon"
-                class="input-icon"
-            >
-            <img
-                v-if="icon && hover"
-                :src="hover"
-                class="input-icon-hover"
-            >
-            <input
-                ref="input"
-                class="input-inner"
-                type="text"
-                :value="value"
-                :placeholder="placeholder"
-                @input="didUpdateInput()"
-                @keydown.enter="didPressEnter"
-            >
-        </div>
-    </a>
+    <input ref="input" class="input" :class="{ 'is-loading': loading, 'is-disabled': disabled }" type="text" :value=value :placeholder=placeholder @input=didUpdateInput() @keydown.enter=didPressEnter />
 </template>
 <script>
     export default {
@@ -46,4 +24,3 @@
         }
     }
 </script>
-<style src="~/static/css/components/input.css" scoped></style>

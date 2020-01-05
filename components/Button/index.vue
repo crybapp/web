@@ -1,31 +1,23 @@
 <template>
-    <a class="button-wrapper" :href="href">
-        <div class="button" :class="{ 'discord': type === 'discord', disabled, loading }">
-            <img
-                v-if="icon"
-                :src="icon"
-                class="button-icon"
-            >
-            <img
-                v-if="icon && hover"
-                :src="hover"
-                class="button-icon-hover"
-            >
-            <p class="button-content"><slot /></p>
-        </div>
+    <a class="is-wrapper" :href=href>
+        <button class="button" :class="{ 'has-theme': theme, 'is-discord-theme': theme === 'discord', 'has-icon': icon, 'is-loading': loading, 'is-disabled': disabled }">
+            <img v-if=icon class="icon" :src=icon />
+            <img v-if="icon && hoverIcon" class="icon is-hover" :src=hoverIcon />
+            <slot />
+        </button>
     </a>
 </template>
 <script>
     export default {
         props: [
-            'type',
             'href',
             'icon',
-            'hover',
+			'hoverIcon',
+			
+			'theme',
 
             'loading',
             'disabled'
         ]
     }
 </script>
-<style src="~/static/css/components/button.css" scoped></style>
