@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const borealis = process.env.BOREALIS_REPOSITORY ? process.env.BOREALIS_REPOSITORY : '@cryb/borealis'
+const borealis = process.env.BOREALIS_REPOSITORY && process.env.NODE_ENV === 'development' ? process.env.BOREALIS_REPOSITORY : '@cryb/borealis'
 
 export default {
     loading: false,
