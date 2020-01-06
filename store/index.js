@@ -380,6 +380,7 @@ export const mutations = {
                         break
                     case 'APERTURE_CONFIG':
                         this.commit('updateAperture', d)
+                        console.log("Aperture config received.")
                         break
                     case 'ROOM_DESTROY':
                         this.commit('handleRoom', null)

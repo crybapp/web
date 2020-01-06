@@ -82,7 +82,12 @@
             ...mapGetters(['user', 'room', 'portal', 'stream', 'janusId', 'janusIp', 'apertureWs', 'apertureToken']),
 
             showViewer() {
-                return this.portalStatus === 'open' && (this.janusId)
+                if(process.env.ENABLE_JANUS) {
+                    return this.portalStatus === 'open' && (this.janusId)
+                } else {
+                    return this.portalStatus === 'open' && (this.apertureWs && this.apertureToken)
+                }
+                
             },
             showPlayerDevtools() {
                 return process.env.SHOW_PLAYER_DEVTOOLS

@@ -83,7 +83,7 @@
             }
         },
         computed: {
-            ...mapGetters(['ws', 'userId', 'controllerId', 'portal', 'janusId', 'janusAddress', 'apertureWs', 'apertureToken', 'viewerMuted', 'viewerVolume']),
+            ...mapGetters(['ws', 'userId', 'controllerId', 'portal', 'janusId', 'janusIp', 'apertureWs', 'apertureToken', 'viewerMuted', 'viewerVolume']),
 
             hasControl() {
                 return this.controllerId === this.userId
@@ -111,11 +111,13 @@
             let hidden,
                 visibilityChange
 
-            Janus.init({
-                debug: true,
-                dependencies: Janus.useDefaultDependencies()	
-            })
-
+            if(this.isJanusEnabled) {
+                Janus.init({
+                    debug: true,
+                    dependencies: Janus.useDefaultDependencies()	
+                })
+            }
+            
             if(typeof document.hidden !== 'undefined') {
                 hidden = 'hidden'
                 visibilityChange = 'visibilitychange'
@@ -130,7 +132,7 @@
             if(typeof document.addEventListener !== 'undefined' && hidden !== undefined)
                 document.addEventListener(visibilityChange, () => this.handleVisibilityChange(hidden), false)
 
-            if(this.janusId) {
+            if(this.janusId || (this.apertureWs && this.apertureToken)) {
                 this.playStream()
             }
 
