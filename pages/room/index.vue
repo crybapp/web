@@ -22,7 +22,6 @@
 
     export default {
         head() {
-
             return {
                 title: this.error ? 'Room Not Found' : (this.room ? this.room.name : ''),
                 script: process.env.ENABLE_JANUS ? [
@@ -54,6 +53,6 @@
         },
         beforeDestroy() {
             this.$store.commit('disconnectWebSocket')
-        },
+        }
     }
 </script>

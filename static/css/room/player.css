@@ -81,7 +81,7 @@ p.player-dev {
     pointer-events: none
 }
 
-video.player-stream {
+canvas.player-stream, video.player-stream {
     position: fixed;
 
     outline: none;

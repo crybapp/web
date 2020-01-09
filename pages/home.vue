@@ -135,10 +135,7 @@
             }
         },
         mounted() {
-            if(!this.user) {
-                this.$store.dispatch('fetchUser')
-            }
-            if(!this.$refs.joinRoomModal && !this.$refs.joinRoomModal) return
+            if (!this.$refs.createRoomModal && !this.$refs.joinRoomModal) return
 
             this.$refs.createRoomModal.visible = this.$route.hash === '#create-room'
             this.$refs.joinRoomModal.visible = this.$route.hash === '#join-room'

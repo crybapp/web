@@ -13,11 +13,9 @@
             ref="stream"
             id="remoteStream"
             class="player-stream"
-            tabindex="1" 
+            tabindex="1"
             autoplay
             playsinline
-            width="1280px"
-            height="720px"
             @keydown="didKeyDown"
             @keyup="didKeyUp"
             @mousemove="didMouseMove"
@@ -31,9 +29,7 @@
             ref="stream"
             id="remoteStream"
             class="player-stream"
-            tabindex="1" 
-            autoplay
-            playsinline
+            tabindex="1"
             @keydown="didKeyDown"
             @keyup="didKeyUp"
             @mousemove="didMouseMove"
@@ -111,13 +107,6 @@
             let hidden,
                 visibilityChange
 
-            if(this.isJanusEnabled) {
-                Janus.init({
-                    debug: true,
-                    dependencies: Janus.useDefaultDependencies()	
-                })
-            }
-            
             if(typeof document.hidden !== 'undefined') {
                 hidden = 'hidden'
                 visibilityChange = 'visibilitychange'
@@ -132,9 +121,8 @@
             if(typeof document.addEventListener !== 'undefined' && hidden !== undefined)
                 document.addEventListener(visibilityChange, () => this.handleVisibilityChange(hidden), false)
 
-            if(this.janusId || (this.apertureWs && this.apertureToken)) {
+            if (this.janusId || (this.apertureWs && this.apertureToken))
                 this.playStream()
-            }
 
             this.$store.subscribe(({ type }, { stream }) => {
                 switch(type) {
@@ -153,12 +141,11 @@
 
             if(this.$refs.stream)
                 this.$refs.stream.onpaste = this.didPaste
-            
-            if(this.viewerMuted) {
+
+            if (this.viewerMuted)
                 this.$refs.stream.volume = 0.0
-            } else {
+            else
                 this.$refs.stream.volume = this.viewerVolume
-            }
 
             this.$root.$on('toggle-fullscreen', () => {
                 this.$refs.stream.requestFullscreen()
@@ -178,6 +165,9 @@
             playJsmpegStream() {
                 if(this.player) this.player.destroy()
 
+                if (!JSMpeg)
+                    return this.$nextTick(this.playJsmpegStream)
+
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
                     canvas: this.$refs.stream,
                     pauseWhenHidden: false,
@@ -193,31 +183,36 @@
                 }
             },
 
-            //TODO: Create iceServer configuration. Request from API?
+            // TODO: Create iceServer configuration. Request from API?
             /*
-            * We should, ideally, have the API/Portals server handle gathering TURN/STUN information and receive the values here. 
+            * We should, ideally, have the API/Portals server handle gathering TURN/STUN information and receive the values here.
             * this will allow us to enable TURN REST API in order to obtain short-lived session and keep TURN server access limited to Cryb.
-            * this needs to be accompanied by the ability to request an ICE restart in order to switch the TURN sessions. 
+            * this needs to be accompanied by the ability to request an ICE restart in order to switch the TURN sessions.
             */
             playJanusStream() {
-                if(!Janus) {
-                    this.$nextTick(this.playJanusStream)
-                    return
-                }
+                if (!Janus)
+                    return this.$nextTick(this.playJanusStream)
 
-                var janusConfig = {
+                // I hope this won't break anything but fix things
+                // pardon me if it does
+                Janus.init({
+                    debug: true,
+                    dependencies: Janus.useDefaultDependencies()
+                })
+
+                const janusConfig = {
                     server: `${process.env.JANUS_URL}:${process.env.JANUS_PORT}/janus`,
-                    //Temporary Public TURN servers.
+                    // Temporary Public TURN servers.
                     iceServers: [
                         {
-                            urls:"turn:turn1.solcode.dev:443",
-                            username:"solcryb",
-                            credential: "crybsol"	
+                            urls: 'turn:turn1.solcode.dev:443',
+                            username: 'solcryb',
+                            credential: 'crybsol'
                         },
                         {
-                            urls:"turn:turn1.solcode.dev:443?transport=tcp",
-                            username: "solcryb",
-                                credential: "crybsol"
+                            urls: 'turn:turn1.solcode.dev:443?transport=tcp',
+                            username: 'solcryb',
+                            credential: 'crybsol'
                         }
                     ],
                     success: this.janusSessionConnected,
@@ -230,7 +225,7 @@
 
             janusSessionConnected() {
                 this.janus.attach({
-                    plugin: "janus.plugin.streaming",
+                    plugin: 'janus.plugin.streaming',
                     success: this.janusHandleCreated,
                     error: this.janusError,
                     onmessage: this.janusHandleMessages,
@@ -248,7 +243,7 @@
             },
 
             janusHandleMessages(msg, jsep) {
-                if(jsep !== undefined && jsep !== null) {
+                if (jsep)
                     this.janusHandle.createAnswer({
                         jsep: jsep,
                         media: {
@@ -258,20 +253,19 @@
                         success: this.janusHandleAnswerSuccess,
                         error: this.janusError
                     })
-                }
             },
 
             janusHandleAnswerSuccess(localJsep) {
                 this.janusHandle.send({
                     message: {
-                        request: "start"
+                        request: 'start'
                     },
                     jsep: localJsep
                 })
             },
 
             janusHandleIncomingStream(stream) {
-		        try {
+                try {
                     this.remoteStream = stream
                     if(stream.getVideoTracks().length > 0) {
                         this.$refs.stream.srcObject = stream
@@ -286,16 +280,14 @@
             },
 
             janusHandleCleanup() {
-                console.log("::: Janus cleanup received :::")
+                console.log('::: Janus cleanup received :::')
             },
 
             janusError(reason) {
-                console.log(reason)
+                console.error(reason)
             },
 
-            janusDestroyed() {
-                return
-            },
+            janusDestroyed() {},
 
             handleVisibilityChange(hidden) {
                 if(document[hidden] && this.activeKeyEvent)
@@ -318,11 +310,10 @@
                 const { keyCode, ctrlKey, shiftKey } = event
                 this.activeKeyEvent = event
 
-                if(keyCode === 86 && ctrlKey === true) {
+                if (keyCode === 86 && ctrlKey === true) {
                     navigator.clipboard.readText().then(clipText => {
                         this.emitEvent({clipText}, 'PASTE_TEXT')
                     })
-
                     return
                 }
 
@@ -394,16 +385,14 @@
                 return Math.round(this.streamHeight * (yPos / elem.clientHeight))
             },
             setStreamMutedStatus() {
-                if(this.viewerMuted === true) {
+                if (this.viewerMuted === true)
                     this.$refs.stream.volume = 0.0
-                } else {
+                else
                     this.$refs.stream.volume = this.viewerVolume
-                }
             },
             setStreamVolume() {
-                if(!this.viewerMuted) {
+                if (!this.viewerMuted)
                     this.$refs.stream.volume = this.viewerVolume
-                }
             },
         }
     }

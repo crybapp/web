@@ -70,10 +70,10 @@ const initialState = {
     apertureWs: null,
     apertureToken: null,
     janusId: null,
-    janusIp: null, 
-    
+    janusIp: null,
+
     viewerMuted: false,
-    viewerVolume: 30, 
+    viewerVolume: 30,
 
     ws: null,
     wsHeartbeat: null,
@@ -169,6 +169,9 @@ export const mutations = {
         state.room.portal = allocation
     },
 
+    /**
+     * Aperture
+     */
     updateAperture(state, config) {
         if(!state.room) return
 
@@ -364,12 +367,12 @@ export const mutations = {
 
             const { op, d, t } = json
 
-            if(op !== 11 && !isProduction())
+            if (op !== 11 && !isProduction())
                 console.log(op, d, t)
 
-            if(op === 0) {
+            if (op === 0) {
                 if(t.split('_')[0] === 'PORTAL')
-                    this.commit('updatePortal', d)
+                    return this.commit('updatePortal', d)
                 switch(t) {
                     // ROOM
                     case 'CONTROLLER_UPDATE':
@@ -392,23 +395,31 @@ export const mutations = {
                     // USER
                     case 'USER_JOIN':
                         this.commit('handleUserJoin', d)
+                        break
                     case 'USER_UPDATE':
                         this.commit('handleUser', d)
+                        break
                     case 'USER_LEAVE':
                         this.commit('handleUserLeave', d)
+                        break
                     case 'OWNER_UPDATE':
                         this.commit('handleOwnerUpdate', d)
+                        break
                     case 'PRESENCE_UPDATE':
                         this.commit('updatePresence', d)
+                        break
                     // MESSAGE
                     case 'MESSAGE_CREATE':
                         this.commit('pushMessage', d)
+                        break
                     case 'MESSAGE_DESTROY':
                         this.commit('pullMessage', d.id)
+                        break
                     case 'TYPING_UPDATE':
                         this.commit('updateTypingStatus', d)
+                        break
                 }
-            } else if(op === 10) {
+            } else if (op === 10) {
                 const { c_heartbeat_interval, c_reconnect_interval } = d
 
                 this.commit('setupHeartbeat', c_heartbeat_interval)
