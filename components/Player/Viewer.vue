@@ -221,6 +221,9 @@
 
                 return Math.round(this.streamHeight * (yPos / elem.clientHeight))
             }
+        },
+        beforeDestroy() {
+            if (this.player) this.player.destroy()
         }
     }
 </script>

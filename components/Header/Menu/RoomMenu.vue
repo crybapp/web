@@ -19,10 +19,10 @@
                 {{ refreshingInvite ? 'Refreshing...' : refreshInviteTooltip }}
             </MenuOption>
         </MenuSection>
-        <MenuOption v-if="room.portal.status === 'open'" name="restartPortal" icon="cube" :loading=restartingPortal :disabled=restartingPortal>
+        <MenuOption v-if="room.portal.status === 'open' && isRoomOwner" name="restartPortal" icon="cube" :loading=restartingPortal :disabled=restartingPortal>
             {{ restartingPortal ? 'Restarting...' : 'Restart Browser' }}
         </MenuOption>
-        <MenuOption name="destroyRoom" icon="circle-close" :loading=destroyingRoom :disabled="refreshingInvite || destroyingRoom">
+        <MenuOption v-if=isRoomOwner name="destroyRoom" icon="circle-close" :loading=destroyingRoom :disabled="refreshingInvite || destroyingRoom">
             {{ destroyingRoom ? 'Deleting...' : 'Delete Room' }}
         </MenuOption>
     </Menu>
@@ -36,7 +36,12 @@
 
     export default {
         computed: {
-            ...mapGetters(['room'])
+            ...mapGetters(['room', 'user']),
+            isRoomOwner() {
+                if (!this.user || !this.room) return false
+
+                return (this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id))
+            }
         },
         components: {
             Menu,

@@ -124,20 +124,20 @@
                 return this.user.room && this.user.room.id === this.room.id
             }
         },
-        // async mounted() {
-        //     if (this.token && !this.user)
-		// 		try {
-		// 			await this.$axios.$get('user/me')
-		// 			// fetch user if it worked
-		// 			// ToDo: avoid doing 2 requests for this
-		// 			this.$store.dispatch('fetchUser')
-		// 		} catch(error) {
-		// 			if (error.response && error.response.data.response === 'USER_NO_AUTH')
-		// 				this.$store.commit('logout')
-		// 			else
-		// 				this.reqFailed = true
-		// 		}
-        // },
+        async mounted() {
+            if (this.token && !this.user)
+                try {
+                    await this.$axios.$get('user/me')
+                    // fetch user if it worked
+                    // ToDo: avoid doing 2 requests for this
+                    this.$store.dispatch('fetchUser')
+                } catch(error) {
+                    if (error.response && error.response.data.response === 'USER_NO_AUTH')
+                        this.$store.commit('logout')
+                    else
+                        this.reqFailed = true
+                }
+        },
         async asyncData(context) {
             try {
                 const redirectUrl = await context.$axios.$get(`/auth/discord/redirect?invite=${context.route.params.id}`),

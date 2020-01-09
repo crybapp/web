@@ -67,11 +67,10 @@
                 return this.$refs.roomMenu.$children[0].visible
             },
             shouldShowRoomMenu() {
-                if (!this.user) return false
-                if (!this.room) return false
+                if (!this.user || !this.room) return false
 
-                return (this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id)
-                        && this.$route.name === 'room')
+                // return (this.$route.name === 'room')
+                return (this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id))
             }
         },
         mounted() {
