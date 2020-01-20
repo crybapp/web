@@ -1,7 +1,7 @@
 <template>
     <div class="root">
         <nuxt />
-        <GoogleAnalytics v-if="this.brand.ga_tracking_id" />
+        <GoogleAnalytics v-if=brand.ga_tracking_id />
     </div>
 </template>
 <script>
@@ -16,7 +16,7 @@
         head() {
             const script = []
 
-            if(this.brand.ga_tracking_id)
+            if (this.brand.ga_tracking_id)
                 script.push({
                     src: `https://www.googletagmanager.com/gtag/js?id=${this.brand.ga_tracking_id}`
                 })
@@ -43,6 +43,3 @@
         }
     }
 </script>
-
-<style src="~/static/css/master.css"></style>
-<style src="~/static/css/components.css"></style>

@@ -1,11 +1,5 @@
 <template>
-    <Menu
-        v-if="user"
-        ref="menu"
-        class="user-menu"
-        type="user"
-        :dark="dark"
-    >
+    <Menu v-if=user ref="menu" type="user" :header="true" :right="true">
         <MenuSection>
             <MenuOption :html="true" :disabled="true">
                 <p class="menu-option-content menu-option-title">
@@ -14,50 +8,24 @@
             </MenuOption>
         </MenuSection>
         <MenuSection>
-            <MenuOption
-                v-if="user.room && this.$route.name !== 'room'"
-                to="/room"
-                icon="preview"
-            >
+            <MenuOption v-if="user.room && this.$route.name !== 'room'" to="/room" icon="preview">
                 View Room
             </MenuOption>
-            <MenuOption
-                v-if="user.room"
-                name="leave-room"
-                icon="panel-arrow-left"
-                :loading="leavingRoom"
-            >
+            <MenuOption v-if=user.room name="leave-room" icon="panel-arrow-left" :loading=leavingRoom :disabled=leavingRoom>
                 {{ leavingRoom ? 'Leaving...' : 'Leave Room' }}
             </MenuOption>
-
-            <MenuOption
-                v-if="!user.room"
-                to="/room/join"
-                icon="panel-arrow-right"
-            >
+            <MenuOption v-if=!user.room to="/room/join" icon="panel-arrow-right">
                 Join Room
             </MenuOption>
-            <MenuOption
-                v-if="!user.room"
-                to="/room/create"
-                icon="add"
-            >
+            <MenuOption v-if=!user.room to="/room/create" icon="add">
                 Create Room
             </MenuOption>
         </MenuSection>
         <MenuSection>
-            <MenuOption
-                name="reload-profile"
-                icon="user"
-                :loading="reloadingProfile"
-            >
+            <MenuOption name="reload-profile" icon="user" :loading=reloadingProfile :disabled=reloadingProfile>
                 {{ reloadingProfile ? 'Reloading...' : 'Reload Profile' }}
             </MenuOption>
-            <MenuOption
-                to="/"
-                name="logout"
-                icon="log-out"
-            >
+            <MenuOption to="/" name="logout" icon="log-out">
                 Logout
             </MenuOption>
         </MenuSection>
@@ -76,9 +44,6 @@
             MenuOption,
             MenuSection
         },
-        props: [
-            'dark'
-        ],
         data() {
             return {
                 leavingRoom: false,
@@ -105,7 +70,7 @@
                 this.reloadingProfile = false
             },
             async leaveRoom() {
-                if(!confirm('Are you sure you want to leave this room? Once you leave this room, you cannot join back without an invite')) return
+                if (!confirm('Are you sure you want to leave this room? Once you leave this room, you cannot join back without an invite')) return
 
                 this.leavingRoom = true
 
@@ -118,7 +83,7 @@
                 } catch(error) {
                     console.error(error)
 
-                    if(error && error.response && error.response.status === 410)
+                    if (error && error.response && error.response.status === 410)
                         this.$store.commit('handleRoom', null)
                 }
 
@@ -144,15 +109,15 @@
             },
 
             didClickOption(name) {
-                if(!name) return this.$refs.menu.toggleMenu()
+                if (!name) return this.$refs.menu.toggleMenu()
 
-                if(name === 'reload-profile')
+                if (name === 'reload-profile')
                     this.reloadProfile()
-                else if(name === 'leave-room')
+                else if (name === 'leave-room')
                     this.leaveRoom()
-                else if(name === 'invite-friends')
+                else if (name === 'invite-friends')
                     this.inviteFriends()
-                else if(name === 'logout')
+                else if (name === 'logout')
                     this.logout()
             }
         }

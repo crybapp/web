@@ -1,6 +1,6 @@
 <template>
     <div class="modal-wrapper" :class="{ visible, cover }">
-        <div class="modal-cover" @click="hideModal()" />
+        <div class="modal-cover" @click=hideModal() />
         <div class="modal">
             <slot />
         </div>
@@ -24,4 +24,3 @@
         }
     }
 </script>
-<style src="~/static/css/components/modal.css" scoped></style>

@@ -1,21 +1,10 @@
 <template>
-    <Menu
-        v-if="room"
-        ref="menu"
-        class="room-menu"
-        type="room"
-        :dark="true"
-    >
+    <Menu v-if=room ref="menu" type="room" :header="true" :left="true">
         <MenuOption to="/home" icon="home">
             Go Home
         </MenuOption>
         <MenuSection>
-            <MenuOption
-                v-if="room.invites"
-                name="copyInvite"
-                icon="door"
-                :html="true"
-            >
+            <MenuOption v-if=room.invites name="copyInvite" icon="door" :html="true">
                 <p class="menu-option-content menu-option-title">
                     Invite Code
                 </p>
@@ -26,31 +15,14 @@
                     {{ hint }}
                 </p>
             </MenuOption>
-            <MenuOption
-                v-if="room.invites"
-                name="refreshInvite"
-                icon="die-3"
-                :loading="refreshingInvite"
-                :disabled="refreshingInvite || destroyingRoom"
-            >
+            <MenuOption v-if=room.invites name="refreshInvite" icon="die-3" :loading=refreshingInvite :disabled="refreshingInvite || destroyingRoom">
                 {{ refreshingInvite ? 'Refreshing...' : refreshInviteTooltip }}
             </MenuOption>
         </MenuSection>
-        <MenuOption
-            v-if="room.portal.status === 'open'"
-            name="restartPortal"
-            icon="cube"
-            :loading="restartingPortal"
-            :disabled="restartingPortal"
-        >
+        <MenuOption v-if="room.portal.status === 'open'" name="restartPortal" icon="cube" :loading=restartingPortal :disabled=restartingPortal>
             {{ restartingPortal ? 'Restarting...' : 'Restart Browser' }}
         </MenuOption>
-        <MenuOption
-            name="destroyRoom"
-            icon="circle-close"
-            :loading="destroyingRoom"
-            :disabled="refreshingInvite || destroyingRoom"
-        >
+        <MenuOption name="destroyRoom" icon="circle-close" :loading=destroyingRoom :disabled="refreshingInvite || destroyingRoom">
             {{ destroyingRoom ? 'Deleting...' : 'Delete Room' }}
         </MenuOption>
     </Menu>
@@ -65,6 +37,11 @@
     export default {
         computed: {
             ...mapGetters(['room'])
+        },
+        components: {
+            Menu,
+            MenuOption,
+            MenuSection
         },
         data() {
             return {
@@ -105,7 +82,7 @@
             },
             async refreshInvite() {
                 this.refreshingInvite = true
-                if(this.refreshInviteTimeout) clearTimeout(this.refreshInviteTimeout)
+                if (this.refreshInviteTimeout) clearTimeout(this.refreshInviteTimeout)
 
                 try {
                     const invite = await this.$axios.$post('room/invite/refresh')
@@ -121,7 +98,7 @@
                 this.refreshingInvite = false
             },
             async destroyRoom() {
-                if(!confirm('Are you sure you want to delete this room? This action is irreversible.')) return
+                if (!confirm('Are you sure you want to delete this room? This action is irreversible.')) return
 
                 this.destroyingRoom = true
                 this.refreshingInvite = false
@@ -138,25 +115,17 @@
             },
 
             didClickOption(name) {
-                if(!name) return this.$refs.menu.toggleMenu()
+                if (!name) return this.$refs.menu.toggleMenu()
 
-                if(name === 'copyInvite')
+                if (name === 'copyInvite')
                     this.copyInvite()
-                else if(name === 'refreshInvite')
+                else if (name === 'refreshInvite')
                     this.refreshInvite()
-                else if(name === 'restartPortal')
+                else if (name === 'restartPortal')
                     this.restartPortal()
-                else if(name === 'destroyRoom')
+                else if (name === 'destroyRoom')
                     this.destroyRoom()
             }
-        },
-        components: {
-            Menu,
-            MenuOption,
-            MenuSection
-        },
-        props: [
-            'dark'
-        ]
+        }
     }
 </script>

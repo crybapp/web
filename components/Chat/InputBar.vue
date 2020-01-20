@@ -1,21 +1,7 @@
 <template>
     <div class="chat-bar-wrapper">
-        <input
-            ref="input"
-            v-model="content"
-            type="text"
-            class="chat-bar"
-            :class="{ 'disabled': sending }"
-            placeholder="Say something cool..."
-            @keyup="didPressKey"
-            @keyup.enter="sendMessage()"
-        >
-        <div
-            class="send-button"
-            :class="{ 'is-enabled': canSendMessage, loading: sending, disabled: sending }"
-            title="Send Message"
-            @click="sendMessage()"
-        >
+        <input ref="input" v-model=content type="text" class="chat-bar" :class="{ 'disabled': sending }" placeholder="Say something cool..." @keyup=didPressKey @keyup.enter=sendMessage() />
+        <div class="send-button" :class="{ 'is-loading': sending, disabled: sending || !canSendMessage }" title="Send Message" @click=sendMessage()>
             <img src="/icons/airplane.svg" class="send-button-icon">
         </div>
     </div>
@@ -41,9 +27,9 @@
         },
         methods: {
             async sendMessage() {
-                if(this.sending) return
-                if(this.content.length === 0) return
-                if(this.content.length > 255) return alert('This message is longer than 255 characters, please shorten it before trying again.')
+                if (this.sending) return
+                if (this.content.length === 0) return
+                if (this.content.length > 255) return alert('This message is longer than 255 characters, please shorten it before trying again.')
 
                 const content = sanitizeHtml(this.content, { allowedTags: [], allowedAttributes: {} })
 
@@ -55,7 +41,7 @@
 
                 this.$store.commit('pushSendingMessage', { content })
 
-                if(content.trim().toLowerCase() === 'something cool')
+                if (content.trim().toLowerCase() === 'something cool')
                     alert('You are not very funny. At all.')
 
                 try {
@@ -67,10 +53,10 @@
                 }
             },
             didPressKey(e) {
-                if(e.keyCode === 8) return
-                if(this.content.length === 0) return
+                if (e.keyCode === 8) return
+                if (this.content.length === 0) return
 
-                if(this.typingTimer)
+                if (this.typingTimer)
                     clearInterval(this.typingTimer)
                 else
                     this.$store.commit('setTypingStatus', true)
@@ -80,7 +66,7 @@
             didEndTyping(broadcast) {
                 this.$store.commit('setTypingStatus', false)
 
-                if(this.typingTimer) {
+                if (this.typingTimer) {
                     clearInterval(this.typingTimer)
                     this.typingTimer = null
                 }
@@ -88,4 +74,3 @@
         }
     }
 </script>
-<style src="~/static/css/room/chat-bar.css" scoped></style>
