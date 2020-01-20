@@ -1,10 +1,11 @@
 <template>
     <div class="root">
-        <Header :dark="isDarkTheme" />
-        <div class="content" :class="{ 'is-dark': isDarkTheme, 'is-center': !isRoomPage }">
+        <Header />
+        <div class="content" :class="{ 'is-center': !isRoomPage }">
             <nuxt />
-            <GoogleAnalytics v-if="brand.ga_tracking_id" />
+            <GoogleAnalytics v-if=brand.ga_tracking_id />
         </div>
+        <Footer v-if=!isRoomPage />
     </div>
 </template>
 <script>
@@ -13,11 +14,14 @@
     import brand from '~/brand/config'
 
     import Header from '~/components/Header'
+	import Footer from '~/components/Footer'
+	
     import GoogleAnalytics from '~/components/GoogleAnalytics'
 
     export default {
         components: {
-            Header,
+			Header,
+			Footer,
             GoogleAnalytics
         },
         data() {
@@ -28,7 +32,7 @@
         head() {
             const script = []
 
-            if(this.brand.ga_tracking_id)
+            if (this.brand.ga_tracking_id)
                 script.push({
                     src: `https://www.googletagmanager.com/gtag/js?id=${this.brand.ga_tracking_id}`
                 })
@@ -55,13 +59,7 @@
 
             isRoomPage() {
                 return this.$route.name === 'room'
-            },
-            isDarkTheme() {
-                return this.isRoomPage
             }
         }
     }
 </script>
-<style src="~/static/fonts/inter.css"></style>
-<style src="~/static/css/master.css"></style>
-<style src="~/static/css/components.css"></style>

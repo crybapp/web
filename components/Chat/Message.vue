@@ -1,24 +1,9 @@
 <template>
-    <div
-        class="chat-message"
-        :class="{ 'is-loading': loading || isMessageSending }"
-    >
-        <p class="chat-message-content" v-html="getEmojifiedMessageContent" />
+    <div class="chat-message" :class="{ 'is-sending': loading || isMessageSending }">
+        <p class="chat-message-content" v-html=getEmojifiedMessageContent />
         <div v-if="!isMessageSending" class="chat-message-options">
-            <img
-                v-if="!isAuthorSelf"
-                class="chat-message-option chat-message-report"
-                src="/icons/message-exclaimation.svg"
-                title="Report message"
-                @click="report()"
-            >
-            <img
-                v-if="isAuthorSelf || isSelfRoomOwner"
-                class="chat-message-option chat-message-delete"
-                src="/icons/trash-full.svg"
-                title="Delete message"
-                @click="destroy()"
-            >
+            <img v-if=!isAuthorSelf class="chat-message-option chat-message-report" src="/icons/message-exclaimation.svg" title="Report message" @click=report()>
+            <img v-if="isAuthorSelf || isSelfRoomOwner" class="chat-message-option chat-message-delete" src="/icons/trash-full.svg" title="Delete message" @click=destroy()>
         </div>
     </div>
 </template>
@@ -44,7 +29,7 @@
                 return this.$parent.isAuthorSelf
             },
             isSelfRoomOwner() {
-                if(!this.room) return
+                if (!this.room) return
 
                 return this.userId === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id)
             },
@@ -52,7 +37,8 @@
                 return typeof this.message === 'string'
             },
             getEmojifiedMessageContent() {
-                var content;
+				var content
+
                 if (typeof this.message === 'string')
                     content = this.message
                 else
@@ -60,7 +46,9 @@
 
                 content = sanitizeHtml(content, { allowedTags: [], allowedAttributes: {} })
 
-                return twemoji.parse(emoji.emojify(content))
+                return twemoji.parse(emoji.emojify(content), {
+					className: 'chat-message-emoji'
+				})
             }
         },
         methods: {

@@ -107,8 +107,8 @@ export const mutations = {
 
         this.$axios.setHeader('authorization', `Bearer ${token}`)
 
-        if(save)
-            if(token)
+        if (save)
+            if (token)
                 cookies.set('token', token, {
                     expires: 365,
                     domain: process.env.COOKIE_DOMAIN,
@@ -124,28 +124,28 @@ export const mutations = {
      * Room
      */
     handleRoom(state, room) {
-        if(room) {
+        if (room) {
             state.room = room
             state.user.room = room
 
             state.onlineUsers = room.online
 
-            if(room.portal)
+            if (room.portal)
                 state.portal = room.portal
 
-            if(!room.messages)
+            if (!room.messages)
                 state.room.messages = []
 
-            if(room.controller)
-                if(typeof room.controller === 'string')
+            if (room.controller)
+                if (typeof room.controller === 'string')
                     state.controllerId = room.controller
                 else
                     state.controllerId = room.controller.id
 
-            if(state.onlineUsers && state.onlineUsers.indexOf(state.userId) === -1)
+            if (state.onlineUsers && state.onlineUsers.indexOf(state.userId) === -1)
                 state.onlineUsers.push(state.userId)
 
-            if(room.members)
+            if (room.members)
                 room.members.forEach(member => this.commit('handleUser', member))
         } else {
             state.room = null
@@ -163,7 +163,7 @@ export const mutations = {
      * Portal
      */
     updatePortal(state, allocation) {
-        if(!state.room) return
+        if (!state.room) return
 
         state.portal = allocation
         state.room.portal = allocation
@@ -173,7 +173,7 @@ export const mutations = {
      * Aperture
      */
     updateAperture(state, config) {
-        if(!state.room) return
+        if (!state.room) return
 
         state.apertureWs = config.ws
         state.apertureToken = config.t
@@ -203,7 +203,7 @@ export const mutations = {
      * Invite
      */
     handleInvite(state, invite) {
-        if(!state.room) return
+        if (!state.room) return
 
         state.room.invites = [ invite ]
     },
@@ -212,19 +212,19 @@ export const mutations = {
      * Messages
      */
     pushMessage(state, message) {
-        if(!state.room) return
+        if (!state.room) return
 
-        if(!state.room.messages)
+        if (!state.room.messages)
             state.room.messages = []
 
         const lastGroup = state.room.messages[state.room.messages.length - 1], { id, author } = message
 
-        if(message.author === state.userId)
+        if (message.author === state.userId)
             state.sendingMessages.splice(state.sendingMessages.indexOf(message.content), 1)
         else
             this.commit('updateTypingStatus', { u: message.author, typing: false })
 
-        if(lastGroup && lastGroup.author === author) {
+        if (lastGroup && lastGroup.author === author) {
             state.room.messages[state.room.messages.length - 1].messages.push(message)
             state.room.messages[state.room.messages.length - 1].messageIds.push(message.id)
         } else
@@ -240,15 +240,15 @@ export const mutations = {
     },
 
     pullMessage(state, messageId) {
-        if(!state.room) return
-        if(state.room.messages.length === 0) return
+        if (!state.room) return
+        if (state.room.messages.length === 0) return
 
         const messageIds = state.room.messages.map(({ messageIds }) => messageIds)
 
         let groupMessageIndex = -1, groupIndex = -1
 
         messageIds.forEach((ids, i) => {
-            if(groupIndex > -1 && groupMessageIndex > -1) return
+            if (groupIndex > -1 && groupMessageIndex > -1) return
 
             groupIndex = i
             groupMessageIndex = ids.indexOf(messageId)
@@ -257,7 +257,7 @@ export const mutations = {
         state.room.messages[groupIndex].messages.splice(groupMessageIndex, 1)
         state.room.messages[groupIndex].messageIds.splice(groupMessageIndex, 1)
 
-        if(state.room.messages[groupIndex].messages.length === 0)
+        if (state.room.messages[groupIndex].messages.length === 0)
             state.room.messages.splice(groupIndex, 1)
     },
 
@@ -267,28 +267,28 @@ export const mutations = {
     handleUserJoin(state, user) {
         state.users[user.id] = user
 
-        if(state.room)
-            if(state.room.members.indexOf(user.id) === -1)
+        if (state.room)
+            if (state.room.members.indexOf(user.id) === -1)
                 state.room.members.push(user)
     },
 
     handleUserLeave(state, { u: userId }) {
-        if(state.userId === userId) return
+        if (state.userId === userId) return
 
-        if(state.room) {
+        if (state.room) {
             const memberIndex = state.room.members.map(({ id }) => id).indexOf(userId)
             state.room.members.splice(memberIndex, 1)
         }
 
-        if(state.onlineMembers)
+        if (state.onlineMembers)
             state.onlineMembers.splice(state.onlineMembers.indexOf(userId), 1)
     },
 
     handleOwnerUpdate(state, { u: userId }) {
-        if(!state.room) return
+        if (!state.room) return
 
         const user = state.users[userId]
-        if(!user) return state.room.owner = userId
+        if (!user) return state.room.owner = userId
 
         state.room.owner = user
     },
@@ -297,16 +297,16 @@ export const mutations = {
      * Typing
      */
     setTypingStatus(state, typing) {
-        if(!state.ws) return
-        if(state.ws.readyState !== state.ws.OPEN) return
+        if (!state.ws) return
+        if (state.ws.readyState !== state.ws.OPEN) return
 
         state.ws.send(JSON.stringify({ op: 0, d: { typing }, t: 'TYPING_UPDATE' }))
     },
 
     updateTypingStatus(state, { typing, u: userId }) {
-        if(userId === state.userId) return
+        if (userId === state.userId) return
 
-        if(typing)
+        if (typing)
             state.typingUsers.push(userId)
         else
             state.typingUsers.splice(state.typingUsers.indexOf(userId), 1)
@@ -316,13 +316,12 @@ export const mutations = {
      * Presence
      */
     updatePresence(state, { u: userId, presence }) {
-        if(userId === state.userId) return
+		if (userId === state.userId) return
 
-        if(presence === 'online')
-            if(state.onlineUsers.indexOf(userId) === -1)
-                state.onlineUsers.push(userId)
-        else
-            state.onlineUsers.splice(state.onlineUsers.indexOf(userId), 1)
+		if(presence === 'online' && state.onlineUsers.indexOf(userId) === -1)
+			state.onlineUsers.push(userId)
+		else
+			state.onlineUsers.splice(state.onlineUsers.indexOf(userId), 1)
     },
 
     /**
@@ -336,7 +335,7 @@ export const mutations = {
      * Cookies
         */
     allowCookies(state, { save } = { save: true }) {
-        if(save)
+        if (save)
             cookies.set('allow_cookies', '1', {
                 expires: 365 * 10, // 10 years
                 domain: process.env.COOKIE_DOMAIN,
@@ -348,7 +347,7 @@ export const mutations = {
      * WebSocket
      */
     setupWebSocket(state) {
-        if(!state.token) return
+        if (!state.token) return
 
         const { token } = state, ws = new WebSocket(process.env.WS_URL)
 
@@ -371,7 +370,11 @@ export const mutations = {
                 console.log(op, d, t)
 
             if (op === 0) {
+<<<<<<< HEAD
                 if(t.split('_')[0] === 'PORTAL')
+=======
+                if (t.split('_')[0] === 'PORTAL')
+>>>>>>> efa2dea8fd45bbc3dc9ddde1418de536429fcde1
                     return this.commit('updatePortal', d)
                 switch(t) {
                     // ROOM
@@ -424,7 +427,7 @@ export const mutations = {
 
                 this.commit('setupHeartbeat', c_heartbeat_interval)
 
-                if(state.wsReconnect) this.commit('invalidateReconnect')
+                if (state.wsReconnect) this.commit('invalidateReconnect')
                 state.wsReconnectInterval = c_reconnect_interval
 
                 ws.send(JSON.stringify({ op: 2, d: { token } }))
@@ -435,35 +438,35 @@ export const mutations = {
     },
 
     disconnectWebSocket(state) {
-        if(state.ws) {
+        if (state.ws) {
             state.ws.close(1000)
             state.ws = null
         }
 
-        if(state.portal)
+        if (state.portal)
             state.portal = null
 
-        if(state.controllerId)
+        if (state.controllerId)
             state.controllerId = null
 
-        if(state.wsHeartbeat)
+        if (state.wsHeartbeat)
             this.commit('invalidateHeartbeat')
 
-        if(state.wsReconnect)
+        if (state.wsReconnect)
             this.commit('invalidateReconnect')
     },
 
     setupHeartbeat(state, interval) {
         state.wsHeartbeat = setInterval(() => {
-            if(!state.ws) return this.commit('invalidateHeartbeat')
-            if(state.ws.readyState !== state.ws.OPEN) return this.commit('invalidateHeartbeat')
+            if (!state.ws) return this.commit('invalidateHeartbeat')
+            if (state.ws.readyState !== state.ws.OPEN) return this.commit('invalidateHeartbeat')
 
             state.ws.send(JSON.stringify({ op: 1, d: {} }))
         }, interval)
     },
 
     invalidateHeartbeat(state) {
-        if(!state.wsHeartbeat) return
+        if (!state.wsHeartbeat) return
 
         clearInterval(state.wsHeartbeat)
         state.wsHeartbeat = null
@@ -471,8 +474,8 @@ export const mutations = {
 
     setupReconnect(state) {
         state.wsReconnect = setInterval(() => {
-            if(state.ws)
-                if(state.ws.readyState === state.ws.OPEN)
+            if (state.ws)
+                if (state.ws.readyState === state.ws.OPEN)
                     return this.commit('invalidateReconnect')
 
             this.commit('setupWebSocket')
@@ -480,14 +483,14 @@ export const mutations = {
     },
 
     invalidateReconnect(state) {
-        if(!state.wsReconnect) return
+        if (!state.wsReconnect) return
 
         clearInterval(state.wsReconnect)
         state.wsReconnect = null
     },
 
     logout(_state) {
-        if(_state.ws)
+        if (_state.ws)
             this.commit('disconnectWebSocket')
 
         const state = { ...initialState }, SAFE_KEYS = []
@@ -534,7 +537,7 @@ export const actions = {
         } catch(error) {
             console.error(error)
 
-            if(error && error.response && error.response.status === 410)
+            if (error && error.response && error.response.status === 410)
                 commit('handleRoom', null)
         }
     },
@@ -572,19 +575,19 @@ export const actions = {
     async nuxtClientInit({ commit }) {
         const token = cookies.get('token')
 
-        if(token)
+        if (token)
             commit('handleToken', { token, save: false })
     },
 
     async nuxtServerInit({ commit }, { req }) {
-        if(typeof req.headers.cookie !== 'string') return
+        if (typeof req.headers.cookie !== 'string') return
 
         const { token, allow_cookies } = parse(req.headers.cookie)
 
-        if(allow_cookies)
+        if (allow_cookies)
             commit('allowCookies', { save: false })
 
-        if(token) {
+        if (token) {
             commit('handleToken', { token, save: false })
 
             try {
