@@ -370,11 +370,7 @@ export const mutations = {
                 console.log(op, d, t)
 
             if (op === 0) {
-<<<<<<< HEAD
-                if(t.split('_')[0] === 'PORTAL')
-=======
                 if (t.split('_')[0] === 'PORTAL')
->>>>>>> efa2dea8fd45bbc3dc9ddde1418de536429fcde1
                     return this.commit('updatePortal', d)
                 switch(t) {
                     // ROOM
