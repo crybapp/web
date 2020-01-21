@@ -20,7 +20,7 @@
                     And so it begins...
                 </h1>
                 <p class="body">
-                    Add a friend or two to get the party started! Once someone else joins this room, we'll queue up your room for a portal
+                    Add a friend or two to get the party started! Once someone else joins this room, we'll queue up your room for a virtual browser
                 </p>
             </div>
             <!-- Portal is not open but there is more than one member in the room -->
@@ -29,7 +29,7 @@
                     Hold your rabbits...
                 </h1>
                 <p class="body">
-                    We're waiting for the right gears to align, so we can get your portal ready - hold tight!
+                    We're waiting for the right gears to align, so we can get your virtual browser ready - hold tight!
                     <br>
                     If this is taking a little long, restart the room
                 </p>
@@ -40,7 +40,7 @@
                     You're in the queue!
                 </h1>
                 <p class="body">
-                    There are a couple rooms in front of you waiting for a portal, please grab your popcorn!
+                    There are a couple rooms in front of you waiting for a virtual browser, please grab your popcorn!
                 </p>
             </div>
             <!-- The portal is either being created or starting -->
@@ -51,7 +51,7 @@
                 <p class="body">
                     Normally this takes a couple seconds, hang tight!
                     <br>
-                    If you have any issues either refresh the page or ask the room owner to restart the portal
+                    If you have any issues either refresh the page or ask the room owner to restart the browser
                 </p>
             </div>
             <!-- The portal has been created and the stream between the client and the aperture is being established -->
@@ -60,7 +60,7 @@
                     Strap in...
                 </h1>
                 <p class="body">
-                    Everything is ready - we're just getting the stream between the portal and you started
+                    Everything is ready - we're just getting the stream between the browser and you started
                 </p>
             </div>
             <!-- Something wrong happened while starting the portal -->
@@ -69,7 +69,7 @@
                     Oh, no!
                 </h1>
                 <p class="body">
-                    Something bad happened that isn't letting this instance from starting a portal.
+                    Something bad happened that isn't letting this instance from starting a virtual browser.
                     <br>
                     We'll try to recover, but if this is stuck for too long, restart the room
                 </p>
