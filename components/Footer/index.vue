@@ -3,7 +3,7 @@
         <p class="footer">
             &copy; {{ new Date().getFullYear() }} {{ brand.name }}
             <span v-for="page in pages" :key=page.name>
-                &mdash; <a :href=page.link target="_blank">{{ page.name }}</a>
+                &mdash; <a :href=page.link target="_blank" rel="noopener">{{ page.name }}</a>
             </span>
         </p>
     </div>

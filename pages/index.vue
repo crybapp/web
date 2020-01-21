@@ -1,6 +1,6 @@
 <template>
     <div class="landing">
-        <div :class="{ 'left': true, 'has-landing-video': hasLandingVideo }">
+        <div class="left" :class="{ 'has-landing-video': hasLandingVideo }">
             <div class="center">
                 <picture>
                     <source srcset="/img/logo.svg" media="(prefers-color-scheme: light)">
@@ -18,21 +18,16 @@
                     </Button>
                 </div>
                 <div v-else-if=!token class="login">
-                    <Button v-if=redirectUrl theme="discord" :href=redirectUrl icon="/icons/discord-white.svg" hover-icon="/icons/discord-colour.svg">
+                    <Button v-if=redirectUrl theme="discord" :href=redirectUrl icon="/icons/discord-white.svg" hover-icon="/icons/discord-colour.svg" icon-alt="Discord Logo">
                         Login with Discord
                     </Button>
                     <p v-else class="disclaimer">
                         Uh-oh! Looks like we can't find a redirect URL for Login with Discord
                     </p>
                 </div>
-                <div v-else-if=reqFailed>
-                    <p class="disclaimer">
-                        An error has occurred trying to contact this instance's API
-                    </p>
-                </div>
                 <div v-else>
                     <p class="disclaimer">
-                        Please wait...
+                        An error has occurred while trying to authenticate with this instance's API
                     </p>
                 </div>
             </div>
@@ -44,7 +39,6 @@
                 width="1920"
                 height="1080"
                 :src="`https://www.youtube.com/embed/${brand.landing_video_id}?controls=0&autoplay=1&loop=1&mute=1`"
-                frameborder="0"
                 allow="accelerometer; autoplay; loop; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
             />
@@ -67,10 +61,20 @@
 			Footer,
             Button
         },
+        async asyncData(context) {
+            let redirectUrl
+
+            try {
+                redirectUrl = await context.$axios.$get('auth/discord/redirect')
+            } catch (error) {
+                console.error(error)
+            }
+
+            return { redirectUrl }
+        },
         data() {
             return {
-                brand,
-                reqFailed: false
+                brand
             }
         },
         computed: {
@@ -78,32 +82,6 @@
 
             hasLandingVideo() {
                 return this.brand.landing_video_id && this.brand.landing_video_id.length > 0
-            }
-        },
-        async mounted() {
-            if (this.token && !this.user) 
-                try {
-                    await this.$axios.$get('user/me')
-                    // fetch user and redirect automatically if it worked
-                    // ToDo: avoid doing 2 requests for this
-                    this.$store.dispatch('fetchUser')
-                    setTimeout(() => this.$router.push('/home'), 250)
-                } catch(error) {
-                    if (error.response && error.response.data.response === 'USER_NO_AUTH')
-                        this.$store.commit('logout')
-                    else
-                        this.reqFailed = true
-                }
-            
-        },
-        async asyncData(context) {
-            try {
-                const redirectUrl = await context.$axios.$get('auth/discord/redirect')
-
-                return { redirectUrl }
-            } catch (error) {
-                console.error(error)
-                return null
             }
         }
     }

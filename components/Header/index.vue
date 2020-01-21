@@ -70,7 +70,7 @@
                 if (!this.user || !this.room) return false
 
                 // return (this.$route.name === 'room')
-                return (this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id))
+                return (this.$route.name === 'room' && this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id))
             }
         },
         mounted() {
