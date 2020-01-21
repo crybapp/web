@@ -101,10 +101,16 @@
             },
 
             portalStatus() {
+                if (!this.portal)
+                    return 'closed'
+
                 return this.portal.status
             },
 
             isSelfRoomOwner() {
+                if (!this.room)
+                    return false
+
                 return this.room.owner.id === this.user.id
             }
         }

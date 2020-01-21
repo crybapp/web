@@ -128,6 +128,7 @@
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
                     canvas: this.$refs.stream,
                     pauseWhenHidden: false,
+                    // ToDo: check if this is /really/ needed
                     videoBufferSize: parseInt(process.env.VIDEO_BITRATE || 1200) * 1024,
                     audioBufferSize: parseInt(process.env.AUDIO_BITRATE || 128) * 1024,
                     // workarounds so jsmpeg breaks less
