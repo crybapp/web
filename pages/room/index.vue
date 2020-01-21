@@ -22,14 +22,6 @@
     import PlayerFooter from '~/components/Player/Footer'
 
     export default {
-        head() {
-            return {
-                title: this.error ? 'Room Not Found' : (this.room ? this.room.name : ''),
-                script: [
-                    { src: '/js/jsmpeg.min.js' }
-                ]
-            }
-        },
         middleware: 'authenticated',
         components: {
             Chat,
@@ -51,6 +43,14 @@
         },
         beforeDestroy() {
             this.$store.commit('disconnectWebSocket')
+        },
+        head() {
+            return {
+                title: this.error ? 'Room Not Found' : (this.room ? this.room.name : ''),
+                script: [
+                    { src: '/js/jsmpeg.min.js' }
+                ]
+            }
         }
     }
 </script>

@@ -96,18 +96,16 @@ export const mutations = {
 
         this.$axios.setHeader('authorization', `Bearer ${token}`)
 
-        if (!process.server)
-            if (save)
-                if (token)
-                    cookies.set('token', token, {
-                        expires: 365,
-                        domain: process.env.COOKIE_DOMAIN,
-                        secure: isProduction()
-                    })
-                else
-                    cookies.erase('token', {
-                        domain: process.env.COOKIE_DOMAIN
-                    })
+        if (token && save && process.client)
+            cookies.set('token', token, {
+                expires: 365,
+                domain: process.env.COOKIE_DOMAIN,
+                secure: isProduction()
+            })
+        else if (save && process.client)
+            cookies.erase('token', {
+                domain: process.env.COOKIE_DOMAIN
+            })
     },
 
     /**
@@ -305,8 +303,7 @@ export const mutations = {
      * Cookies
         */
     allowCookies(state, { save } = { save: true }) {
-        if (!process.server)
-            if (save)
+        if (save && process.client)
                 cookies.set('cookies', '1', {
                     expires: 365 * 10, // 10 years
                     domain: process.env.COOKIE_DOMAIN,
@@ -464,7 +461,7 @@ export const mutations = {
             0
         )
 
-        if (!process.server)
+        if (process.client)
             cookies.erase('token', {
                 domain: process.env.COOKIE_DOMAIN
             })
@@ -545,7 +542,6 @@ export const actions = {
 
         if (token) {
             commit('handleToken', { token, save: false })
-            // fetch user if we haven't got it (SPA/static or API error)
             if (!this.user)
                await this.dispatch('fetchUser')
         }

@@ -53,6 +53,7 @@
             userIcon() {
                 if (!this.user) return null
 
+                // ToDo: Re-work how animated avatars work.
                 return this.user.icon.replace('.gif', '.png')
             },
 
@@ -69,7 +70,6 @@
             shouldShowRoomMenu() {
                 if (!this.user || !this.room) return false
 
-                // return (this.$route.name === 'room')
                 return (this.$route.name === 'room' && this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id))
             }
         },
@@ -90,7 +90,6 @@
                     this.toggleRoomMenu(false)
 
                 this.$refs.userMenu.$children[0].toggleMenu()
-                // this.$router.push(this.isUserMenuVisible ? '#user-menu' : '')
             },
             toggleRoomMenu(userAction) {
                 if (!this.isRoomMenuVisible && this.isUserMenuVisible && userAction)
@@ -99,7 +98,6 @@
                 if (!this.shouldShowRoomMenu) return
 
                 this.$refs.roomMenu.$children[0].toggleMenu()
-                // this.$router.push(this.isRoomMenuVisible ? '#room-menu' : '')
             }
         }
     }

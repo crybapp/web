@@ -99,13 +99,15 @@
                 switch(type) {
                     case 'updateAperture':
                         this.$nextTick(this.playStream)
-
                         break
                 }
             })
 
             if (this.$refs.stream)
                 this.$refs.stream.onpaste = this.didPaste
+        },
+        beforeDestroy() {
+            if (this.player) this.player.destroy()
         },
         methods: {
             unmute() {
@@ -114,7 +116,8 @@
 
             playStream() {
                 if (typeof window === 'undefined') return
-                if (!JSMpeg) return // TODO: Add a popup that allows the user to retry playing the stream once the jsmpeg script has loaded
+                if (!JSMpeg)
+                    return this.$nextTick(this.playStream)
 
                 if (this.player) this.player.destroy()
 
@@ -221,9 +224,6 @@
 
                 return Math.round(this.streamHeight * (yPos / elem.clientHeight))
             }
-        },
-        beforeDestroy() {
-            if (this.player) this.player.destroy()
         }
     }
 </script>

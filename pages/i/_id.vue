@@ -62,13 +62,22 @@
 
     import brand from '~/brand/config'
 
-    import Form from '~/components/Form'
     import Button from '~/components/Button'
 
     export default {
         components: {
-            Form,
             Button
+        },
+        async asyncData(context) {
+            try {
+                const redirectUrl = await context.$axios.$get(`/auth/discord/redirect?invite=${context.route.params.id}`),
+                    room = await context.$axios.$get(`/invite/${context.route.params.id}/peek`)
+
+                return { room, redirectUrl }
+            } catch(error) {
+                console.error(error)
+                return { room: null, redirectUrl: null }
+            }
         },
         data() {
             return {
@@ -76,24 +85,6 @@
                 error: '',
                 loading: false,
                 reqFailed: false
-            }
-        },
-        head() {
-            let inviteHeaders = {}
-
-            if (this.room)
-                inviteHeaders = {
-                    meta: [
-                        { name: 'description', content: `You've been invited to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
-
-                        { property: 'og:title', content: `Join ${this.room.name} on ${this.brand.name}` },
-                        { property: 'og:description', content: `You've been invted to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
-                    ]
-                }
-
-            return {
-                title: this.room ? `Join ${this.room.name}` : 'Invite Not Found',
-                ...inviteHeaders
             }
         },
         computed: {
@@ -114,17 +105,6 @@
                 if (!this.user) return false
 
                 return this.user.room && this.user.room.id === this.room.id
-            }
-        },
-        async asyncData(context) {
-            try {
-                const redirectUrl = await context.$axios.$get(`/auth/discord/redirect?invite=${context.route.params.id}`),
-                    room = await context.$axios.$get(`/invite/${context.route.params.id}/peek`)
-
-                return { room, redirectUrl }
-            } catch(error) {
-                console.error(error)
-                return { room: null, redirectUrl: null }
             }
         },
         methods: {
@@ -148,6 +128,24 @@
 
                 this.$store.dispatch('leaveRoom')
             }
-        }
+        },
+        head() {
+            let inviteHeaders = {}
+
+            if (this.room)
+                inviteHeaders = {
+                    meta: [
+                        { name: 'description', content: `You've been invited to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
+
+                        { property: 'og:title', content: `Join ${this.room.name} on ${this.brand.name}` },
+                        { property: 'og:description', content: `You've been invted to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
+                    ]
+                }
+
+            return {
+                title: this.room ? `Join ${this.room.name}` : 'Invite Not Found',
+                ...inviteHeaders
+            }
+        },
     }
 </script>
