@@ -304,11 +304,11 @@ export const mutations = {
         */
     allowCookies(state, { save } = { save: true }) {
         if (save && process.client)
-                cookies.set('cookies', '1', {
-                    expires: 365 * 10, // 10 years
-                    domain: process.env.COOKIE_DOMAIN,
-                    secure: isProduction()
-                })
+            cookies.set('cookies', '1', {
+                expires: 365 * 10, // 10 years
+                domain: process.env.COOKIE_DOMAIN,
+                secure: isProduction()
+            })
     },
 
     /**

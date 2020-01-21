@@ -60,12 +60,14 @@
             },
 
             streamWidth() {
-                if (!this.player) return 1280
+                if (!this.player)
+                    return 1280
 
                 return this.player.video.destination.width
             },
             streamHeight() {
-                if (!this.player) return 720
+                if (!this.player)
+                    return 720
 
                 return this.player.video.destination.height
             },
@@ -107,7 +109,8 @@
                 this.$refs.stream.onpaste = this.didPaste
         },
         beforeDestroy() {
-            if (this.player) this.player.destroy()
+            if (this.player)
+                this.player.destroy()
         },
         methods: {
             unmute() {
@@ -115,11 +118,12 @@
             },
 
             playStream() {
-                if (typeof window === 'undefined') return
+                if (typeof window === 'undefined')
+                    return
                 if (!JSMpeg)
                     return this.$nextTick(this.playStream)
-
-                if (this.player) this.player.destroy()
+                if (this.player)
+                    this.player.destroy()
 
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
                     canvas: this.$refs.stream,
