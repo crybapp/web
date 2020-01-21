@@ -29,7 +29,7 @@
                     Hold your rabbits...
                 </h1>
                 <p class="body">
-                    We're waiting for the right gears to align, so we can get your virtual browser ready - hold tight!
+                    We're waiting for the right gears to align, so we can get your browser ready - hold tight!
                     <br>
                     If this is taking a little long, restart the room
                 </p>
@@ -46,7 +46,7 @@
             <!-- The portal is either being created or starting -->
             <div v-else-if="portalStatus === 'creating' || portalStatus === 'starting'" class="player-message">
                 <h1 class="title">
-                    We're {{ portalStatus }} your portal now
+                    We're {{ portalStatus }} your browser now
                 </h1>
                 <p class="body">
                     Normally this takes a couple seconds, hang tight!
