@@ -11,6 +11,8 @@
             id="remoteStream"
             class="player-stream"
             tabindex="1"
+            width="1280"
+            height="720"
             autoplay
             playsinline
             @keydown="didKeyDown"
