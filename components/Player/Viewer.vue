@@ -144,8 +144,15 @@
                 this.$refs.stream.volume = this.viewerVolume
 
             this.$root.$on('toggle-fullscreen', () => {
-                this.$refs.stream.requestFullscreen()
+                if(this.$refs.stream.nodeName === "VIDEO")
+                    this.$refs.stream.requestFullscreen()
             })
+            if(this.isJanusEnabled) {
+                Janus.init({
+                    debug: true,
+                    dependencies: Janus.useDefaultDependencies()
+                })
+            }
         },
         methods: {
             unmute() {
@@ -188,14 +195,7 @@
             playJanusStream() {
                 if (!Janus)
                     return this.$nextTick(this.playJanusStream)
-
-                // I hope this won't break anything but fix things
-                // pardon me if it does
-                Janus.init({
-                    debug: true,
-                    dependencies: Janus.useDefaultDependencies()
-                })
-
+                
                 const janusConfig = {
                     server: `${process.env.JANUS_URL}:${process.env.JANUS_PORT}/janus`,
                     // Temporary Public TURN servers.
@@ -280,6 +280,9 @@
             },
 
             janusError(reason) {
+                if(reason ===  "Library not initialized") {
+                    setTimeout(() => this.$nextTick(this.playJanusStream()), 2000)
+                }
                 console.error(reason)
             },
 
@@ -380,14 +383,17 @@
 
                 return Math.round(this.streamHeight * (yPos / elem.clientHeight))
             },
+            
             setStreamMutedStatus() {
+                if(this.$refs.stream.nodeName !== "VIDEO")
+                    return
                 if (this.viewerMuted === true)
                     this.$refs.stream.volume = 0.0
                 else
                     this.$refs.stream.volume = this.viewerVolume
             },
             setStreamVolume() {
-                if (!this.viewerMuted)
+                if (!this.viewerMuted && this.$refs.stream.nodeName === "VIDEO")
                     this.$refs.stream.volume = this.viewerVolume
             },
         }

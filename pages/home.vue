@@ -12,7 +12,7 @@
             <div class="options">
                 <nuxt-link class="is-wrapper" to="/room">
                     <div class="box option is-hoverable">
-                        <img src="/icons/panel-arrow-right.svg" alt="" class="icon" />
+                        <img src="/icons/tv.svg" alt="" class="icon" />
                         <h3 class="header">
                             Return to {{ room.name }}
                         </h3>
@@ -23,7 +23,7 @@
                 </nuxt-link>
                 <nuxt-link class="is-wrapper" to="#leave-room" @click.native=leaveRoom()>
                     <div class="box option is-hoverable" :class="{ 'is-loading': leavingRoom, 'is-disabled': leavingRoom }">
-                        <img src="/icons/add.svg" alt="" class="icon" />
+                        <img src="/icons/panel-arrow-right.svg" alt="" class="icon" />
                         <h3 class="header">
                             {{ leavingRoom ? 'Leaving' : 'Leave' }} {{ room.name }}{{ leavingRoom ? '...' : '' }}
                         </h3>
