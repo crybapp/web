@@ -7,10 +7,13 @@
             Fuck.
         </h1>
         <p v-if="error.statusCode === 404" class="subtitle">
-            We couldn't find this page. Maybe it's our fault, maybe it's yours, but you should <nuxt-link to="/home">go home</nuxt-link> in any case.
+            We couldn't find this page. Maybe it's our fault, maybe it's yours.
         </p>
-        <p v-else>
-            We're not sure what quite happened here. It's our fault, so for now you should <nuxt-link to="/home">go home</nuxt-link> now.
+        <p v-else class="subtitle">
+            We're not quite sure what happened here, but it's definitely our fault.
+        </p>
+        <p class="disclaimer">
+            You might want to <nuxt-link to="/home">go home</nuxt-link> now.
         </p>
     </div>
 </template>

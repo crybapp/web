@@ -107,17 +107,16 @@ export const mutations = {
 
         this.$axios.setHeader('authorization', `Bearer ${token}`)
 
-        if (save)
-            if (token)
-                cookies.set('token', token, {
-                    expires: 365,
-                    domain: process.env.COOKIE_DOMAIN,
-                    secure: isProduction()
-                })
-            else
-                cookies.erase('token', {
-                    domain: process.env.COOKIE_DOMAIN
-                })
+        if (token && save && process.client)
+            cookies.set('token', token, {
+                expires: 365,
+                domain: process.env.COOKIE_DOMAIN,
+                secure: isProduction()
+            })
+        else if (save && process.client)
+            cookies.erase('token', {
+                domain: process.env.COOKIE_DOMAIN
+            })
     },
 
     /**
@@ -335,8 +334,8 @@ export const mutations = {
      * Cookies
         */
     allowCookies(state, { save } = { save: true }) {
-        if (save)
-            cookies.set('allow_cookies', '1', {
+        if (save && process.client)
+            cookies.set('cookies', '1', {
                 expires: 365 * 10, // 10 years
                 domain: process.env.COOKIE_DOMAIN,
                 secure: isProduction()
@@ -496,9 +495,10 @@ export const mutations = {
             0
         )
 
-        cookies.erase('token', {
-            domain: process.env.COOKIE_DOMAIN
-        })
+        if (process.client)
+            cookies.erase('token', {
+                domain: process.env.COOKIE_DOMAIN
+            })
     }
 }
 
@@ -511,7 +511,10 @@ export const actions = {
             commit('handleUserId', user.id)
             commit('handleRoom', user.room)
         } catch(error) {
-            console.error(error)
+            if (error.response && error.response.data.response === 'USER_NO_AUTH')
+                commit('logout')
+            else
+                console.error(error)
         }
     },
 
@@ -571,30 +574,21 @@ export const actions = {
     async nuxtClientInit({ commit }) {
         const token = cookies.get('token')
 
-        if (token)
+        if (token) {
             commit('handleToken', { token, save: false })
+            if (!this.user)
+               await this.dispatch('fetchUser')
+        }
     },
 
     async nuxtServerInit({ commit }, { req }) {
-        if (typeof req.headers.cookie !== 'string') return
+        if (!req || typeof req.headers.cookie !== 'string') return
 
-        const { token, allow_cookies } = parse(req.headers.cookie)
-
-        if (allow_cookies)
-            commit('allowCookies', { save: false })
+        const { token } = parse(req.headers.cookie)
 
         if (token) {
             commit('handleToken', { token, save: false })
-
-            try {
-                const user = await this.$axios.$get('user/me')
-
-                commit('handleSelfUser', user)
-                commit('handleUserId', user.id)
-                commit('handleRoom', user.room)
-            } catch(error) {
-                console.error(error)
-            }
+            await this.dispatch('fetchUser')
         }
     }
 }

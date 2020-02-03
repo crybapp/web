@@ -5,14 +5,14 @@
     import JoinRoom from '~/components/Room/Join'
 
     export default {
+        middleware: 'authenticated',
+        components: {
+            JoinRoom
+        },
         head() {
             return {
                 title: 'Join a Room'
             }
-        },
-        middleware: 'authenticated',
-        components: {
-            JoinRoom
         }
     }
 </script>

@@ -26,14 +26,11 @@
             <Button v-else-if=redirectUrl theme="discord" :href=redirectUrl icon="/icons/discord-white.svg" hover-icon="/icons/discord-colour.svg">
                 Login with Discord
             </Button>
-            <p v-if=reqFailed class="disclaimer">
-                Looks like an issue occured while trying to contact
-            </p>
-            <p v-else-if=!redirectUrl class="disclaimer">
+            <p v-if=!redirectUrl class="disclaimer">
                 Uh-oh! Looks like we can't find a redirect URL for Login with Discord.
             </p>
             <p v-else-if="token && !user" class="disclaimer">
-                Please wait...
+                An error has occurred while trying to authenticate with this instance's API
             </p>
 
             <p v-if="isSelfInRoom && !isSelfInInvitedRoom" class="disclaimer">
@@ -56,9 +53,7 @@
             We couldn't find a room linked with this invite code. Make sure you have the right invite and try again!
         </p>
         <p class="disclaimer">
-            You might want to <nuxt-link to="/home">
-                go home
-            </nuxt-link> now.
+            You might want to <nuxt-link to="/home">go home</nuxt-link> now.
         </p>
     </div>
 </template>
@@ -67,13 +62,22 @@
 
     import brand from '~/brand/config'
 
-    import Form from '~/components/Form'
     import Button from '~/components/Button'
 
     export default {
         components: {
-            Form,
             Button
+        },
+        async asyncData(context) {
+            try {
+                const redirectUrl = await context.$axios.$get(`/auth/discord/redirect?invite=${context.route.params.id}`),
+                    room = await context.$axios.$get(`/invite/${context.route.params.id}/peek`)
+
+                return { room, redirectUrl }
+            } catch(error) {
+                console.error(error)
+                return { room: null, redirectUrl: null }
+            }
         },
         data() {
             return {
@@ -81,27 +85,6 @@
                 error: '',
                 loading: false,
                 reqFailed: false
-            }
-        },
-        head() {
-            let inviteHeaders = {}
-
-            if (this.room)
-                inviteHeaders = {
-                    meta: [
-                        { name: 'description', content: `You've been invited to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
-
-                        { property: 'og:title', content: `Join ${this.room.name} on ${this.brand.name}` },
-                        { property: 'og:description', content: `You've been invted to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
-                    ],
-                    link: [
-                        { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
-                    ]
-                }
-
-            return {
-                title: this.room ? `Join ${this.room.name}` : 'Invite Not Found',
-                ...inviteHeaders
             }
         },
         computed: {
@@ -122,31 +105,6 @@
                 if (!this.user) return false
 
                 return this.user.room && this.user.room.id === this.room.id
-            }
-        },
-        // async mounted() {
-        //     if (this.token && !this.user)
-		// 		try {
-		// 			await this.$axios.$get('user/me')
-		// 			// fetch user if it worked
-		// 			// ToDo: avoid doing 2 requests for this
-		// 			this.$store.dispatch('fetchUser')
-		// 		} catch(error) {
-		// 			if (error.response && error.response.data.response === 'USER_NO_AUTH')
-		// 				this.$store.commit('logout')
-		// 			else
-		// 				this.reqFailed = true
-		// 		}
-        // },
-        async asyncData(context) {
-            try {
-                const redirectUrl = await context.$axios.$get(`/auth/discord/redirect?invite=${context.route.params.id}`),
-                    room = await context.$axios.$get(`/invite/${context.route.params.id}/peek`)
-
-                return { room, redirectUrl }
-            } catch(error) {
-                console.error(error)
-                return { room: null, redirectUrl: null }
             }
         },
         methods: {
@@ -170,6 +128,24 @@
 
                 this.$store.dispatch('leaveRoom')
             }
-        }
+        },
+        head() {
+            let inviteHeaders = {}
+
+            if (this.room)
+                inviteHeaders = {
+                    meta: [
+                        { name: 'description', content: `You've been invited to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
+
+                        { property: 'og:title', content: `Join ${this.room.name} on ${this.brand.name}` },
+                        { property: 'og:description', content: `You've been invted to join ${this.membersList} on ${this.brand.name}, the best way to share the internet with your friends` },
+                    ]
+                }
+
+            return {
+                title: this.room ? `Join ${this.room.name}` : 'Invite Not Found',
+                ...inviteHeaders
+            }
+        },
     }
 </script>

@@ -9,13 +9,11 @@
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
-
     import brand from '~/brand/config'
 
     import Header from '~/components/Header'
 	import Footer from '~/components/Footer'
-	
+
     import GoogleAnalytics from '~/components/GoogleAnalytics'
 
     export default {
@@ -30,33 +28,11 @@
             }
         },
         head() {
-            const script = []
-
-            if (this.brand.ga_tracking_id)
-                script.push({
-                    src: `https://www.googletagmanager.com/gtag/js?id=${this.brand.ga_tracking_id}`
-                })
-
             return {
-                titleTemplate: chunk => this.$route.name === 'room' && this.room ? `${this.room.name} - ${this.brand.name}` : (chunk ? `${chunk} - ${this.brand.name}` : this.brand.name),
-                meta: [
-                    { charset: 'utf-8' },
-                    { name: 'viewport', content: 'width=device-width, initial-scale=1, user-scalable=no' },
-                    { name: 'description', content: `${this.brand.name} makes it easy to enjoy what you love with your friends` },
-                    { name: 'theme-color', content: '#000000' },
-                    { property: 'og:image', content: '/img/icon-hq.png'}
-                ],
-                link: [
-                    { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
-                ],
-                script: [
-                    ...script
-                ]
+                titleTemplate: chunk => (chunk ? `${chunk} - ${this.brand.name}` : this.brand.name)
             }
         },
         computed: {
-            ...mapGetters(['room']),
-
             isRoomPage() {
                 return this.$route.name === 'room'
             }

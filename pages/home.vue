@@ -16,9 +16,6 @@
                         <h3 class="header">
                             Return to {{ room.name }}
                         </h3>
-                        <!-- <p class="description">
-							Received an invite link or an invite code for a room? Enter it here!
-						</p> -->
                     </div>
                 </nuxt-link>
                 <nuxt-link class="is-wrapper" to="#leave-room" @click.native=leaveRoom()>
@@ -27,9 +24,6 @@
                         <h3 class="header">
                             {{ leavingRoom ? 'Leaving' : 'Leave' }} {{ room.name }}{{ leavingRoom ? '...' : '' }}
                         </h3>
-                        <!-- <p class="description">
-							Need a room where you can watch anything with your friends? This is the place to go
-						</p> -->
                     </div>
                 </nuxt-link>
             </div>
@@ -72,25 +66,12 @@
     import { mapGetters } from 'vuex'
 
     export default {
+        middleware: 'authenticated',
         data() {
             return {
                 leavingRoom: false
             }
         },
-        head() {
-            return {
-                title: (
-                    this.isCreateRoomModalVisible ?
-                    'Create a Room' :
-                    (
-                        this.isJoinRoomModalVisible ?
-                        'Join a Room' :
-                        null
-                    )
-                )
-            }
-        },
-        middleware: 'authenticated',
         computed: {
             ...mapGetters(['user']),
             room() {
@@ -137,6 +118,19 @@
 
                 this.$refs.createRoomModal.visible = false
                 this.$refs.joinRoomModal.visible = false
+            }
+        },
+        head() {
+            return {
+                title: (
+                    this.isCreateRoomModalVisible ?
+                        'Create a Room' :
+                        (
+                            this.isJoinRoomModalVisible ?
+                                'Join a Room' :
+                                null
+                        )
+                )
             }
         }
     }

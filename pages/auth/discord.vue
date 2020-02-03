@@ -5,11 +5,6 @@
 </template>
 <script>
 export default {
-    head() {
-        return {
-            title: 'Logging in'
-        }
-    },
     middleware: 'logged-out',
     data() {
         return {
@@ -29,6 +24,11 @@ export default {
             setTimeout(() => this.$router.push(state ? `/i/${state.split('=')[1]}` : '/home'), 250)
         } catch(error) {
             this.message = 'An error occurred while authenticating. Please go home and try logging in again.'
+        }
+    },
+    head() {
+        return {
+            title: 'Logging in'
         }
     }
 }
