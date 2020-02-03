@@ -1,5 +1,5 @@
 <template>
-    <div class="invite-hint">
+    <div v-if=inviteLink class="invite-hint">
         <h3 class="invite-hint-title">
             Rooms are better with friends
         </h3>
@@ -28,6 +28,8 @@
             ...mapGetters(['room']),
 
             inviteLink() {
+                if (!this.room) return
+
                 return `${process.env.BASE_WEB_URL}/i/${this.room.invites[0].code}`
             }
         },

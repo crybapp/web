@@ -60,12 +60,14 @@
             },
 
             streamWidth() {
-                if (!this.player) return 1280
+                if (!this.player)
+                    return 1280
 
                 return this.player.video.destination.width
             },
             streamHeight() {
-                if (!this.player) return 720
+                if (!this.player)
+                    return 720
 
                 return this.player.video.destination.height
             },
@@ -99,7 +101,6 @@
                 switch(type) {
                     case 'updateAperture':
                         this.$nextTick(this.playStream)
-
                         break
                 }
             })
@@ -107,20 +108,27 @@
             if (this.$refs.stream)
                 this.$refs.stream.onpaste = this.didPaste
         },
+        beforeDestroy() {
+            if (this.player)
+                this.player.destroy()
+        },
         methods: {
             unmute() {
                 this.showMutedPopup = false
             },
 
             playStream() {
-                if (typeof window === 'undefined') return
-                if (!JSMpeg) return // TODO: Add a popup that allows the user to retry playing the stream once the jsmpeg script has loaded
-
-                if (this.player) this.player.destroy()
+                if (typeof window === 'undefined')
+                    return
+                if (!JSMpeg)
+                    return this.$nextTick(this.playStream)
+                if (this.player)
+                    this.player.destroy()
 
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
                     canvas: this.$refs.stream,
                     pauseWhenHidden: false,
+                    // ToDo: check if this is /really/ needed
                     videoBufferSize: parseInt(process.env.VIDEO_BITRATE || 1200) * 1024,
                     audioBufferSize: parseInt(process.env.AUDIO_BITRATE || 128) * 1024,
                     // workarounds so jsmpeg breaks less

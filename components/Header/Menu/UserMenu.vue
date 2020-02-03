@@ -111,14 +111,20 @@
             didClickOption(name) {
                 if (!name) return this.$refs.menu.toggleMenu()
 
-                if (name === 'reload-profile')
-                    this.reloadProfile()
-                else if (name === 'leave-room')
-                    this.leaveRoom()
-                else if (name === 'invite-friends')
-                    this.inviteFriends()
-                else if (name === 'logout')
-                    this.logout()
+                switch(name) {
+                    case 'reload-profile':
+                        this.reloadProfile()
+                        break
+                    case 'leave-room':
+                        this.leaveRoom()
+                        break
+                    case 'invite-friends':
+                        this.inviteFriends()
+                        break
+                    case 'logout':
+                        this.logout()
+                        break
+                }
             }
         }
     }
