@@ -55,7 +55,7 @@
                     { src: '/js/adapter.js', defer: true, callback: () => this.loadedScripts.push('adapter')},
                     { src: '/js/janus.js', defer: true, callback: () => this.loadedScripts.push('janus')}
                 ] : [
-                    { src: '/js/jsmpeg.min.js', callback: () => this.loadedScripts.push('jsmpeg')}
+                    { src: '/js/jsmpeg.min.js', defer: true, callback: () => this.loadedScripts.push('jsmpeg')}
                 ]
             }
         }

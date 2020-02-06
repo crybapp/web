@@ -66,15 +66,12 @@
         },
         props: {
             volume: Number,
-            loadedScripts: {
-                deafult: [],
-                type: Array
-            }
+            loadedScripts: Array
         },
         data() {
             return {
                 brand,
-                activeKeyEvent: null,
+                activeKeyEvent: undefined,
                 showMutedPopup: false,
                 remoteStream: undefined,
                 scriptReadyCallbacks: [],
@@ -100,7 +97,7 @@
             streamHeight() {
                 if (this.player) 
                     return this.player.video.destination.height
-                else if(this.remoteStream) 
+                else if (this.remoteStream)
                     return this.maxHeight
                 else 
                     return 720
@@ -120,14 +117,15 @@
             loadedScripts: {
                 immediate: true,
                 handler(newVal, oldVal) {
-                    console.log(newVal)
-                    if(this.scriptReadyCallbacks.length > 0) 
+                    if (process.env.NODE_ENV === 'development')
+                        console.debug(newVal)
+
+                    if (this.scriptReadyCallbacks.length > 0)
                         this.scriptReadyCallbacks.forEach(callback => callback(newVal))
                 }
             }
         },
         mounted() {
-
             let hidden,
                 visibilityChange
 
@@ -163,18 +161,21 @@
                 }
             })
 
-            if (this.$refs.stream)
+            if (this.$refs.stream) {
                 this.$refs.stream.onpaste = this.didPaste
 
-            if (this.viewerMuted)
-                this.$refs.stream.volume = 0.0
-            else
-                this.$refs.stream.volume = this.viewerVolume
+                if (this.isJanusEnabled) {
+                    if (this.viewerMuted)
+                        this.$refs.stream.volume = 0.0
+                    else
+                        this.$refs.stream.volume = this.viewerVolume
 
-            this.$root.$on('toggle-fullscreen', () => {
-                if(this.$refs.stream.nodeName === "VIDEO")
-                    this.$refs.stream.requestFullscreen()
-            })
+                    this.$root.$on('toggle-fullscreen', () => {
+                        if (this.$refs.stream.nodeName === 'VIDEO')
+                            this.$refs.stream.requestFullscreen()
+                    })
+                }
+            }
         },
         beforeDestroy() {
             if (this.player)
@@ -183,29 +184,37 @@
         methods: {
             unmute() {
                 this.showMutedPopup = false
+                if (this.isJanusEnabled && this.$refs.stream)
+                    this.$refs.stream.volume = this.viewerVolume
+            },
+
+            areScriptsReady(...values) {
+                return values.every(x => this.loadedScripts.includes(x))
             },
 
             playStream() {
-                if(typeof window === 'undefined') return
+                if (typeof window === 'undefined')
+                    return
 
                 this.isJanusEnabled ? this.playJanusStream() : this.playJsmpegStream()
             },
 
             playJsmpegStream() {
-                if(!this.loadedScripts.includes('jsmpeg')) {
-                    this.scriptReadyCallbacks.push(() => {
-                        if(this.loadedScripts.includes('jsmpeg')) {
-                            this.setupJsmpeg()
-                        }
-                    })
-                    return
-                } else {
-                    setupJsmpeg()
-                }
+                if (this.areScriptsReady('jsmpeg'))
+                    this.initJsmpeg()
+                else
+                    this.scriptReadyCallbacks.push(this.playJsmpegStream)
+            },
+            playJanusStream() {
+                if (this.areScriptsReady('janus', 'adapter'))
+                    this.initJanus()
+                else
+                    this.scriptReadyCallbacks.push(this.playJanusStream)
             },
 
-            setupJsmpeg() {
-                if(this.player) this.player.destroy()
+            initJsmpeg() {
+                if (this.player)
+                    this.player.destroy()
 
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
                     canvas: this.$refs.stream,
@@ -218,9 +227,18 @@
                     disableGl: true
                 })
 
-                if (this.player.audioOut && !this.player.audioOut.unlocked) {
+                if (this.player.audioOut && !this.player.audioOut.unlocked)
                     this.showMutedPopup = true
-                }
+            },
+            initJanus() {
+                if (process.env.NODE_ENV === 'development')
+                    console.debug('Initalizing Janus library.')
+
+                Janus.init({
+                    debug: (process.env.NODE_ENV === 'development'),
+                    dependencies: Janus.useDefaultDependencies(),
+                    callback: this.configureJanus()
+                })
             },
 
             // TODO: Create iceServer configuration. Request from API?
@@ -229,32 +247,10 @@
             * this will allow us to enable TURN REST API in order to obtain short-lived session and keep TURN server access limited to Cryb.
             * this needs to be accompanied by the ability to request an ICE restart in order to switch the TURN sessions.
             */
-            areScriptsReady(...values) {
-                return values.every(x => this.loadedScripts.includes(x))
-            },
-            playJanusStream() {
-                if(this.areScriptsReady('janus', 'adapter')) {
-                    this.initJanus()
-                } else {
-                    this.scriptReadyCallbacks.push(() => {
-                        if(this.areScriptsReady('janus', 'adapter')) {
-                            this.initJanus()
-                        }
-                    })
-                }
-            },
-
-            initJanus() {
-                console.log("Initalizing Janus library.")
-                Janus.init({
-                    debug: true,
-                    dependencies: Janus.useDefaultDependencies(),
-                    callback: this.configureJanus()
-                })
-            },
-
             configureJanus() {
-                console.log("Configuring janus object")
+                if (process.env.NODE_ENV === 'development')
+                    console.debug('Configuring Janus object')
+
                 const janusConfig = {
                     server: `${process.env.JANUS_URL}:${process.env.JANUS_PORT}/janus`,
                     // Temporary Public TURN servers.
@@ -276,7 +272,7 @@
                 }
 
                 this.janus = new Janus(janusConfig)
-            }, 
+            },
 
             janusSessionConnected() {
                 this.janus.attach({
@@ -322,15 +318,15 @@
             janusHandleIncomingStream(stream) {
                 try {
                     this.remoteStream = stream
-                    if(stream.getVideoTracks().length > 0) {
+                    if (stream.getVideoTracks().length > 0) {
                         this.$refs.stream.srcObject = stream
-                        var streamSettings = stream.getVideoTracks()[0].getSettings()
-                        
-                        if(streamSettings.width) {
+                        const streamSettings = stream.getVideoTracks()[0].getSettings()
+
+                        if (streamSettings.width) {
                             this.maxWidth = streamSettings.width
                             this.maxHeight = streamSettings.height
                         }
-                        
+
                         setTimeout(() => {
                             this.janusHandleCreated(this.janusHandle)
                         }, 1800000)
@@ -341,12 +337,13 @@
             },
 
             janusHandleCleanup() {
-                console.log('::: Janus cleanup received :::')
+                if (process.env.NODE_ENV === 'development')
+                    console.debug('::: Janus cleanup received :::')
             },
 
             janusError(reason) {
-                if(reason ===  "Library not initialized") {
-                    setTimeout(() => this.$nextTick(this.playJanusStream()), 2000)
+                if (reason === 'Library not initialized') {
+                    return setTimeout(() => this.$nextTick(this.playJanusStream()), 2000)
                 }
                 console.error(reason)
             },
@@ -361,56 +358,48 @@
             handleRightClick(event) {
                 event.preventDefault()
             },
-
             didPaste(event) {
                 const { clipboardData } = event,
                         text = clipboardData.getData('text/plain')
 
                 this.emitEvent({ text }, 'PASTE_TEXT')
             },
-
             didKeyDown(event) {
                 event.preventDefault()
                 const { keyCode, ctrlKey, shiftKey } = event
                 this.activeKeyEvent = event
 
                 if (keyCode === 86 && ctrlKey === true) {
-                    navigator.clipboard.readText().then(text => {
+                    return navigator.clipboard.readText().then(text => {
                         this.emitEvent({text}, 'PASTE_TEXT')
                     })
-                    return
                 }
 
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_DOWN')
             },
-
             didKeyUp(event) {
                 event.preventDefault()
                 const { keyCode, ctrlKey, shiftKey } = event
 
                 this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_UP')
             },
-
             didMouseMove(event) {
                 const { x, y } = this.calculatePos(event)
 
                 this.emitEvent({ x, y }, 'MOUSE_MOVE')
             },
-
             didMouseDown(event) {
                 const { button } = event,
                     { x, y } = this.calculatePos(event)
 
                 this.emitEvent({ x, y, button: button + 1 }, 'MOUSE_DOWN')
             },
-
             didMouseUp(event) {
                 const { button } = event,
                       { x, y } = this.calculatePos(event)
 
                 this.emitEvent({ x, y, button: button + 1 }, 'MOUSE_UP')
             },
-
             didMouseWheel(event) {
                 event.preventDefault()
                 const { deltaX, deltaY } = event
@@ -419,13 +408,10 @@
             },
 
             emitEvent(d, t) {
-                const { ws, hasControl } = this
+                if (!this.ws || !this.hasControl || this.ws.readyState !== ws.OPEN)
+                    return
 
-                if (!ws) return
-                if (!hasControl) return
-                if (ws.readyState !== ws.OPEN) return
-
-                ws.send(JSON.stringify({ op: 0, d, t }))
+                this.ws.send(JSON.stringify({ op: 0, d, t }))
             },
 
             calculatePos(event) {
@@ -450,17 +436,21 @@
             },
             
             setStreamMutedStatus() {
-                if(this.$refs.stream.nodeName !== "VIDEO")
+                if (!this.isJanusEnabled || this.$refs.stream.nodeName !== 'VIDEO')
                     return
-                if (this.viewerMuted === true)
+
+                if (this.viewerMuted)
                     this.$refs.stream.volume = 0.0
                 else
                     this.$refs.stream.volume = this.viewerVolume
             },
             setStreamVolume() {
-                if (!this.viewerMuted && this.$refs.stream.nodeName === "VIDEO")
+                if (!this.isJanusEnabled)
+                    return
+
+                if (!this.viewerMuted && this.$refs.stream.nodeName === 'VIDEO')
                     this.$refs.stream.volume = this.viewerVolume
-            },
+            }
         }
     }
 </script>
