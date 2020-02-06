@@ -9,7 +9,7 @@
             </p>
         </div>
         <div v-else-if=room class="room">
-            <Player />
+            <Player :loaded-scripts="this.loadedScripts"/>
             <PlayerFooter />
             <Chat />
         </div>
@@ -21,17 +21,6 @@
     import PlayerFooter from '~/components/Player/Footer'
 
     export default {
-        head() {
-            return {
-                title: this.error ? 'Room Not Found' : (this.room ? this.room.name : ''),
-                script: process.env.ENABLE_JANUS ? [
-                    { src: '/js/adapter.js' },
-                    { src: '/js/janus.js'}
-                ] : [
-                    { src: '/js/jsmpeg.min.js'}
-                ]
-            }
-        },
         middleware: 'authenticated',
         components: {
             Chat,
@@ -54,11 +43,19 @@
         beforeDestroy() {
             this.$store.commit('disconnectWebSocket')
         },
+        data() {
+            return {
+                loadedScripts: []
+            }
+        }, 
         head() {
             return {
                 title: this.error ? 'Room Not Found' : (this.room ? this.room.name : ''),
-                script: [
-                    { src: '/js/jsmpeg.min.js' }
+                script: process.env.ENABLE_JANUS ? [
+                    { src: '/js/adapter.js', defer: true, callback: () => this.loadedScripts.push('adapter')},
+                    { src: '/js/janus.js', defer: true, callback: () => this.loadedScripts.push('janus')}
+                ] : [
+                    { src: '/js/jsmpeg.min.js', callback: () => this.loadedScripts.push('jsmpeg')}
                 ]
             }
         }

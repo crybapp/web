@@ -78,7 +78,7 @@
                 <div class="loading" />
             </div>
         </div>
-        <Viewer v-else />
+        <Viewer v-else :loaded-scripts="this.loadedScripts"/>
     </div>
 </template>
 <script>
@@ -90,6 +90,9 @@
         components: {
             Viewer
         },
+        props: {
+            loadedScripts: Array
+        }, 
         computed: {
             ...mapGetters(['user', 'room', 'portal', 'stream', 'janusId', 'janusIp', 'apertureWs', 'apertureToken']),
 

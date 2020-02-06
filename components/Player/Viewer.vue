@@ -11,8 +11,7 @@
             id="remoteStream"
             class="player-stream"
             tabindex="1"
-            width="1280"
-            height="720"
+            :style="maxWidthHeightStyle"
             autoplay
             playsinline
             @keydown="didKeyDown"
@@ -66,14 +65,21 @@
             Button
         },
         props: {
-            volume: Number
+            volume: Number,
+            loadedScripts: {
+                deafult: [],
+                type: Array
+            }
         },
         data() {
             return {
                 brand,
                 activeKeyEvent: null,
                 showMutedPopup: false,
-                remoteStream: undefined
+                remoteStream: undefined,
+                scriptReadyCallbacks: [],
+                maxWidth: 1280,
+                maxHeight: 720
             }
         },
         computed: {
@@ -84,16 +90,20 @@
             },
 
             streamWidth() {
-                if (!this.player)
+                if (this.player)
+                    return this.player.video.destination.width
+                else if (this.remoteStream)
+                    return this.maxWidth
+                else
                     return 1280
-
-                return this.player.video.destination.width
             },
             streamHeight() {
-                if (!this.player)
+                if (this.player) 
+                    return this.player.video.destination.height
+                else if(this.remoteStream) 
+                    return this.maxHeight
+                else 
                     return 720
-
-                return this.player.video.destination.height
             },
 
             showPlayerDevtools() {
@@ -101,9 +111,23 @@
             },
             isJanusEnabled() {
                 return process.env.ENABLE_JANUS
+            },
+            maxWidthHeightStyle() {
+                return `max-width: ${this.streamWidth}px; max-height: ${this.streamHeight}px;`
+            } 
+        },
+        watch: {
+            loadedScripts: {
+                immediate: true,
+                handler(newVal, oldVal) {
+                    console.log(newVal)
+                    if(this.scriptReadyCallbacks.length > 0) 
+                        this.scriptReadyCallbacks.forEach(callback => callback(newVal))
+                }
             }
         },
         mounted() {
+
             let hidden,
                 visibilityChange
 
@@ -151,12 +175,6 @@
                 if(this.$refs.stream.nodeName === "VIDEO")
                     this.$refs.stream.requestFullscreen()
             })
-            if(this.isJanusEnabled) {
-                Janus.init({
-                    debug: true,
-                    dependencies: Janus.useDefaultDependencies()
-                })
-            }
         },
         beforeDestroy() {
             if (this.player)
@@ -174,10 +192,20 @@
             },
 
             playJsmpegStream() {
-                if(this.player) this.player.destroy()
+                if(!this.loadedScripts.includes('jsmpeg')) {
+                    this.scriptReadyCallbacks.push(() => {
+                        if(this.loadedScripts.includes('jsmpeg')) {
+                            this.setupJsmpeg()
+                        }
+                    })
+                    return
+                } else {
+                    setupJsmpeg()
+                }
+            },
 
-                if (!JSMpeg)
-                    return this.$nextTick(this.playJsmpegStream)
+            setupJsmpeg() {
+                if(this.player) this.player.destroy()
 
                 this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
                     canvas: this.$refs.stream,
@@ -201,10 +229,32 @@
             * this will allow us to enable TURN REST API in order to obtain short-lived session and keep TURN server access limited to Cryb.
             * this needs to be accompanied by the ability to request an ICE restart in order to switch the TURN sessions.
             */
+            areScriptsReady(...values) {
+                return values.every(x => this.loadedScripts.includes(x))
+            },
             playJanusStream() {
-                if (!Janus)
-                    return this.$nextTick(this.playJanusStream)
-                
+                if(this.areScriptsReady('janus', 'adapter')) {
+                    this.initJanus()
+                } else {
+                    this.scriptReadyCallbacks.push(() => {
+                        if(this.areScriptsReady('janus', 'adapter')) {
+                            this.initJanus()
+                        }
+                    })
+                }
+            },
+
+            initJanus() {
+                console.log("Initalizing Janus library.")
+                Janus.init({
+                    debug: true,
+                    dependencies: Janus.useDefaultDependencies(),
+                    callback: this.configureJanus()
+                })
+            },
+
+            configureJanus() {
+                console.log("Configuring janus object")
                 const janusConfig = {
                     server: `${process.env.JANUS_URL}:${process.env.JANUS_PORT}/janus`,
                     // Temporary Public TURN servers.
@@ -226,7 +276,7 @@
                 }
 
                 this.janus = new Janus(janusConfig)
-            },
+            }, 
 
             janusSessionConnected() {
                 this.janus.attach({
@@ -274,7 +324,13 @@
                     this.remoteStream = stream
                     if(stream.getVideoTracks().length > 0) {
                         this.$refs.stream.srcObject = stream
-
+                        var streamSettings = stream.getVideoTracks()[0].getSettings()
+                        
+                        if(streamSettings.width) {
+                            this.maxWidth = streamSettings.width
+                            this.maxHeight = streamSettings.height
+                        }
+                        
                         setTimeout(() => {
                             this.janusHandleCreated(this.janusHandle)
                         }, 1800000)
@@ -319,8 +375,8 @@
                 this.activeKeyEvent = event
 
                 if (keyCode === 86 && ctrlKey === true) {
-                    navigator.clipboard.readText().then(clipText => {
-                        this.emitEvent({clipText}, 'PASTE_TEXT')
+                    navigator.clipboard.readText().then(text => {
+                        this.emitEvent({text}, 'PASTE_TEXT')
                     })
                     return
                 }

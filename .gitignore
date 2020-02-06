@@ -63,8 +63,8 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
-.env.test
+*.env
+*.env.test
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -115,5 +115,5 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-dev.env
-borealis/
+
+# Keep artifacts out of repo
