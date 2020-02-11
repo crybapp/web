@@ -78,7 +78,7 @@
                 <div class="loading" />
             </div>
         </div>
-        <Viewer v-else />
+        <Viewer v-else :loaded-scripts="this.loadedScripts"/>
     </div>
 </template>
 <script>
@@ -90,11 +90,17 @@
         components: {
             Viewer
         },
+        props: {
+            loadedScripts: Array
+        }, 
         computed: {
-            ...mapGetters(['user', 'room', 'portal', 'stream', 'apertureWs', 'apertureToken']),
+            ...mapGetters(['user', 'room', 'portal', 'stream', 'janusId', 'janusIp', 'apertureWs', 'apertureToken']),
 
             showViewer() {
-                return this.portalStatus === 'open' && this.apertureWs && this.apertureToken
+                if(process.env.ENABLE_JANUS)
+                    return this.portalStatus === 'open' && this.janusId
+                else
+                    return this.portalStatus === 'open' && this.apertureWs && this.apertureToken
             },
             showPlayerDevtools() {
                 return process.env.SHOW_PLAYER_DEVTOOLS

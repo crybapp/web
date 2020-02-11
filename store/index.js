@@ -42,6 +42,12 @@ export const getters = {
     apertureWs: ({ apertureWs }) => apertureWs,
     apertureToken: ({ apertureToken }) => apertureToken,
 
+    janusId: ({ janusId }) => janusId,
+    janusIp: ({ janusIp }) => janusIp,
+
+    viewerMuted: ({ viewerMuted }) => viewerMuted,
+    viewerVolume: ({ viewerVolume }) => (viewerVolume/100),
+
     ws: ({ ws }) => ws
 }
 
@@ -63,6 +69,11 @@ const initialState = {
 
     apertureWs: null,
     apertureToken: null,
+    janusId: null,
+    janusIp: null,
+
+    viewerMuted: false,
+    viewerVolume: 30,
 
     ws: null,
     wsHeartbeat: null,
@@ -165,6 +176,26 @@ export const mutations = {
 
         state.apertureWs = config.ws
         state.apertureToken = config.t
+    },
+
+    /**
+     * Janus
+     */
+    updateJanus(state, config) {
+        if(!state.room) return
+
+        state.janusId = config.id
+        state.janusIp = config.ip
+    },
+
+    /**
+     * Viewer State
+     */
+    setMutedStatus(state, isMuted) {
+        state.viewerMuted = isMuted
+    },
+    setViewerVolume(state, newVolume) {
+        state.viewerVolume = newVolume
     },
 
     /**
@@ -340,14 +371,17 @@ export const mutations = {
             if (op === 0) {
                 if (t.split('_')[0] === 'PORTAL')
                     return this.commit('updatePortal', d)
-
                 switch(t) {
                     // ROOM
                     case 'CONTROLLER_UPDATE':
                         this.commit('updateController', d)
                         break
+                    case'JANUS_CONFIG':
+                        this.commit('updateJanus', d)
+                        break
                     case 'APERTURE_CONFIG':
                         this.commit('updateAperture', d)
+                        console.log("Aperture config received.")
                         break
                     case 'ROOM_DESTROY':
                         this.commit('handleRoom', null)
