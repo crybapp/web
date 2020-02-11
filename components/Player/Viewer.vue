@@ -117,9 +117,6 @@
             loadedScripts: {
                 immediate: true,
                 handler(newVal, oldVal) {
-                    if (process.env.NODE_ENV === 'development')
-                        console.debug(newVal)
-
                     if (this.scriptReadyCallbacks.length > 0)
                         this.scriptReadyCallbacks.forEach(callback => callback(newVal))
                 }
@@ -161,20 +158,18 @@
                 }
             })
 
-            if (this.$refs.stream) {
-                this.$refs.stream.onpaste = this.didPaste
+            this.$refs.stream.onpaste = this.didPaste
 
-                if (this.isJanusEnabled) {
-                    if (this.viewerMuted)
-                        this.$refs.stream.volume = 0.0
-                    else
-                        this.$refs.stream.volume = this.viewerVolume
+            if (this.isJanusEnabled) {
+                if (this.viewerMuted)
+                    this.$refs.stream.volume = 0.0
+                else
+                    this.$refs.stream.volume = this.viewerVolume
 
-                    this.$root.$on('toggle-fullscreen', () => {
-                        if (this.$refs.stream.nodeName === 'VIDEO')
-                            this.$refs.stream.requestFullscreen()
-                    })
-                }
+                this.$root.$on('toggle-fullscreen', () => {
+                    if (this.$refs.stream.nodeName === 'VIDEO')
+                        this.$refs.stream.requestFullscreen()
+                })
             }
         },
         beforeDestroy() {
@@ -184,10 +179,12 @@
         methods: {
             unmute() {
                 this.showMutedPopup = false
-                if (this.isJanusEnabled && this.$refs.stream)
+                if (this.isJanusEnabled)
                     this.$refs.stream.volume = this.viewerVolume
             },
 
+            //O(values.length * loadedScripts.length)
+            //Anyone got something better?
             areScriptsReady(...values) {
                 return values.every(x => this.loadedScripts.includes(x))
             },
@@ -203,13 +200,19 @@
                 if (this.areScriptsReady('jsmpeg'))
                     this.initJsmpeg()
                 else
-                    this.scriptReadyCallbacks.push(this.playJsmpegStream)
+                    this.scriptReadyCallbacks.push(() => {
+                        if(this.areScriptsReady('jsmpeg'))
+                            this.initJsmpeg()
+                    })
             },
             playJanusStream() {
                 if (this.areScriptsReady('janus', 'adapter'))
                     this.initJanus()
                 else
-                    this.scriptReadyCallbacks.push(this.playJanusStream)
+                    this.scriptReadyCallbacks.push(() => {
+                        if(this.areScriptsReady('janus', 'adapter'))
+                            this.initJanus()
+                    })
             },
 
             initJsmpeg() {
@@ -230,6 +233,7 @@
                 if (this.player.audioOut && !this.player.audioOut.unlocked)
                     this.showMutedPopup = true
             },
+
             initJanus() {
                 if (process.env.NODE_ENV === 'development')
                     console.debug('Initalizing Janus library.')
@@ -253,19 +257,6 @@
 
                 const janusConfig = {
                     server: `${process.env.JANUS_URL}:${process.env.JANUS_PORT}/janus`,
-                    // Temporary Public TURN servers.
-                    iceServers: [
-                        {
-                            urls: 'turn:turn1.solcode.dev:443',
-                            username: 'solcryb',
-                            credential: 'crybsol'
-                        },
-                        {
-                            urls: 'turn:turn1.solcode.dev:443?transport=tcp',
-                            username: 'solcryb',
-                            credential: 'crybsol'
-                        }
-                    ],
                     success: this.janusSessionConnected,
                     error: this.janusError,
                     destroy: this.janusDestroyed
