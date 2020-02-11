@@ -408,7 +408,7 @@
             },
 
             emitEvent(d, t) {
-                if (!this.ws || !this.hasControl || this.ws.readyState !== ws.OPEN)
+                if (!this.ws || !this.hasControl || this.ws.readyState !== this.ws.OPEN)
                     return
 
                 this.ws.send(JSON.stringify({ op: 0, d, t }))
