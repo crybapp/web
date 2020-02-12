@@ -14,7 +14,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@cryb/borealis": "^1.0.4",
+    "@cryb/borealis": "^1.0.6",
     "@nuxtjs/axios": "^5.5.4",
     "@nuxtjs/robots": "^2.4.2",
     "browser-cookies": "^1.2.0",
