@@ -33,7 +33,6 @@ export default {
         JANUS_PORT: process.env.JANUS_PORT,
         JANUS_URL: process.env.JANUS_URL,
 
-
         /**
          * Other Config
          */

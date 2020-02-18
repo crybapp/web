@@ -12,7 +12,7 @@
     import brand from '~/brand/config'
 
     import Header from '~/components/Header'
-	import Footer from '~/components/Footer'
+    import Footer from '~/components/Footer'
 
     import GoogleAnalytics from '~/components/GoogleAnalytics'
 

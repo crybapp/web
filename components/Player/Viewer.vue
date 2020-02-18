@@ -357,22 +357,24 @@
             },
             didKeyDown(event) {
                 event.preventDefault()
-                const { keyCode, ctrlKey, shiftKey } = event
+                const { key, ctrlKey, shiftKey } = event
                 this.activeKeyEvent = event
 
-                if (keyCode === 86 && ctrlKey === true) {
-                    return navigator.clipboard.readText().then(text => {
-                        this.emitEvent({text}, 'PASTE_TEXT')
-                    })
+                if(window.isSecureContext) {
+                    if (key === "v" && ctrlKey === true) {
+                        return navigator.clipboard.readText().then(text => {
+                            this.emitEvent({text}, 'PASTE_TEXT')
+                        })
+                    }
                 }
 
-                this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_DOWN')
+                this.emitEvent({ key, ctrlKey, shiftKey }, 'KEY_DOWN')
             },
             didKeyUp(event) {
                 event.preventDefault()
-                const { keyCode, ctrlKey, shiftKey } = event
+                const { key, ctrlKey, shiftKey } = event
 
-                this.emitEvent({ keyCode, ctrlKey, shiftKey }, 'KEY_UP')
+                this.emitEvent({ key, ctrlKey, shiftKey }, 'KEY_UP')
             },
             didMouseMove(event) {
                 const { x, y } = this.calculatePos(event)
