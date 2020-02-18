@@ -1,5 +1,5 @@
 <template>
-    <div class="error">
+    <div class="error is-center">
         <h1 v-if=error.statusCode class="title">
             {{ error.statusCode }}
         </h1>
