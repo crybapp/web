@@ -1,5 +1,5 @@
 <template>
-    <div class="player" :class="{ 'capture-events': hasControl }">
+    <div class="player" ref="viewport" :class="{ 'capture-events': hasControl }">
         <p v-if=showPlayerDevtools class="player-dev">
             Portal ID: {{ portal.id }}
             <br>
@@ -11,7 +11,7 @@
             id="remoteStream"
             class="player-stream"
             tabindex="1"
-            :style="maxWidthHeightStyle"
+            :style="playerMaxWidthHeightStyle"
             autoplay
             playsinline
             @keydown="didKeyDown"
@@ -76,7 +76,8 @@
                 remoteStream: undefined,
                 scriptReadyCallbacks: [],
                 maxWidth: 1280,
-                maxHeight: 720
+                maxHeight: 720,
+                playerMaxWidthHeightStyle: 'max-width: 1280px; max-height: 720px;'
             }
         },
         computed: {
@@ -108,9 +109,6 @@
             },
             isJanusEnabled() {
                 return process.env.ENABLE_JANUS
-            },
-            maxWidthHeightStyle() {
-                return `max-width: ${this.streamWidth}px; max-height: ${this.streamHeight}px;`
             } 
         },
         watch: {
@@ -171,6 +169,9 @@
                         this.$refs.stream.requestFullscreen()
                 })
             }
+
+            this.setMaxWidthHeightStyle()
+            window.addEventListener('resize', this.setMaxWidthHeightStyle)
         },
         beforeDestroy() {
             if (this.player)
@@ -183,8 +184,22 @@
                     this.$refs.stream.volume = this.viewerVolume
             },
 
-            //O(values.length * loadedScripts.length)
-            //Anyone got something better?
+            setMaxWidthHeightStyle() {
+                if(!this.$refs.viewport)
+                    return
+        
+                const currentRect = this.$refs.viewport.getBoundingClientRect()
+                let widthHeightAuto
+
+                if(currentRect.height / this.streamHeight < currentRect.width / this.streamWidth) {
+                    widthHeightAuto = "height: 100%; width: auto;"
+                } else {
+                    widthHeightAuto = "width: 100%; height: auto;"
+                }
+
+                this.playerMaxWidthHeightStyle = `max-width: ${this.streamWidth}px; max-height: ${this.streamHeight}px; ${widthHeightAuto}`
+            },
+
             areScriptsReady(...values) {
                 return values.every(x => this.loadedScripts.includes(x))
             },
@@ -437,6 +452,7 @@
                 else
                     this.$refs.stream.volume = this.viewerVolume
             },
+
             setStreamVolume() {
                 if (!this.isJanusEnabled)
                     return
