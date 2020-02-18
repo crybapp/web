@@ -360,10 +360,12 @@
                 const { key, ctrlKey, shiftKey } = event
                 this.activeKeyEvent = event
 
-                if (key === "c" && ctrlKey === true) {
-                    return navigator.clipboard.readText().then(text => {
-                        this.emitEvent({text}, 'PASTE_TEXT')
-                    })
+                if(window.isSecureContext) {
+                    if (key === "v" && ctrlKey === true) {
+                        return navigator.clipboard.readText().then(text => {
+                            this.emitEvent({text}, 'PASTE_TEXT')
+                        })
+                    }
                 }
 
                 this.emitEvent({ key, ctrlKey, shiftKey }, 'KEY_DOWN')
