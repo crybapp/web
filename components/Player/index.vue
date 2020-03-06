@@ -13,38 +13,8 @@
                 <br>
                 Portal Status: {{ portalStatus }}
             </p>
-            <!-- Portal is not open and there is only one person in the room
-                 ToDo: change this in case there's a different minimum requirement -->
-            <div v-if="(portalStatus === 'waiting' || portalStatus === 'closed') && room.members.length === 1" class="player-message">
-                <h1 class="title">
-                    And so it begins...
-                </h1>
-                <p class="body">
-                    Add a friend or two to get the party started! Once someone else joins this room, we'll queue up your room for a virtual browser
-                </p>
-            </div>
-            <!-- Portal is not open but there is more than one member in the room -->
-            <div v-else-if="(portalStatus === 'waiting' || portalStatus === 'closed') && room.members.length > 1" class="player-message">
-                <h1 class="title">
-                    Hold your rabbits...
-                </h1>
-                <p class="body">
-                    We're waiting for the right gears to align, so we can get your browser ready - hold tight!
-                    <br>
-                    If this is taking a little long, restart the room
-                </p>
-            </div>
-            <!-- A portal has been placed into the queue -->
-            <div v-else-if="portalStatus === 'in-queue'" class="player-message">
-                <h1 class="title">
-                    You're in the queue!
-                </h1>
-                <p class="body">
-                    There are a couple rooms in front of you waiting for a virtual browser, please grab your popcorn!
-                </p>
-            </div>
             <!-- The portal is either being created or starting -->
-            <div v-else-if="portalStatus === 'creating' || portalStatus === 'starting'" class="player-message">
+            <div v-if="portalStatus === 'creating' || portalStatus === 'starting'" class="player-message">
                 <h1 class="title">
                     We're {{ portalStatus }} your browser now
                 </h1>
@@ -74,6 +44,36 @@
                     We'll try to recover, but if this is stuck for too long, restart the room
                 </p>
             </div>
+            <!-- A portal has been placed into the queue -->
+            <div v-else-if="queueStatus !== null" class="player-message">
+                <h1 class="title">
+                    You're in the queue!
+                </h1>
+                <p class="body">
+                    You are currently number {{ queueStatus.currentPositionInQueue }} out of {{ queueStatus.currentQueueLength }}, please grab your popcorn!
+                </p>
+            </div>
+            <!-- Portal is not open and there is only one person in the room
+                 ToDo: change this in case there's a different minimum requirement -->
+            <div v-else-if="(portalStatus === 'waiting' || portalStatus === 'closed') && room.members.length === 1" class="player-message">
+                <h1 class="title">
+                    And so it begins...
+                </h1>
+                <p class="body">
+                    Add a friend or two to get the party started! Once someone else joins this room, we'll queue up your room for a virtual browser
+                </p>
+            </div>
+            <!-- Portal is not open but there is more than one member in the room -->
+            <div v-else-if="(portalStatus === 'waiting' || portalStatus === 'closed') && room.members.length > 1" class="player-message">
+                <h1 class="title">
+                    Hold your rabbits...
+                </h1>
+                <p class="body">
+                    We're waiting for the right gears to align, so we can get your browser ready - hold tight!
+                    <br>
+                    If this is taking a little long, restart the room
+                </p>
+            </div>
             <div class="loading-wrapper">
                 <div class="loading" />
             </div>
@@ -94,7 +94,7 @@
             loadedScripts: Array
         }, 
         computed: {
-            ...mapGetters(['user', 'room', 'portal', 'stream', 'janusId', 'janusIp', 'apertureWs', 'apertureToken']),
+            ...mapGetters(['user', 'room', 'portal', 'stream', 'janusId', 'janusIp', 'apertureWs', 'apertureToken', 'queueStatus']),
 
             showViewer() {
                 if(process.env.ENABLE_JANUS)

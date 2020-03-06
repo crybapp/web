@@ -39,6 +39,8 @@ export const getters = {
     messages: ({ room }) => room ? (room.messages || []) : [],
     controllerId: ({ controllerId }) => controllerId,
 
+    queueStatus: ({ queueStatus }) => queueStatus, 
+
     apertureWs: ({ apertureWs }) => apertureWs,
     apertureToken: ({ apertureToken }) => apertureToken,
 
@@ -66,6 +68,8 @@ const initialState = () => ({
 
     typingUsers: [],
     sendingMessages: [],
+
+    queueStatus: null, 
 
     apertureWs: null,
     apertureToken: null,
@@ -164,6 +168,18 @@ export const mutations = {
 
         state.portal = allocation
         state.room.portal = allocation
+
+        if(allocation.status === 'creating' || allocation.status === 'starting' || allocation.status === 'open')
+            this.commit('updateQueueStatus', null)
+    },
+
+    /**
+     * QueueStatus
+     */
+    updateQueueStatus(state, status) {
+        if(!state.room) return
+
+        state.queueStatus = status
     },
 
     /**
@@ -373,6 +389,9 @@ export const mutations = {
                     // ROOM
                     case 'CONTROLLER_UPDATE':
                         this.commit('updateController', d)
+                        break
+                    case 'QUEUE_UPDATE':
+                        this.commit('updateQueueStatus', d)
                         break
                     case'JANUS_CONFIG':
                         this.commit('updateJanus', d)
