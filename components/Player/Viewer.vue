@@ -19,7 +19,7 @@
             @mousemove="didMouseMove"
             @mousedown="didMouseDown"
             @mouseup="didMouseUp"
-            @mousewheel="didMouseWheel"
+            @wheel="didMouseWheel"
             @contextmenu="handleRightClick"
         />
         <canvas
@@ -271,11 +271,17 @@
                     console.debug('Configuring Janus object')
 
                 const janusConfig = {
-                    server: `${process.env.JANUS_URL}:${process.env.JANUS_PORT}/janus`,
+                    server: '',
                     success: this.janusSessionConnected,
                     error: this.janusError,
                     destroy: this.janusDestroyed
                 }
+
+                if (process.env.JANUS_PORT)
+                    janusConfig.server = `${process.env.JANUS_URL}:${process.env.JANUS_PORT}/janus`
+                else
+                    janusConfig.server = `${process.env.JANUS_URL}/janus`
+
 
                 this.janus = new Janus(janusConfig)
             },
