@@ -260,18 +260,20 @@
                 })
             },
 
-            // TODO: Create iceServer configuration. Request from API?
             /*
             * We should, ideally, have the API/Portals server handle gathering TURN/STUN information and receive the values here.
             * this will allow us to enable TURN REST API in order to obtain short-lived session and keep TURN server access limited to Cryb.
             * this needs to be accompanied by the ability to request an ICE restart in order to switch the TURN sessions.
             */
+
+           //TO-DO: Rewrite credential check for more complexity in checking if one more more sets are needed.
             configureJanus() {
                 if (process.env.NODE_ENV === 'development')
                     console.debug('Configuring Janus object')
 
                 const janusConfig = {
                     server: '',
+                    iceServers: [],
                     success: this.janusSessionConnected,
                     error: this.janusError,
                     destroy: this.janusDestroyed
@@ -282,6 +284,37 @@
                 else
                     janusConfig.server = `${process.env.JANUS_URL}/janus`
 
+                if (process.env.ENABLE_TURN)
+                    if(process.env.TURN_URL != '')
+                        var turnURLS = `${process.env.TURN_URL}`.split(',')
+
+                    if (process.env.TURN_USERNAME != '')
+                        var turnUsr = `${process.env.TURN_USERNAME}`.split(',')
+                    
+                    if (process.env.TURN_PASSWORD != '')
+                        var turnPass = `${process.env.TURN_PASSWORD}`.split(',')
+                
+                    
+                    var num;
+
+                    for (num = 0; num < turnURLS.length; ++num) {
+                        let cNum;
+                        if (turnUsr[1] === undefined)
+                            cNum = 0
+                        else
+                            cNum = num
+                        
+                        var turnAdd = 
+                        {
+                            url: `${turnURLS[num]}`,
+                            username: `${turnUsr[cNum]}`,
+                            credential: `${turnPass[cNum]}` 
+                        }
+                        
+                        janusConfig.iceServers.push(turnAdd)
+                    }
+
+                console.log(janusConfig)
 
                 this.janus = new Janus(janusConfig)
             },
