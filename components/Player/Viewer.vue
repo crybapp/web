@@ -314,8 +314,6 @@
                         janusConfig.iceServers.push(turnAdd)
                     }
 
-                console.log(janusConfig)
-
                 this.janus = new Janus(janusConfig)
             },
 
