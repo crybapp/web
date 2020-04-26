@@ -284,7 +284,7 @@
                 else
                     janusConfig.server = `${process.env.JANUS_URL}/janus`
 
-                if (process.env.ENABLE_TURN)
+                if (process.env.ENABLE_TURN) {
                     if(process.env.TURN_URL != '')
                         var turnURLS = `${process.env.TURN_URL}`.split(',')
 
@@ -313,6 +313,7 @@
                         
                         janusConfig.iceServers.push(turnAdd)
                     }
+                }
 
                 this.janus = new Janus(janusConfig)
             },
