@@ -2,16 +2,15 @@
     <div class="chat-message" :class="{ 'is-sending': loading || isMessageSending }">
         <p class="chat-message-content" v-html=getEmojifiedMessageContent />
         <div v-if="!isMessageSending" class="chat-message-options">
-            <img v-if=!isAuthorSelf class="chat-message-option chat-message-report" src="/icons/message-exclaimation.svg" title="Report message" @click=report()>
-            <img v-if="isAuthorSelf || isSelfRoomOwner" class="chat-message-option chat-message-delete" src="/icons/trash-full.svg" title="Delete message" @click=destroy()>
+            <img v-if=!isAuthorSelf class="chat-message-option chat-message-report" src="~/assets/icons/message-exclaimation.svg" title="Report message" @click=report()>
+            <img v-if="isAuthorSelf || isSelfRoomOwner" class="chat-message-option chat-message-delete" src="~/assets/icons/trash-full.svg" title="Delete message" @click=destroy()>
         </div>
     </div>
 </template>
 <script>
     import { mapGetters } from 'vuex'
-    import emoji from 'node-emoji'
+    import stripHtml from 'string-strip-html'
     import twemoji from 'twemoji'
-    import sanitizeHtml from 'sanitize-html'
 
     export default {
         props: [
@@ -37,18 +36,12 @@
                 return typeof this.message === 'string'
             },
             getEmojifiedMessageContent() {
-				var content
+                const content = (typeof this.message === 'string' ? this.message : this.message.content)
+                const safeContent = stripHtml(content)
 
-                if (typeof this.message === 'string')
-                    content = this.message
-                else
-                    content = this.message.content
-
-                content = sanitizeHtml(content, { allowedTags: [], allowedAttributes: {} })
-
-                return twemoji.parse(emoji.emojify(content), {
-					className: 'chat-message-emoji'
-				})
+                return twemoji.parse(safeContent, {
+                    className: 'chat-message-emoji'
+                })
             }
         },
         methods: {

@@ -11,13 +11,13 @@
             <MenuOption v-if="user.room && this.$route.name !== 'room'" to="/room" icon="preview">
                 View Room
             </MenuOption>
-            <MenuOption v-if=user.room name="leave-room" icon="panel-arrow-left" :loading=leavingRoom :disabled=leavingRoom>
+            <MenuOption v-if="user.room" name="leave-room" icon="panel-arrow-left" :loading="leavingRoom" :disabled="leavingRoom">
                 {{ leavingRoom ? 'Leaving...' : 'Leave Room' }}
             </MenuOption>
-            <MenuOption v-if=!user.room to="/room/join" icon="panel-arrow-right">
+            <MenuOption v-if="!user.room" to="/room/join" icon="panel-arrow-right">
                 Join Room
             </MenuOption>
-            <MenuOption v-if=!user.room to="/room/create" icon="add">
+            <MenuOption v-if="!user.room" to="/room/create" icon="add">
                 Create Room
             </MenuOption>
         </MenuSection>
@@ -25,7 +25,7 @@
             <MenuOption name="reload-profile" icon="user" :loading=reloadingProfile :disabled=reloadingProfile>
                 {{ reloadingProfile ? 'Reloading...' : 'Reload Profile' }}
             </MenuOption>
-            <MenuOption to="/" name="logout" icon="log-out">
+            <MenuOption href="/" name="logout" icon="log-out">
                 Logout
             </MenuOption>
         </MenuSection>
@@ -47,8 +47,7 @@
         data() {
             return {
                 leavingRoom: false,
-                reloadingProfile: false,
-                loadingInvites: false
+                reloadingProfile: false
             }
         },
         computed: {
@@ -77,7 +76,6 @@
                 try {
                     await this.$axios.$post('room/leave')
 
-                    this.$router.push('/home')
                     this.$refs.menu.toggleMenu()
                     this.$store.commit('handleRoom', null)
                 } catch(error) {
@@ -90,26 +88,13 @@
                 this.leavingRoom = false
             },
 
-            async inviteFriends() {
-                this.loadingInvites = true
-
-                try {
-                    await this.$router.push('invites')
-
-                    this.$refs.menu.toggleMenu()
-                } catch(error) {
-                    alert(error)
-                }
-
-                this.loadingInvites = false
-            },
-
             logout() {
                 this.$store.commit('logout')
             },
 
             didClickOption(name) {
-                if (!name) return this.$refs.menu.toggleMenu()
+                if (!name)
+                    return this.$refs.menu.toggleMenu()
 
                 switch(name) {
                     case 'reload-profile':
@@ -117,9 +102,6 @@
                         break
                     case 'leave-room':
                         this.leaveRoom()
-                        break
-                    case 'invite-friends':
-                        this.inviteFriends()
                         break
                     case 'logout':
                         this.logout()

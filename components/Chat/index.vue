@@ -1,10 +1,12 @@
 <template>
     <div class="chat">
-        <p v-if="!messages || messages.length === 0" class="chat-no-messages">
-            Nobody said nothing. Maybe say something?
-        </p>
-        <div v-else-if=messages ref="messagesView" class="grouped-chat-messages-wrapper" :class="{ 'users-are-typing': typingUsers.length > 0 }">
-            <GroupedChatMessage v-for="(group, i) in messages" :key=group.id :group=group :is-last-group="i === messages.length - 1" />
+        <div ref="messagesView" class="grouped-chat-messages-wrapper">
+            <p v-if="!messages || messages.length === 0" class="chat-no-messages">
+                Nobody said nothing.
+                <br>
+                Maybe say something?
+            </p>
+            <GroupedChatMessage v-for="(group, i) in messages" v-else :key=group.id :group=group :is-last-group="i === messages.length - 1" />
         </div>
         <ChatTypingBar />
         <ChatInput />
@@ -12,6 +14,7 @@
 </template>
 <script>
     import { mapGetters } from 'vuex'
+    import PerfectScrollbar from 'perfect-scrollbar'
 
     import ChatInput from '~/components/Chat/InputBar'
     import ChatTypingBar from '~/components/Chat/TypingBar'
@@ -27,19 +30,30 @@
             ...mapGetters(['messages', 'typingUsers'])
         },
         mounted() {
-            this.$nextTick(this.updateMessageView)
-
-            this.$store.subscribe(({ type }, state) => {
-                if (type === 'pushMessage' || type === 'pushSendingMessage')
+            this.unsubscribe = this.$store.subscribe(({ type }, state) => {
+                if (type === 'pushMessage' || type === 'pushSendingMessage' || type === 'pullMessage')
                     this.$nextTick(this.updateMessageView)
             })
+
+            this.ps = new PerfectScrollbar(this.$refs.messagesView)
+            window.addEventListener('resize', this.ps.update)
+            this.updateMessageView()
+        },
+        beforeDestroy() {
+            this.unsubscribe()
+            window.removeEventListener('resize', this.ps.update)
+            this.ps.destroy()
+            this.ps = null
         },
         methods: {
             updateMessageView() {
                 const { messagesView } = this.$refs
-                if (!messagesView) return
+                if (!messagesView)
+                    return
 
                 messagesView.scrollTop = messagesView.scrollHeight
+
+                this.ps.update()
             }
         }
     }

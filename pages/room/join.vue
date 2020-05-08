@@ -1,5 +1,5 @@
 <template>
-    <JoinRoom :modal="false" />
+    <JoinRoom />
 </template>
 <script>
     import JoinRoom from '~/components/Room/Join'

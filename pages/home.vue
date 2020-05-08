@@ -1,6 +1,6 @@
 <template>
     <div v-if=user class="home">
-        <div v-if=room class="in-room">
+        <div v-if=room>
             <h1 class="title">
                 Let's jump back into watching
             </h1>
@@ -10,63 +10,74 @@
                 Want to get out? There's an option for that too!
             </p>
             <div class="options">
-                <nuxt-link class="is-wrapper" to="/room">
-                    <div class="box option is-hoverable">
-                        <img src="/icons/tv.svg" alt="" class="icon" />
-                        <h3 class="header">
-                            Return to {{ room.name }}
-                        </h3>
-                    </div>
-                </nuxt-link>
-                <nuxt-link class="is-wrapper" to="#leave-room" @click.native=leaveRoom()>
-                    <div class="box option is-hoverable" :class="{ 'is-loading': leavingRoom, 'is-disabled': leavingRoom }">
-                        <img src="/icons/panel-arrow-right.svg" alt="" class="icon" />
-                        <h3 class="header">
-                            {{ leavingRoom ? 'Leaving' : 'Leave' }} {{ room.name }}{{ leavingRoom ? '...' : '' }}
-                        </h3>
-                    </div>
-                </nuxt-link>
+                <ButtonBox icon="tv" to="/room">
+                    Return to {{ room.name }}
+                </ButtonBox>
+
+                <ButtonBox icon="panel-arrow-right" :loading="leavingRoom"
+                           :disabled="leavingRoom" @click.native="leaveRoom()">
+                    {{ leavingRoom ? 'Leaving' : 'Leave' }} {{ room.name }}{{ leavingRoom ? '...' : '' }}
+                </ButtonBox>
             </div>
         </div>
-        <div v-else class="no-room">
+        <div v-else>
             <h1 class="title">
                 Welcome Home
             </h1>
             <p class="subtitle">
-                It's never been easier to join or start a room with your friends.<br>Select an option below to get started
+                It's never been easier to join or start a room with your friends.
+                <br>
+                Select an option below to get started:
             </p>
             <div class="options">
-                <nuxt-link class="is-wrapper" to="/room/join">
-                    <div class="box option is-hoverable">
-                        <img src="/icons/panel-arrow-right.svg" alt="" class="icon" />
-                        <h3 class="header">
-                            Join a Room
-                        </h3>
-                        <p class="description">
-                            Received an invite link or an invite code for a room? Enter it here!
-                        </p>
-                    </div>
-                </nuxt-link>
-                <nuxt-link class="is-wrapper" to="/room/create">
-                    <div class="box option is-hoverable">
-                        <img src="/icons/add.svg" alt="" class="icon" />
-                        <h3 class="header">
-                            Create a Room
-                        </h3>
-                        <p class="description">
-                            Need a room where you can watch anything with your friends? This is the place to go
-                        </p>
-                    </div>
-                </nuxt-link>
+                <ButtonBox
+                    icon="panel-arrow-right"
+                    href="/room/join"
+                    :fake="true"
+                    description="Received an invite link or an invite code for a room? Enter it here!"
+                    @click.native="toggleJoinRoomModal()"
+                >
+                    Join a Room
+                </ButtonBox>
+
+                <ButtonBox
+                    icon="add"
+                    href="/room/create"
+                    :fake="true"
+                    description="Need a room where you can watch anything with your friends? This is the place to go"
+                    @click.native="toggleCreateRoomModal()"
+                >
+                    Create a Room
+                </ButtonBox>
             </div>
         </div>
+        <p v-if="!isSecure" class="error">
+            This instance is not using HTTPS for the web client, which will result in some
+            <br>
+            functionability to be disabled by your browser due to security concerns.
+        </p>
+        <Modal ref="createRoomModal" :cover="true">
+            <CreateRoom />
+        </Modal>
+        <Modal ref="joinRoomModal" :cover="true">
+            <JoinRoom />
+        </Modal>
     </div>
 </template>
 <script>
     import { mapGetters } from 'vuex'
 
+    import ButtonBox from '~/components/Button/Box'
+    import Modal from '~/components/Modal'
+
     export default {
         middleware: 'authenticated',
+        components: {
+            ButtonBox,
+            Modal,
+            JoinRoom: () => import('~/components/Room/Join'),
+            CreateRoom: () => import('~/components/Room/Create')
+        },
         data() {
             return {
                 leavingRoom: false
@@ -77,23 +88,12 @@
             room() {
                 return this.$store.state.room || this.user.room || null
             },
+            isSecure() {
+                if (process.server)
+                    return true // it'll update itself when client is rendered anyway
 
-            isJoinRoomModalVisible() {
-                if (!this.$refs.joinRoomModal) return false
-
-                return this.$refs.joinRoomModal.visible
-            },
-            isCreateRoomModalVisible() {
-                if (!this.$refs.createRoomModal) return false
-
-                return this.$refs.createRoomModal.visible
+                return window.isSecureContext
             }
-        },
-        mounted() {
-            if (!this.$refs.createRoomModal && !this.$refs.joinRoomModal) return
-
-            this.$refs.createRoomModal.visible = this.$route.hash === '#create-room'
-            this.$refs.joinRoomModal.visible = this.$route.hash === '#join-room'
         },
         methods: {
             leaveRoom() {
@@ -103,34 +103,22 @@
                 this.$store.dispatch('leaveRoom')
             },
 
-            showCreateRoomModal() {
-                if (!this.$refs.createRoomModal) return
+            toggleCreateRoomModal() {
+                if (!this.$refs.createRoomModal)
+                    return
 
-                this.$refs.createRoomModal.visible = true
+                this.$refs.createRoomModal.visible = !this.$refs.createRoomModal.visible
             },
-            showJoinRoomModal() {
-                if (!this.$refs.joinRoomModal) return
+            toggleJoinRoomModal() {
+                if (!this.$refs.joinRoomModal)
+                    return
 
-                this.$refs.joinRoomModal.visible = true
-            },
-            hideModals() {
-                if (!this.$refs.joinRoomModal && !this.$refs.joinRoomModal) return
-
-                this.$refs.createRoomModal.visible = false
-                this.$refs.joinRoomModal.visible = false
+                this.$refs.joinRoomModal.visible = !this.$refs.joinRoomModal.visible
             }
         },
         head() {
             return {
-                title: (
-                    this.isCreateRoomModalVisible ?
-                        'Create a Room' :
-                        (
-                            this.isJoinRoomModalVisible ?
-                                'Join a Room' :
-                                null
-                        )
-                )
+                title: false
             }
         }
     }

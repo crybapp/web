@@ -1,35 +1,18 @@
 <template>
     <div class="landing">
         <div class="left" :class="{ 'has-landing-video': hasLandingVideo }">
-            <div class="center">
-                <picture>
-                    <source srcset="/img/logo.svg" media="(prefers-color-scheme: light)">
-                    <img src="/img/logo-light.svg" class="logo">
-                </picture>
+            <div class="centre">
+                <div class="logo-small logo-mask" />
                 <h1 class="title">
                     Share the internet with your friends
                 </h1>
                 <p class="body">
                     {{ brand.name }} makes it easy to start up a room, add your friends, and browse the web
                 </p>
-                <div v-if="user" class="continue">
-                    <Button href="/home" icon="/icons/user-white.svg" hover="/icons/user.svg">
-                        Continue to {{ brand.name }}
-                    </Button>
-                </div>
-                <div v-else-if=!token class="login">
-                    <Button v-if=redirectUrl theme="discord" :href=redirectUrl icon="/icons/discord-white.svg" hover-icon="/icons/discord-colour.svg" icon-alt="Discord Logo">
-                        Login with Discord
-                    </Button>
-                    <p v-else class="disclaimer">
-                        Uh-oh! Looks like we can't find a redirect URL for Login with Discord
-                    </p>
-                </div>
-                <div v-else>
-                    <p class="disclaimer">
-                        An error has occurred while trying to authenticate with this instance's API
-                    </p>
-                </div>
+                <LoginButton />
+                <p v-if="!isSecure" class="error">
+                    This instance is not using HTTPS for the web client, which will result in some functionability to be disabled by your browser due to security concerns.
+                </p>
             </div>
             <Footer />
         </div>
@@ -46,12 +29,9 @@
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
-
     import brand from '~/brand/config'
 
-    import Button from '~/components/Button'
-
+    import LoginButton from '~/components/Button/Login'
     import Footer from '~/components/Footer'
 
     export default {
@@ -59,18 +39,7 @@
         middleware: 'logged-out',
         components: {
 			Footer,
-            Button
-        },
-        async asyncData(context) {
-            let redirectUrl
-
-            try {
-                redirectUrl = await context.$axios.$get('auth/discord/redirect')
-            } catch (error) {
-                console.error(error)
-            }
-
-            return { redirectUrl }
+            LoginButton
         },
         data() {
             return {
@@ -78,10 +47,14 @@
             }
         },
         computed: {
-            ...mapGetters(['token', 'user']),
-
             hasLandingVideo() {
                 return this.brand.landing_video_id && this.brand.landing_video_id.length > 0
+            },
+            isSecure() {
+                if (process.server)
+                    return true
+
+                return window.isSecureContext
             }
         }
     }

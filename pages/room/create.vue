@@ -1,5 +1,5 @@
 <template>
-    <CreateRoom :modal="false" />
+    <CreateRoom />
 </template>
 <script>
     import CreateRoom from '~/components/Room/Create'
