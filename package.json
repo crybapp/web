@@ -21,6 +21,7 @@
     "cookieparser": "^0.1.0",
     "date-fns": "^2.5.1",
     "dotenv": "^8.2.0",
+    "mesa-js-client": "^1.4.4",
     "node-emoji": "^1.10.0",
     "nuxt": "^2.8.1",
     "nuxt-client-init-module": "^0.1.4",

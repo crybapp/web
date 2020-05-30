@@ -1,6 +1,8 @@
 import { parse } from 'cookieparser'
 import cookies from 'browser-cookies'
 
+import Mesa from 'mesa-js-client'
+
 const isProduction = () => process.env.NODE_ENV === 'production'
 
 export const getters = {
@@ -50,7 +52,7 @@ export const getters = {
     viewerMuted: ({ viewerMuted }) => viewerMuted,
     viewerVolume: ({ viewerVolume }) => (viewerVolume/100),
 
-    ws: ({ ws }) => ws
+    mesa: ({ mesa }) => mesa
 }
 
 const initialState = () => ({
@@ -79,10 +81,7 @@ const initialState = () => ({
     viewerMuted: false,
     viewerVolume: 30,
 
-    ws: null,
-    wsHeartbeat: null,
-    wsReconnect: null,
-    wsReconnectInterval: 5000
+		mesa: null
 })
 
 export const state = () => initialState()
@@ -310,10 +309,16 @@ export const mutations = {
      * Typing
      */
     setTypingStatus(state, typing) {
-        if (!state.ws) return
-        if (state.ws.readyState !== state.ws.OPEN) return
+				if (!state.mesa && !state.mesa.ws)
+					return
+				else if (state.mesa.ws.readyState !== WebSocket.OPEN)
+					return
 
-        state.ws.send(JSON.stringify({ op: 0, d: { typing }, t: 'TYPING_UPDATE' }))
+        state.mesa.send({
+					opcode: 0,
+					data: { typing },
+					type: 'TYPING_UPDATE'
+				})
     },
 
     updateTypingStatus(state, { typing, u: userId }) {
@@ -329,12 +334,12 @@ export const mutations = {
      * Presence
      */
     updatePresence(state, { u: userId, presence }) {
-		if (userId === state.userId) return
+			if (userId === state.userId) return
 
-		if(presence === 'online' && state.onlineUsers.indexOf(userId) === -1)
-			state.onlineUsers.push(userId)
-		else
-			state.onlineUsers.splice(state.onlineUsers.indexOf(userId), 1)
+			if(presence === 'online' && state.onlineUsers.indexOf(userId) === -1)
+				state.onlineUsers.push(userId)
+			else
+				state.onlineUsers.splice(state.onlineUsers.indexOf(userId), 1)
     },
 
     /**
@@ -360,99 +365,84 @@ export const mutations = {
      * WebSocket
      */
     setupWebSocket(state) {
-        if (!state.token) return
+        console.log(state.token)
+        if (!state.token)
+            return
 
-        const { token } = state, ws = new WebSocket(process.env.WS_URL)
+        const { token } = state, mesa = new Mesa(process.env.WS_URL, { autoConnect: false })
 
-        ws.onerror = () => this.commit('setupReconnect')
+        mesa.onConnected = async () => {
+            console.log('connected')
 
-        ws.onmessage = ({ data }) => {
-            let json
-
-            try {
-                json = JSON.parse(data)
-            } catch(error) {
-                console.error(error)
-
-                return console.error(error)
-            }
-
-            const { op, d, t } = json
-
-            if (op !== 11 && !isProduction())
-                console.log(op, d, t)
-
-            if (op === 0) {
-                if (t.split('_')[0] === 'PORTAL')
-                    return this.commit('updatePortal', d)
-                switch(t) {
-                    // ROOM
-                    case 'CONTROLLER_UPDATE':
-                        this.commit('updateController', d)
-                        break
-                    case 'QUEUE_UPDATE':
-                        this.commit('updateQueueStatus', d)
-                        break
-                    case'JANUS_CONFIG':
-                        this.commit('updateJanus', d)
-                        break
-                    case 'APERTURE_CONFIG':
-                        this.commit('updateAperture', d)
-                        console.log("Aperture config received.")
-                        break
-                    case 'ROOM_DESTROY':
-                        this.commit('handleRoom', null)
-                        this.app.router.push('/home')
-                        break
-                    case 'INVITE_UPDATE':
-                        this.commit('handleInvite', d)
-                        break
-                    // USER
-                    case 'USER_JOIN':
-                        this.commit('handleUserJoin', d)
-                        break
-                    case 'USER_UPDATE':
-                        this.commit('handleUser', d)
-                        break
-                    case 'USER_LEAVE':
-                        this.commit('handleUserLeave', d)
-                        break
-                    case 'OWNER_UPDATE':
-                        this.commit('handleOwnerUpdate', d)
-                        break
-                    case 'PRESENCE_UPDATE':
-                        this.commit('updatePresence', d)
-                        break
-                    // MESSAGE
-                    case 'MESSAGE_CREATE':
-                        this.commit('pushMessage', d)
-                        break
-                    case 'MESSAGE_DESTROY':
-                        this.commit('pullMessage', d.id)
-                        break
-                    case 'TYPING_UPDATE':
-                        this.commit('updateTypingStatus', d)
-                        break
-                }
-            } else if (op === 10) {
-                const { c_heartbeat_interval, c_reconnect_interval } = d
-
-                this.commit('setupHeartbeat', c_heartbeat_interval)
-
-                if (state.wsReconnect) this.commit('invalidateReconnect')
-                state.wsReconnectInterval = c_reconnect_interval
-
-                ws.send(JSON.stringify({ op: 2, d: { token } }))
-            }
+            await mesa.authenticate({ token })
         }
 
-        state.ws = ws
+        mesa.onMessage = (op, d, t) => {
+					if (op === 0) {
+						if (t.split('_')[0] === 'PORTAL')
+								return this.commit('updatePortal', d)
+
+						switch(t) {
+							// ROOM
+							case 'CONTROLLER_UPDATE':
+								this.commit('updateController', d)
+								break
+							case 'QUEUE_UPDATE':
+								this.commit('updateQueueStatus', d)
+								break
+							case'JANUS_CONFIG':
+								this.commit('updateJanus', d)
+								break
+							case 'APERTURE_CONFIG':
+								this.commit('updateAperture', d)
+								console.log("Aperture config received.")
+								break
+							case 'ROOM_DESTROY':
+								this.commit('handleRoom', null)
+								this.app.router.push('/home')
+								break
+							case 'INVITE_UPDATE':
+								this.commit('handleInvite', d)
+								break
+							// USER
+							case 'USER_JOIN':
+								this.commit('handleUserJoin', d)
+								break
+							case 'USER_UPDATE':
+								this.commit('handleUser', d)
+								break
+							case 'USER_LEAVE':
+								this.commit('handleUserLeave', d)
+								break
+							case 'OWNER_UPDATE':
+								this.commit('handleOwnerUpdate', d)
+								break
+							case 'PRESENCE_UPDATE':
+								this.commit('updatePresence', d)
+								break
+							// MESSAGE
+							case 'MESSAGE_CREATE':
+								this.commit('pushMessage', d)
+								break
+							case 'MESSAGE_DESTROY':
+								this.commit('pullMessage', d.id)
+								break
+							case 'TYPING_UPDATE':
+								this.commit('updateTypingStatus', d)
+								break
+						}
+					} 
+				}
+
+				mesa.connect()
+				
+				state.mesa = mesa
     },
 
     disconnectWebSocket(state) {
-        if (state.ws) {
-            state.ws.close(1000)
-            state.ws = null
+        if (state.mesa) {
+            state.mesa.disconnect(1000)
+            state.mesa = null
         }
 
         if (state.portal)
@@ -460,49 +450,10 @@ export const mutations = {
 
         if (state.controllerId)
             state.controllerId = null
-
-        if (state.wsHeartbeat)
-            this.commit('invalidateHeartbeat')
-
-        if (state.wsReconnect)
-            this.commit('invalidateReconnect')
-    },
-
-    setupHeartbeat(state, interval) {
-        state.wsHeartbeat = setInterval(() => {
-            if (!state.ws) return this.commit('invalidateHeartbeat')
-            if (state.ws.readyState !== state.ws.OPEN) return this.commit('invalidateHeartbeat')
-
-            state.ws.send(JSON.stringify({ op: 1, d: {} }))
-        }, interval)
-    },
-
-    invalidateHeartbeat(state) {
-        if (!state.wsHeartbeat) return
-
-        clearInterval(state.wsHeartbeat)
-        state.wsHeartbeat = null
-    },
-
-    setupReconnect(state) {
-        state.wsReconnect = setInterval(() => {
-            if (state.ws)
-                if (state.ws.readyState === state.ws.OPEN)
-                    return this.commit('invalidateReconnect')
-
-            this.commit('setupWebSocket')
-        }, state.wsReconnectInterval)
-    },
-
-    invalidateReconnect(state) {
-        if (!state.wsReconnect) return
-
-        clearInterval(state.wsReconnect)
-        state.wsReconnect = null
     },
 
     logout(_state) {
-        if (_state.ws)
+        if (_state.mesa)
             this.commit('disconnectWebSocket')
 
         const state = initialState(), SAFE_KEYS = []

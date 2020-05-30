@@ -3,6 +3,8 @@ import brand from './brand/config'
 
 const borealis = process.env.BOREALIS_REPOSITORY ? process.env.BOREALIS_REPOSITORY : '@cryb/borealis'
 
+export const strict = false
+
 const script = []
 if (brand.ga_tracking_id)
     script.push({
