@@ -83,7 +83,6 @@ export default {
             ...script
         ]
     },
-    loadingIndicator: '~/components/Loading/index.html',
     robots: {
         // by default, this only allows the root to be indexed, not the rest, which is enough.
         UserAgent: '*',
