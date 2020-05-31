@@ -1,5 +1,5 @@
 <template>
-    <div class="player" ref="viewport" :class="{ 'capture-events': hasControl }">
+    <div class="player" ref="viewport" :class="{ 'has-control capture-events': hasControl }">
         <p v-if=showPlayerDevtools class="player-dev">
             Portal ID: {{ portal.id }}
             <br>
@@ -36,6 +36,7 @@
             @mousewheel=didMouseWheel
             @contextmenu=handleRightClick
         />
+        <ControlBar />
         <div v-if=showMutedPopup class="player-tooltips">
             <div class="player-tooltip" :class="{ visible: showMutedPopup }">
                 <div class="player-tooltip-info">
@@ -59,10 +60,12 @@
     import brand from '~/brand/config'
 
     import Button from '~/components/Button'
+    import ControlBar from '~/components/Player/ControlBar'
 
     export default {
         components: {
-            Button
+            Button,
+            ControlBar
         },
         props: {
             volume: Number,
