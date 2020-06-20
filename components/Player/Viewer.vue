@@ -81,7 +81,7 @@
             }
         },
         computed: {
-            ...mapGetters(['ws', 'userId', 'controllerId', 'portal', 'janusId', 'janusIp', 'apertureWs', 'apertureToken', 'viewerMuted', 'viewerVolume']),
+            ...mapGetters(['mesa', 'userId', 'controllerId', 'portal', 'janusId', 'janusIp', 'apertureWs', 'apertureToken', 'viewerMuted', 'viewerVolume']),
 
             hasControl() {
                 return this.controllerId === this.userId
@@ -453,11 +453,14 @@
                 this.emitEvent({ scrollUp: deltaY > 0 }, 'MOUSE_SCROLL')
             },
 
-            emitEvent(d, t) {
-                if (!this.ws || !this.hasControl || this.ws.readyState !== this.ws.OPEN)
+            emitEvent(data, type) {
+                if (!this.mesa || !this.hasControl || this.mesa.readyState !== WebSocket.OPEN)
                     return
 
-                this.ws.send(JSON.stringify({ op: 0, d, t }))
+                this.mesa.send({
+                    opcode: 0,
+                    data, type
+                })
             },
 
             calculatePos(event) {
