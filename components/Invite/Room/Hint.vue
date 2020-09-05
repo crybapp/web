@@ -41,7 +41,7 @@
                 try {
                     await this.$copyText(this.inviteLink)
 
-                    this.hint = ' - copied!'
+                    this.hint = '- copied!'
                     this.hintTimeout = setTimeout(() => this.hint = '', 1250)
                 } catch(error) {
                     alert(error)

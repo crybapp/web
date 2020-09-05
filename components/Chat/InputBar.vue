@@ -1,25 +1,34 @@
 <template>
     <div class="chat-bar-wrapper">
-        <input ref="input" v-model=content type="text" class="chat-bar" :class="{ 'disabled': sending }" placeholder="Say something cool..." @keyup=didPressKey @keyup.enter=sendMessage() />
-        <div class="send-button" :class="{ 'is-loading': sending, disabled: sending || !canSendMessage }" title="Send Message" @click=sendMessage()>
-            <img src="/icons/airplane.svg" class="send-button-icon">
+        <input ref="input" v-model="content" type="text" class="chat-bar" placeholder="Say something cool..." @keyup="didPressKey" @keyup.enter="sendMessage()" />
+        <div class="send-button" :class="{ 'is-loading': pendingMessages, disabled: !canSendMessage || notFunnyContent }" title="Send Message" @click="sendMessage()">
+            <img src="~/assets/icons/airplane.svg" class="send-button-icon">
         </div>
     </div>
 </template>
 <script>
-    import sanitizeHtml from 'sanitize-html'
+    import { mapGetters } from 'vuex'
+
+    import emoji from 'node-emoji'
+    import stripHtml from 'string-strip-html'
 
     export default {
         data() {
             return {
                 content: '',
-                sending: false,
                 typingTimer: null
             }
         },
         computed: {
+            ...mapGetters(['sendingMessages']),
             canSendMessage() {
-                return this.content.length > 0
+                return this.content.trim().length > 0
+            },
+            pendingMessages() {
+                return this.sendingMessages.length > 0
+            },
+            notFunnyContent() {
+                return this.content.trim() === 'You are not very funny. At all.'
             }
         },
         mounted() {
@@ -27,25 +36,29 @@
         },
         methods: {
             async sendMessage() {
-                if (this.sending) return
-                if (this.content.length === 0) return
-                if (this.content.length > 255) return alert('This message is longer than 255 characters, please shorten it before trying again.')
+                if (this.sendingMessages.length > 5)
+                    return alert('You already are sending too much messages!')
 
-                const content = sanitizeHtml(this.content, { allowedTags: [], allowedAttributes: {} })
+                const content = stripHtml(this.content.trim(), { dumpLinkHrefsNearby: { enabled: true } })
 
-                if (content.length === 0) return
+                if (content.length === 0 || this.notFunnyContent)
+                    return
+                if (content.length > 255)
+                    return alert('This message is longer than 255 characters, please shorten it before trying again.')
 
                 this.content = ''
                 this.didEndTyping()
                 this.$refs.input.focus()
 
-                this.$store.commit('pushSendingMessage', { content })
+                if (content.toLowerCase() === 'something cool')
+                    this.content = 'You are not very funny. At all.'
 
-                if (content.trim().toLowerCase() === 'something cool')
-                    alert('You are not very funny. At all.')
+                const parsedContent = emoji.emojify(content)
+
+                this.$store.commit('pushSendingMessage', { content: parsedContent })
 
                 try {
-                    const message = await this.$axios.$post('room/message', { content })
+                    const message = await this.$axios.$post('room/message', { content: parsedContent })
 
                     this.$store.commit('pushMessage', message)
                 } catch(error) {
@@ -53,8 +66,8 @@
                 }
             },
             didPressKey(e) {
-                if (e.keyCode === 8) return
-                if (this.content.length === 0) return
+                if (e.keyCode === 8 || this.content.length === 0)
+                    return
 
                 if (this.typingTimer)
                     clearInterval(this.typingTimer)

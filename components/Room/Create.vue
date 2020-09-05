@@ -1,14 +1,10 @@
 <template>
-    <div class="room-create" :class="{ 'has-icon': modal && !loading }">
-        <nuxt-link v-if=modal to="" @click.native=$parent.$parent.hideModals()>
-            <img src="/icons/circle-close.svg" class="close-button">
-            <img src="/icons/circle-close-filled.svg" class="close-button-hover">
-        </nuxt-link>
+    <div class="room-create">
         <h1 class="title">
             Create a Room
         </h1>
         <p class="subtitle">
-            When you create a room, you'll be able to add your friends and browse the internet
+            When you create a room, you'll be able to add your friends and browse the internet!
         </p>
         <Form>
             <Input v-model=roomName placeholder="Room Name" :disabled=loading @keydown.enter=createRoom() />
@@ -34,9 +30,6 @@
             Input,
             Button
         },
-        props: [
-            'modal'
-        ],
         data() {
             return {
                 error: null,
@@ -54,8 +47,8 @@
         },
         methods: {
             async createRoom() {
-                if (this.loading) return
-                if (!this.isRoomNameValid) return
+                if (this.loading || !this.isRoomNameValid)
+                    return
 
                 this.error = null
                 this.loading = true
@@ -63,7 +56,7 @@
                 try {
                     await this.$axios.$post('room', { name: this.roomName })
 
-                    this.$router.push(`/room`)
+                    this.$router.push('/room')
                 } catch(error) {
                     this.error = error.response.data ? error.response.data.error.description : error
 

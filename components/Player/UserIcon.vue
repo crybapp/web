@@ -1,14 +1,14 @@
 <template>
-    <div v-if=member class="user-icon" :class="{ 'passable': canPassControl, 'offline': !isUserOnline, 'has-control': hasControl }" @click=didClickUserIcon() @mouseover="hover = true" @mouseleave="hover = false">
-        <img v-if=userIcon :src=userIcon class="user-icon-avatar" :title=userHoverTitle />
+    <div v-if=member class="user-icon" :class="{ 'passable': canPassControl, 'offline': !isUserOnline, 'has-control': hasControl, 'owner': isOwnerOfRoom }" @click=didClickUserIcon() @mouseover="hover = true" @mouseleave="hover = false">
+        <img v-if=userIcon :src=userIcon class="user-icon-avatar" :title="userHoverTitle" />
         <div class="user-name-wrapper">
             <p class="user-name">
                 {{ member.name }}
             </p>
         </div>
         <div class="user-control-indicator" :class="{ 'visible': hasControl, 'is-interactable': interactable }" :title=indicatorHoverTitle @click=didClickControlIcon()>
-            <img class="user-control-icon has-control" src="/icons/cursor-a.svg" />
-            <img v-if=interactable class="user-control-icon remove-control" src="/icons/multiply.svg" />
+            <img class="user-control-icon has-control" src="~/assets/icons/cursor-a.svg" />
+            <img v-if="interactable" class="user-control-icon remove-control" src="~/assets/icons/multiply.svg" />
         </div>
     </div>
 </template>
@@ -21,7 +21,7 @@
         ],
         data() {
             return {
-                hover: false,
+                hover: false
             }
         },
         computed: {
@@ -55,42 +55,50 @@
             },
 
             canPassControl() {
-                if (!this.isUserOnline) return false
+                if (!this.isUserOnline)
+                    return false
 
-                return ((this.isSelfOwnerOfRoom || this.isSelfControllerOfRoom) && !this.hasControl) || (this.controllerId === null && this.isUserSelf)
+                return ((this.isSelfOwnerOfRoom || this.isSelfControllerOfRoom) && !this.hasControl) || (!this.controllerId && this.isUserSelf)
             },
 
             hasControl() {
-                if (!this.controllerId) return false
+                if (!this.controllerId)
+                    return false
 
                 return this.member.id === this.controllerId
             },
 
             isUserSelf() {
-                if (!this.userId) return false
-                if (!this.member) return false
+                if (!this.userId || !this.member)
+                    return false
 
                 return this.userId === this.member.id
             },
             isUserOnline() {
                 return this.onlineUserIds.indexOf(this.member.id) > -1 || this.isUserSelf
             },
+            isOwnerOfRoom() {
+                if (!this.room || !this.member)
+                    return false
+
+                return this.member.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id)
+            },
             isSelfOwnerOfRoom() {
-                if (!this.room) return false
-                if (!this.userId) return false
+                if (!this.room || !this.userId)
+                    return false
 
                 return this.userId === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id)
             },
             isSelfControllerOfRoom() {
-                if (!this.userId) return false
-                if (!this.controllerId) return false
+                if (!this.userId || !this.controllerId)
+                    return false
 
                 return this.userId === this.controllerId
             }
         },
         methods: {
             didClickUserIcon() {
-                if (this.controllerId === null && this.isUserSelf)
+                if (!this.controllerId && this.isUserSelf)
                     this.$store.dispatch('takeControl')
                 else if (this.canPassControl)
                     this.$store.dispatch('giveControl', this.member.id)

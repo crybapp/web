@@ -39,7 +39,7 @@ export const getters = {
     messages: ({ room }) => room ? (room.messages || []) : [],
     controllerId: ({ controllerId }) => controllerId,
 
-    queueStatus: ({ queueStatus }) => queueStatus, 
+    queueStatus: ({ queueStatus }) => queueStatus,
 
     apertureWs: ({ apertureWs }) => apertureWs,
     apertureToken: ({ apertureToken }) => apertureToken,
@@ -48,9 +48,12 @@ export const getters = {
     janusIp: ({ janusIp }) => janusIp,
 
     viewerMuted: ({ viewerMuted }) => viewerMuted,
-    viewerVolume: ({ viewerVolume }) => (viewerVolume/100),
+    viewerVolume: ({ viewerVolume }) => (viewerVolume / 100),
+    fullscreen: ({ fullscreen }) => fullscreen,
+    pip: ({ pip }) => pip,
 
-    ws: ({ ws }) => ws
+    ws: ({ ws }) => ws,
+    wsHeartbeat: ({ wsHeartbeat }) => wsHeartbeat
 }
 
 const initialState = () => ({
@@ -69,7 +72,7 @@ const initialState = () => ({
     typingUsers: [],
     sendingMessages: [],
 
-    queueStatus: null, 
+    queueStatus: null,
 
     apertureWs: null,
     apertureToken: null,
@@ -78,6 +81,8 @@ const initialState = () => ({
 
     viewerMuted: false,
     viewerVolume: 30,
+    fullscreen: false,
+    pip: false,
 
     ws: null,
     wsHeartbeat: null,
@@ -107,13 +112,13 @@ export const mutations = {
     handleToken(state, { token, save }) {
         state.token = token
 
-        this.$axios.setHeader('authorization', `Bearer ${token}`)
+        this.$axios.setHeader('Authorization', `Bearer ${token}`)
 
         if (token && save && process.client)
             cookies.set('token', token, {
                 expires: 365,
                 domain: process.env.COOKIE_DOMAIN,
-                secure: isProduction()
+                secure: isProduction() || window.isSecureContext
             })
         else if (save && process.client)
             cookies.erase('token', {
@@ -129,6 +134,7 @@ export const mutations = {
             state.room = room
             state.user.room = room
 
+            state.typingUsers = []
             state.onlineUsers = room.online
 
             if (room.portal)
@@ -142,6 +148,8 @@ export const mutations = {
                     state.controllerId = room.controller
                 else
                     state.controllerId = room.controller.id
+            else
+                state.controllerId = null
 
             if (state.onlineUsers && state.onlineUsers.indexOf(state.userId) === -1)
                 state.onlineUsers.push(state.userId)
@@ -155,8 +163,13 @@ export const mutations = {
             state.portal = null
 
             state.typingUsers = []
-            state.onlineMembers = []
+            state.onlineUsers = []
             state.controllerId = null
+
+            state.apertureWs = null
+            state.apertureToken = null
+            state.janusId = null
+            state.janusIp = null
         }
     },
 
@@ -164,12 +177,13 @@ export const mutations = {
      * Portal
      */
     updatePortal(state, allocation) {
-        if (!state.room) return
+        if (!state.room)
+            return
 
         state.portal = allocation
         state.room.portal = allocation
 
-        if(allocation.status === 'creating' || allocation.status === 'starting' || allocation.status === 'open')
+        if (allocation.status === 'creating' || allocation.status === 'starting' || allocation.status === 'open')
             this.commit('updateQueueStatus', null)
     },
 
@@ -177,8 +191,14 @@ export const mutations = {
      * QueueStatus
      */
     updateQueueStatus(state, status) {
-        if(!state.room) return
+        if (!state.room)
+            return
 
+        // ToDo: NUKE THIS ASAP
+        if (state.portal.status === 'waiting' && status !== null) {
+            this.portal.status = 'in-queue'
+            this.state.portal.status = 'in-queue'
+        }
         state.queueStatus = status
     },
 
@@ -186,7 +206,8 @@ export const mutations = {
      * Aperture
      */
     updateAperture(state, config) {
-        if (!state.room) return
+        if (!state.room)
+            return
 
         state.apertureWs = config.ws
         state.apertureToken = config.t
@@ -196,7 +217,8 @@ export const mutations = {
      * Janus
      */
     updateJanus(state, config) {
-        if(!state.room) return
+        if (!state.room)
+            return
 
         state.janusId = config.id
         state.janusIp = config.ip
@@ -211,12 +233,19 @@ export const mutations = {
     setViewerVolume(state, newVolume) {
         state.viewerVolume = newVolume
     },
+    setFullscreenStatus(state, status) {
+        state.fullscreen = status
+    },
+    setPiPStatus(state, status) {
+        state.pip = status
+    },
 
     /**
      * Invite
      */
     handleInvite(state, invite) {
-        if (!state.room) return
+        if (!state.room)
+            return
 
         state.room.invites = [ invite ]
     },
@@ -225,7 +254,8 @@ export const mutations = {
      * Messages
      */
     pushMessage(state, message) {
-        if (!state.room) return
+        if (!state.room)
+            return
 
         if (!state.room.messages)
             state.room.messages = []
@@ -253,15 +283,16 @@ export const mutations = {
     },
 
     pullMessage(state, messageId) {
-        if (!state.room) return
-        if (state.room.messages.length === 0) return
+        if (!state.room || state.room.messages.length === 0)
+            return
 
         const messageIds = state.room.messages.map(({ messageIds }) => messageIds)
 
         let groupMessageIndex = -1, groupIndex = -1
 
         messageIds.forEach((ids, i) => {
-            if (groupIndex > -1 && groupMessageIndex > -1) return
+            if (groupIndex > -1 && groupMessageIndex > -1)
+                return
 
             groupIndex = i
             groupMessageIndex = ids.indexOf(messageId)
@@ -280,13 +311,13 @@ export const mutations = {
     handleUserJoin(state, user) {
         state.users[user.id] = user
 
-        if (state.room)
-            if (state.room.members.indexOf(user.id) === -1)
-                state.room.members.push(user)
+        if (state.room && state.room.members.indexOf(user.id) === -1)
+            state.room.members.push(user)
     },
 
     handleUserLeave(state, { u: userId }) {
-        if (state.userId === userId) return
+        if (state.userId === userId)
+            return
 
         if (state.room) {
             const memberIndex = state.room.members.map(({ id }) => id).indexOf(userId)
@@ -298,10 +329,12 @@ export const mutations = {
     },
 
     handleOwnerUpdate(state, { u: userId }) {
-        if (!state.room) return
+        if (!state.room)
+            return
 
         const user = state.users[userId]
-        if (!user) return state.room.owner = userId
+        if (!user)
+            return state.room.owner = userId
 
         state.room.owner = user
     },
@@ -310,14 +343,15 @@ export const mutations = {
      * Typing
      */
     setTypingStatus(state, typing) {
-        if (!state.ws) return
-        if (state.ws.readyState !== state.ws.OPEN) return
+        if (!state.ws || state.ws.readyState !== state.ws.OPEN)
+            return
 
         state.ws.send(JSON.stringify({ op: 0, d: { typing }, t: 'TYPING_UPDATE' }))
     },
 
     updateTypingStatus(state, { typing, u: userId }) {
-        if (userId === state.userId) return
+        if (userId === state.userId)
+            return
 
         if (typing)
             state.typingUsers.push(userId)
@@ -329,12 +363,13 @@ export const mutations = {
      * Presence
      */
     updatePresence(state, { u: userId, presence }) {
-		if (userId === state.userId) return
+        if (userId === state.userId)
+            return
 
-		if(presence === 'online' && state.onlineUsers.indexOf(userId) === -1)
-			state.onlineUsers.push(userId)
-		else
-			state.onlineUsers.splice(state.onlineUsers.indexOf(userId), 1)
+        if (presence === 'online' && state.onlineUsers.indexOf(userId) === -1)
+            state.onlineUsers.push(userId)
+        else
+            state.onlineUsers.splice(state.onlineUsers.indexOf(userId), 1)
     },
 
     /**
@@ -352,7 +387,7 @@ export const mutations = {
             cookies.set('cookies', '1', {
                 expires: 365 * 10, // 10 years
                 domain: process.env.COOKIE_DOMAIN,
-                secure: isProduction()
+                secure: isProduction() || window.isSecureContext
             })
     },
 
@@ -360,11 +395,15 @@ export const mutations = {
      * WebSocket
      */
     setupWebSocket(state) {
-        if (!state.token) return
+        if (!state.token)
+            return
 
         const { token } = state, ws = new WebSocket(process.env.WS_URL)
 
-        ws.onerror = () => this.commit('setupReconnect')
+        if (state.wsReconnect)
+            this.commit('invalidateReconnect')
+
+        ws.onclose = ws.onerror = () => setTimeout(() => this.commit('setupReconnect'), 50)
 
         ws.onmessage = ({ data }) => {
             let json
@@ -372,8 +411,6 @@ export const mutations = {
             try {
                 json = JSON.parse(data)
             } catch(error) {
-                console.error(error)
-
                 return console.error(error)
             }
 
@@ -385,7 +422,7 @@ export const mutations = {
             if (op === 0) {
                 if (t.split('_')[0] === 'PORTAL')
                     return this.commit('updatePortal', d)
-                switch(t) {
+                switch (t) {
                     // ROOM
                     case 'CONTROLLER_UPDATE':
                         this.commit('updateController', d)
@@ -393,16 +430,14 @@ export const mutations = {
                     case 'QUEUE_UPDATE':
                         this.commit('updateQueueStatus', d)
                         break
-                    case'JANUS_CONFIG':
+                    case 'JANUS_CONFIG':
                         this.commit('updateJanus', d)
                         break
                     case 'APERTURE_CONFIG':
                         this.commit('updateAperture', d)
-                        console.log("Aperture config received.")
                         break
                     case 'ROOM_DESTROY':
                         this.commit('handleRoom', null)
-                        this.app.router.push('/home')
                         break
                     case 'INVITE_UPDATE':
                         this.commit('handleInvite', d)
@@ -438,8 +473,6 @@ export const mutations = {
                 const { c_heartbeat_interval, c_reconnect_interval } = d
 
                 this.commit('setupHeartbeat', c_heartbeat_interval)
-
-                if (state.wsReconnect) this.commit('invalidateReconnect')
                 state.wsReconnectInterval = c_reconnect_interval
 
                 ws.send(JSON.stringify({ op: 2, d: { token } }))
@@ -455,11 +488,13 @@ export const mutations = {
             state.ws = null
         }
 
-        if (state.portal)
-            state.portal = null
-
-        if (state.controllerId)
-            state.controllerId = null
+        state.controllerId = null
+        state.typingUsers = []
+        state.onlineMembers = []
+        state.apertureWs = null
+        state.apertureToken = null
+        state.janusId = null
+        state.janusIp = null
 
         if (state.wsHeartbeat)
             this.commit('invalidateHeartbeat')
@@ -470,21 +505,27 @@ export const mutations = {
 
     setupHeartbeat(state, interval) {
         state.wsHeartbeat = setInterval(() => {
-            if (!state.ws) return this.commit('invalidateHeartbeat')
-            if (state.ws.readyState !== state.ws.OPEN) return this.commit('invalidateHeartbeat')
+            if (!state.ws || state.ws.readyState !== state.ws.OPEN)
+                return this.commit('invalidateHeartbeat')
 
             state.ws.send(JSON.stringify({ op: 1, d: {} }))
         }, interval)
     },
 
     invalidateHeartbeat(state) {
-        if (!state.wsHeartbeat) return
+        if (!state.wsHeartbeat)
+            return
 
         clearInterval(state.wsHeartbeat)
         state.wsHeartbeat = null
     },
 
     setupReconnect(state) {
+        if (!state.ws || state.wsReconnect)
+            return
+
+        this.commit('disconnectWebSocket')
+
         state.wsReconnect = setInterval(() => {
             if (state.ws)
                 if (state.ws.readyState === state.ws.OPEN)
@@ -495,7 +536,8 @@ export const mutations = {
     },
 
     invalidateReconnect(state) {
-        if (!state.wsReconnect) return
+        if (!state.wsReconnect)
+            return
 
         clearInterval(state.wsReconnect)
         state.wsReconnect = null
@@ -505,12 +547,7 @@ export const mutations = {
         if (_state.ws)
             this.commit('disconnectWebSocket')
 
-        const state = initialState(), SAFE_KEYS = []
-        Object.keys(state).forEach(key =>
-            SAFE_KEYS.indexOf(key) === -1 ?
-            _state[key] = state[key] :
-            0
-        )
+        const state = initialState()
 
         if (process.client)
             cookies.erase('token', {
@@ -528,7 +565,7 @@ export const actions = {
             commit('handleUserId', user.id)
             commit('handleRoom', user.room)
         } catch(error) {
-            if (error.response && error.response.data.response === 'USER_NO_AUTH')
+            if (error.response && error.response.data && error.response.data.response === 'USER_NO_AUTH')
                 commit('logout')
             else
                 console.error(error)
@@ -537,7 +574,7 @@ export const actions = {
 
     async fetchRoom({ commit }) {
         try {
-            const room = await this.$axios.$get(`room`)
+            const room = await this.$axios.$get('room')
 
             commit('handleRoom', room)
         } catch(error) {
@@ -599,7 +636,8 @@ export const actions = {
     },
 
     async nuxtServerInit({ commit }, { req }) {
-        if (!req || typeof req.headers.cookie !== 'string') return
+        if (!req || typeof req.headers.cookie !== 'string')
+            return
 
         const { token } = parse(req.headers.cookie)
 

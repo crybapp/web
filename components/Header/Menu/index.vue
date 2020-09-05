@@ -7,26 +7,23 @@
     </div>
 </template>
 <script>
-	export default {
-		props: [
-			'type',
+    export default {
+        props: [
+            'type',
 
-			'header',
-			'left',
-			'right'
-		],
-		data() {
-			return {
-				visible: false
-			}
-		},
-		methods: {
-			toggleMenu() {
-				this.visible = !this.visible
-
-				if (this.type)
-					this.$router.push(this.visible ? `#${this.type}-menu` : '')
-			}
-		}
-	}
+            'header',
+            'left',
+            'right'
+        ],
+        data() {
+            return {
+                visible: false
+            }
+        },
+        methods: {
+            toggleMenu() {
+                this.visible = !this.visible
+            }
+        }
+    }
 </script>

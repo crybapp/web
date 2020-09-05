@@ -1,11 +1,11 @@
 <template>
     <div class="root">
         <Header />
-        <div class="content" :class="{ 'is-center': !isRoomPage }">
+        <div class="content is-center">
             <nuxt />
             <GoogleAnalytics v-if=brand.ga_tracking_id />
         </div>
-        <Footer v-if=!isRoomPage />
+        <Footer v-if="!isRoomPage && showFooter" />
     </div>
 </template>
 <script>
@@ -27,14 +27,17 @@
                 brand
             }
         },
-        head() {
-            return {
-                titleTemplate: chunk => (chunk ? `${chunk} - ${this.brand.name}` : this.brand.name)
-            }
-        },
         computed: {
             isRoomPage() {
                 return this.$route.name === 'room'
+            },
+            showFooter() {
+                return process.env.SHOW_FOOTER
+            }
+        },
+        head() {
+            return {
+                titleTemplate: chunk => (chunk ? `${chunk} - ${this.brand.name}` : this.brand.name)
             }
         }
     }

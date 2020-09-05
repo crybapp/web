@@ -15,11 +15,11 @@
                     {{ hint }}
                 </p>
             </MenuOption>
-            <MenuOption v-if=room.invites name="refreshInvite" icon="die-3" :loading=refreshingInvite :disabled="refreshingInvite || destroyingRoom">
-                {{ refreshingInvite ? 'Refreshing...' : refreshInviteTooltip }}
+            <MenuOption name="refreshInvite" icon="die-3" :loading=refreshingInvite :disabled="refreshingInvite || destroyingRoom">
+                {{ refreshingInvite ? 'Refreshing...' : (room.invites ? 'Refresh Invite' : 'Create Invite') }}
             </MenuOption>
         </MenuSection>
-        <MenuOption v-if="room.portal.status === 'open' && isRoomOwner" name="restartPortal" icon="cube" :loading=restartingPortal :disabled=restartingPortal>
+        <MenuOption v-if="room.portal.id && isRoomOwner" name="restartPortal" icon="cube" :loading=restartingPortal :disabled=restartingPortal>
             {{ restartingPortal ? 'Restarting...' : 'Restart Browser' }}
         </MenuOption>
         <MenuOption v-if=isRoomOwner name="destroyRoom" icon="circle-close" :loading=destroyingRoom :disabled="refreshingInvite || destroyingRoom">
@@ -35,14 +35,6 @@
     import MenuSection from '~/components/Header/Menu/Section'
 
     export default {
-        computed: {
-            ...mapGetters(['room', 'user']),
-            isRoomOwner() {
-                if (!this.user || !this.room) return false
-
-                return (this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id))
-            }
-        },
         components: {
             Menu,
             MenuOption,
@@ -53,7 +45,6 @@
                 hint: 'Click to copy link',
 
                 refreshingInvite: false,
-                refreshInviteTooltip: 'Refresh Invite',
                 refreshInviteTimeout: null,
 
                 restartingPortal: false,
@@ -61,12 +52,21 @@
                 destroyingRoom: false
             }
         },
+        computed: {
+            ...mapGetters(['room', 'user']),
+            isRoomOwner() {
+                if (!this.user || !this.room)
+                    return false
+
+                return (this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id))
+            }
+        },
         methods: {
             async restartPortal() {
                 this.restartingPortal = true
 
                 try {
-                    await this.$axios.$post(`room/portal/restart`)
+                    await this.$axios.$post('room/portal/restart')
 
                     this.$refs.menu.toggleMenu()
                 } catch(error) {
@@ -87,7 +87,8 @@
             },
             async refreshInvite() {
                 this.refreshingInvite = true
-                if (this.refreshInviteTimeout) clearTimeout(this.refreshInviteTimeout)
+                if (this.refreshInviteTimeout)
+                    clearTimeout(this.refreshInviteTimeout)
 
                 try {
                     const invite = await this.$axios.$post('room/invite/refresh')
@@ -103,7 +104,8 @@
                 this.refreshingInvite = false
             },
             async destroyRoom() {
-                if (!confirm('Are you sure you want to delete this room? This action is irreversible.')) return
+                if (!confirm('Are you sure you want to delete this room? This action is irreversible.'))
+                    return
 
                 this.destroyingRoom = true
                 this.refreshingInvite = false
@@ -112,6 +114,7 @@
                     await this.$axios.$delete('room')
 
                     this.$store.commit('handleRoom', null)
+                    this.$router.push('/home')
                 } catch(error) {
                     console.error(error)
                 }
@@ -120,16 +123,23 @@
             },
 
             didClickOption(name) {
-                if (!name) return this.$refs.menu.toggleMenu()
+                if (!name)
+                    return this.$refs.menu.toggleMenu()
 
-                if (name === 'copyInvite')
-                    this.copyInvite()
-                else if (name === 'refreshInvite')
-                    this.refreshInvite()
-                else if (name === 'restartPortal')
-                    this.restartPortal()
-                else if (name === 'destroyRoom')
-                    this.destroyRoom()
+                switch (name) {
+                    case 'copyInvite':
+                        this.copyInvite()
+                        break
+                    case 'refreshInvite':
+                        this.refreshInvite()
+                        break
+                    case 'restartPortal':
+                        this.restartPortal()
+                        break
+                    case 'destroyRoom':
+                        this.destroyRoom()
+                        break
+                }
             }
         }
     }

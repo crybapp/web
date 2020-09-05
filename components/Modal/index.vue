@@ -1,25 +1,31 @@
 <template>
-    <div class="modal-wrapper" :class="{ visible, cover }">
+    <div class="modal-wrapper" :class="{ visible, cover, canHide }">
         <div class="modal-cover" @click=hideModal() />
-        <div class="modal">
+        <div v-if="visible" class="modal">
             <slot />
         </div>
     </div>
 </template>
 <script>
     export default {
-        props: [
-            'cover'
-        ],
-        data() {
-            return {
-                visible: false
+        props: {
+            'cover': {
+                type: Boolean,
+                default: true
+            },
+            'visible': {
+                type: Boolean,
+                default: false
+            },
+            'canHide': {
+                type: Boolean,
+                default: true
             }
         },
         methods: {
             hideModal() {
-                this.visible = false
-                this.$router.push('')
+                if (this.canHide)
+                    this.visible = false
             }
         }
     }

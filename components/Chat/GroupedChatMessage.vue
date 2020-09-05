@@ -1,6 +1,6 @@
 <template>
     <div v-if=author class="grouped-chat-messages" @mouseover="hover = true" @mouseleave="hover = false">
-        <img v-if=userIcon :src=userIcon class="chat-messages-author-avatar" :class="{ 'has-controller': hasController }">
+        <img v-if=userIcon :src=userIcon class="chat-messages-author-avatar" :class="{ 'has-control': hasControl, 'owner': isOwnerOfRoom }">
         <div class="chat-messages">
             <div class="grouped-chat-messages-meta">
                 <p class="chat-messages-author-name">
@@ -30,7 +30,7 @@
             }
         },
         computed: {
-            ...mapGetters(['users', 'timestamps', 'userId', 'controllerId', 'sendingMessages']),
+            ...mapGetters(['room', 'users', 'timestamps', 'userId', 'controllerId', 'sendingMessages']),
 
             author() {
                 return this.users[this.group.author]
@@ -42,9 +42,11 @@
             },
 
             userIcon() {
-                if (!this.author) return null
+                if (!this.author)
+                    return null
 
-                if (this.hover) return this.author.icon
+                if (this.hover)
+                    return this.author.icon
 
                 return this.author.icon.replace('.gif', '.png')
             },
@@ -54,11 +56,18 @@
 
                 return this.group.author === this.userId
             },
-            hasController() {
+            hasControl() {
                 if (!this.author) return false
 
                 return this.author.id === this.controllerId
-            }
+            },
+            isOwnerOfRoom() {
+                if (!this.room || !this.author)
+                    return false
+
+                return (this.author.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id)
+                        && this.author.id !== this.controllerId)
+            },
         }
     }
 </script>

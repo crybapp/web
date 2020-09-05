@@ -1,12 +1,8 @@
 <template>
     <div class="header">
         <div class="left">
-            <nuxt-link class="is-wrapper" :to="shouldShowRoomMenu ? '#room-menu' : (token ? '/home' : '/')" @click.native=toggleRoomMenu()>
-                <div class="gradient loading" />
-                <picture class="logo">
-                    <source srcset="/img/logo.svg" media="(prefers-color-scheme: light)">
-                    <img src="/img/logo-light.svg" class="logo">
-                </picture>
+            <nuxt-link class="is-wrapper" :to="shouldShowRoomMenu ? '' : (token ? '/home' : '/')" @click.native=toggleRoomMenu()>
+                <div class="logo-small logo-mask" />
             </nuxt-link>
 
             <h1 v-if=title class="header-title">
@@ -39,9 +35,6 @@
             UserMenu,
             RoomMenu
         },
-        props: [
-            'loading'
-        ],
         computed: {
             ...mapGetters(['user', 'token', 'room']),
             title() {
@@ -51,26 +44,30 @@
                 return null
             },
             userIcon() {
-                if (!this.user) return null
+                if (!this.user)
+                    return null
 
                 // ToDo: Re-work how animated avatars work.
                 return this.user.icon.replace('.gif', '.png')
             },
 
             isUserMenuVisible() {
-                if (!this.$refs.userMenu || !this.$refs.userMenu.$children[0]) return false
+                if (!this.$refs.userMenu || !this.$refs.userMenu.$children[0])
+                    return false
 
                 return this.$refs.userMenu.$children[0].visible
             },
             isRoomMenuVisible() {
-                if (!this.$refs.userMenu || !this.$refs.roomMenu.$children[0]) return false
+                if (!this.$refs.userMenu || !this.$refs.roomMenu.$children[0])
+                    return false
 
                 return this.$refs.roomMenu.$children[0].visible
             },
             shouldShowRoomMenu() {
-                if (!this.user || !this.room) return false
+                if (!this.user || !this.room)
+                    return false
 
-                return (this.$route.name === 'room' && this.user.id === (typeof this.room.owner === 'string' ? this.room.owner : this.room.owner.id))
+                return this.$route.name === 'room' && this.room.owner.id === this.user.id
             }
         },
         mounted() {
@@ -95,7 +92,8 @@
                 if (!this.isRoomMenuVisible && this.isUserMenuVisible && userAction)
                     this.toggleUserMenu(false)
 
-                if (!this.shouldShowRoomMenu) return
+                if (!this.shouldShowRoomMenu)
+                    return
 
                 this.$refs.roomMenu.$children[0].toggleMenu()
             }

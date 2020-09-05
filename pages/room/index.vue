@@ -1,61 +1,68 @@
 <template>
-    <div class="room-wrapper">
-        <div v-if=error class="center error">
-            <h1 class="title">
-                Room Not Found
-            </h1>
-            <p class="subtitle" style="margin-bottom: 0">
-                We couldn't find this room. Check the invite again, or <nuxt-link to="/home">go home</nuxt-link>.
-            </p>
-        </div>
-        <div v-else-if=room class="room">
-            <Player :loaded-scripts="this.loadedScripts"/>
+    <div v-if="room" class="room-wrapper">
+        <div class="room">
+            <Player :loaded-scripts="loadedScripts" />
             <PlayerFooter />
             <Chat />
         </div>
+        <Loading v-if="!wsHeartbeat" />
     </div>
 </template>
 <script>
+    import { mapGetters } from 'vuex'
+
     import Chat from '~/components/Chat'
     import Player from '~/components/Player'
     import PlayerFooter from '~/components/Player/Footer'
+    import Loading from '~/components/Loading'
 
     export default {
         middleware: 'authenticated',
         components: {
             Chat,
             Player,
-            PlayerFooter
+            PlayerFooter,
+            Loading
         },
         async asyncData(context) {
-            try {
-                const room = await context.$axios.$get('room')
-                context.store.commit('handleRoom', room)
-
-                return { room, error: null }
-            } catch(error) {
-                return { room: null, error: true }
-            }
-        },
-        mounted() {
-            this.$store.commit('setupWebSocket')
-        },
-        beforeDestroy() {
-            this.$store.commit('disconnectWebSocket')
+            await context.store.dispatch('fetchRoom')
         },
         data() {
             return {
                 loadedScripts: []
             }
-        }, 
+        },
+        computed: {
+            ...mapGetters(['room', 'wsHeartbeat'])
+        },
+        mounted() {
+            this.$store.commit('setupWebSocket')
+
+            this.unsubscribe = this.$store.subscribe(({ type }, { stream }) => {
+                if (type === 'setupWebSocket')
+                    this.$store.dispatch('fetchRoom')
+                else if (type === 'handleRoom')
+                    if (!this.room)
+                        this.$router.push('/home')
+            })
+        },
+        beforeDestroy() {
+            this.unsubscribe()
+            this.$store.commit('disconnectWebSocket')
+        },
         head() {
+            // ToDo: rework JSMpeg/Janus imports
             return {
-                title: this.error ? 'Room Not Found' : (this.room ? this.room.name : ''),
-                script: process.env.ENABLE_JANUS ? [
-                    { src: '/js/adapter.js', defer: true, callback: () => this.loadedScripts.push('adapter')},
-                    { src: '/js/janus.js', defer: true, callback: () => this.loadedScripts.push('janus')}
+                title: this.room ? this.room.name : 'Room Not Found',
+                link: process.env.ENABLE_JANUS ? [
+                    { rel: 'preload', href: '/assets/js/janus.min.js?v=1', as: 'script'}
                 ] : [
-                    { src: '/js/jsmpeg.min.js', defer: true, callback: () => this.loadedScripts.push('jsmpeg')}
+                    { rel: 'preload', href: '/assets/js/jsmpeg.min.js?v=1', as: 'script'}
+                ],
+                script: process.env.ENABLE_JANUS ? [
+                    { charset: 'utf-8', src: '/assets/js/janus.min.js?v=1', callback: () => this.loadedScripts.push('janus')}
+                ] : [
+                    { charset: 'utf-8', src: '/assets/js/jsmpeg.min.js?v=1', callback: () => this.loadedScripts.push('jsmpeg')}
                 ]
             }
         }
