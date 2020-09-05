@@ -861,10 +861,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@cryb/borealis@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@cryb/borealis/-/borealis-1.0.6.tgz#f02b03424cdb79660f5090434d75c8564e77805e"
-  integrity sha512-fM+pI3D0EVHIZZqb1jQ1ICtTN/8fNKtjfMwzU8VJXapOYVLWxXl5Nkio3aCNg/sYQBmtmn32klMP4Pe0fK6ENQ==
+"@cryb/borealis@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@cryb/borealis/-/borealis-1.0.7.tgz#07e49f5e313a5b675deca99947c64bed2f117de2"
+  integrity sha512-CxxWstKfP2jFMKeH22329e7OuhEQ/BwgP9msQCVCGn4naQNvWVKAkmt3yFN5g/Du8t+caUXktfxeLIuxuxXNUw==
 
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"

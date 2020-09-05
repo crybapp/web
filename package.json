@@ -14,7 +14,7 @@
     "lint": "eslint --ext .html,.js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
-    "@cryb/borealis": "^1.0.6",
+    "@cryb/borealis": "^1.0.7",
     "@nuxtjs/axios": "^5.10.3",
     "@nuxtjs/pwa": "^3.0.0-beta.20",
     "@nuxtjs/robots": "^2.4.2",
