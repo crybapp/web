@@ -17,7 +17,7 @@
             </div>
             <div class="toggles">
                 <!--<img src="~/assets/icons/keyboard.svg" alt="" title="Show keyboard" class="icon keyboard" @click="showKeyboard" />-->
-                <img v-if="canPiP" src="~/assets/icons/pip.svg" alt="" title="Picture-in-Picture" class="icon" @click="togglePiP" />
+                <img v-if="canPiP" v-show="hasVM" src="~/assets/icons/pip.svg" alt="" title="Picture-in-Picture" class="icon" @click="togglePiP" />
                 <img src="~/assets/icons/full-screen.svg" alt="" title="Fullscreen" class="icon" @click="toggleFullscreen" />
             </div>
         </div>
@@ -49,7 +49,7 @@
             }
         },
         computed: {
-            ...mapGetters(['fullscreen', 'pip', 'room', 'users', 'userId', 'onlineUsers', 'viewerMuted']),
+            ...mapGetters(['apertureWs', 'apertureToken', 'fullscreen', 'janusId', 'pip', 'portalStatus', 'room', 'users', 'userId', 'onlineUsers', 'viewerMuted']),
 
             isJanusEnabled() {
                 return process.env.ENABLE_JANUS
@@ -59,6 +59,12 @@
                     return false
 
                 return ('pictureInPictureEnabled' in document && document.pictureInPictureEnabled)
+            },
+            hasVM() {
+                if (process.env.ENABLE_JANUS)
+                    return this.portalStatus === 'open' && this.janusId
+                else
+                    return this.portalStatus === 'open' && this.apertureWs && this.apertureToken
             },
             members() {
                 const users = this.memberIds.map(id => this.users[id]).filter(user => user !== null),

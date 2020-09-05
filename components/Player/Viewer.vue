@@ -43,17 +43,14 @@
         <div v-if="showPopup" class="player-message-cover">
             <div v-if="loading" class="logo-big logo-mask is-loading" />
             <div v-else class="player-message">
-                <h1 class="title">
+                <h1 v-if="!showMutedPopup" class="title">
                     {{ brand.name }} has a little issue...
                 </h1>
 
-                <p v-if="showMutedPopup" class="body">
-                    Your browser requires user interaction in order to let us play your stream.
-                </p>
-                <p v-else-if="showUnsupportedPopup" class="body">
+                <p v-if="showUnsupportedPopup" class="body">
                     Your browser seems to be running into trouble trying to play your stream.
                 </p>
-                <p v-else class="body">
+                <p v-else-if="!showMutedPopup" class="body">
                     An error has occurred, and it's not letting us play your stream.
                 </p>
                 <p v-if="playError" class="error">
@@ -261,7 +258,7 @@
 
 
             togglePiP() {
-                if (!this.canPiP || !this.$refs.stream || !this.$refs.canvasStream)
+                if (!this.canPiP || !this.canControlPlayer || !this.$refs.stream || !this.$refs.canvasStream)
                     return
 
                 if (this.pip)
