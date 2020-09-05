@@ -56,6 +56,9 @@
             <br>
             functionability to be disabled by your browser due to security concerns.
         </p>
+        <p v-if="!tokenStored">
+            This session will only last until you leave the page.
+        </p>
         <Modal ref="createRoomModal" :cover="true">
             <CreateRoom />
         </Modal>
@@ -65,6 +68,7 @@
     </div>
 </template>
 <script>
+    import cookies from 'browser-cookies'
     import { mapGetters } from 'vuex'
 
     import ButtonBox from '~/components/Button/Box'
@@ -93,6 +97,12 @@
                     return true // it'll update itself when client is rendered anyway
 
                 return window.isSecureContext
+            },
+            tokenStored() {
+                if (process.server)
+                    return true
+
+                return cookies.get('token') !== null
             }
         },
         methods: {

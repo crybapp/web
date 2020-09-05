@@ -112,13 +112,13 @@ export const mutations = {
     handleToken(state, { token, save }) {
         state.token = token
 
-        this.$axios.setHeader('authorization', `Bearer ${token}`)
+        this.$axios.setHeader('Authorization', `Bearer ${token}`)
 
         if (token && save && process.client)
             cookies.set('token', token, {
                 expires: 365,
                 domain: process.env.COOKIE_DOMAIN,
-                secure: isProduction()
+                secure: isProduction() || window.isSecureContext
             })
         else if (save && process.client)
             cookies.erase('token', {
@@ -387,7 +387,7 @@ export const mutations = {
             cookies.set('cookies', '1', {
                 expires: 365 * 10, // 10 years
                 domain: process.env.COOKIE_DOMAIN,
-                secure: isProduction()
+                secure: isProduction() || window.isSecureContext
             })
     },
 
