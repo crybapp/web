@@ -32,11 +32,15 @@ export default {
         BASE_WEB_URL: process.env.WEB_BASE_URL,
         JANUS_PORT: process.env.JANUS_PORT,
         JANUS_URL: process.env.JANUS_URL,
+        TURN_URL: process.env.TURN_URL,
 
         /**
          * Other Config
          */
         ENABLE_JANUS: (process.env.ENABLE_JANUS === 'true'),
+        ENABLE_TURN: (process.env.ENABLE_TURN === 'true'),
+        TURN_USERNAME: process.env.TURN_USERNAME,
+        TURN_PASSWORD: process.env.TURN_PASSWORD,
         SHOW_PLAYER_DEVTOOLS: (process.env.SHOW_PLAYER_DEVTOOLS === 'true'),
         SHOW_FOOTER: (process.env.SHOW_FOOTER !== 'false'),
         AUDIO_BITRATE: process.env.AUDIO_BITRATE,

@@ -93,7 +93,8 @@
                 maxWidth: 1280,
                 maxHeight: 720,
                 loading: true,
-                updateCanvas: false
+                updateCanvas: false,
+                iceServers: []
             }
         },
         computed: {
@@ -358,6 +359,20 @@
                 if (process.env.NODE_ENV === 'development')
                     console.debug('Initalizing Janus library.')
 
+                // ToDo: refactor the entirety of this
+                if (process.env.ENABLE_TURN) {
+                    const servers = process.env.TURN_URL.toString().split(',')
+                    const users = process.env.TURN_USERNAME.toString().split(',')
+                    const passwords = process.env.TURN_PASSWORD.toString().split(',')
+
+                    // ToDo: **seriously** refactor this
+                    servers.forEach((serv, i) => this.iceServers.push({
+                        url: serv,
+                        username: users[i],
+                        credential: passwords[i]
+                    }))
+                }
+
                 Janus.init({
                     debug: (process.env.NODE_ENV === 'development'),
                     dependencies: Janus.useDefaultDependencies(),
@@ -365,18 +380,20 @@
                 })
             },
 
-            // TODO: Create iceServer configuration. Request from API?
             /*
             * We should, ideally, have the API/Portals server handle gathering TURN/STUN information and receive the values here.
             * this will allow us to enable TURN REST API in order to obtain short-lived session and keep TURN server access limited to Cryb.
             * this needs to be accompanied by the ability to request an ICE restart in order to switch the TURN sessions.
             */
+
+           // ToDo: Rewrite credential check for more complexity in checking if one more more sets are needed.
             configureJanus() {
                 if (process.env.NODE_ENV !== 'production')
                     console.debug('Configuring Janus object')
 
                 const janusConfig = {
-                    server: `${process.env.JANUS_URL}:${process.env.JANUS_PORT}/janus`,
+                    server: `${process.env.JANUS_URL}/janus`,
+                    iceServers: this.iceServers,
                     success: this.janusSessionConnected,
                     error: this.janusError,
                     destroy: this.janusDestroyed

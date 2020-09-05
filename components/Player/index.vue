@@ -42,7 +42,10 @@
                 <h1 class="title">
                     You're in the queue!
                 </h1>
-                <p class="body">
+                <p v-if="queueStatus" class="body">
+                    You are currently #{{ queueStatus.currentPositionInQueue }} out of {{ queueStatus.currentQueueLength }}, please grab your popcorn!
+                </p>
+                <p v-else class="body">
                     There are a couple rooms in front of you waiting for a portal, please grab your popcorn!
                 </p>
             </div>
@@ -97,7 +100,7 @@
             loadedScripts: Array
         },
         computed: {
-            ...mapGetters(['user', 'room', 'portal', 'stream', 'janusId', 'janusIp', 'apertureWs', 'apertureToken', 'fullscreen', 'pip']),
+            ...mapGetters(['user', 'room', 'portal', 'stream', 'janusId', 'janusIp', 'apertureWs', 'apertureToken', 'fullscreen', 'pip', 'queueStatus']),
 
             showViewer() {
                 if (process.env.ENABLE_JANUS)
@@ -128,9 +131,6 @@
                 if (type === 'setFullscreenStatus')
                     this.toggleFullscreen()
             })
-
-            //document.addEventListener('fullscreenchange',
-                //() => this.$store.commit('setFullscreenStatus', (document.fullscreenElement === this.$el)))
         },
         beforeDestroy() {
             this.$store.commit('setFullscreenStatus', false)

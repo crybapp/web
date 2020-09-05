@@ -3,10 +3,38 @@
 </div>
 
 <script type="text/javascript">
-    window.addEventListener('error', () => {
+    window.addEventListener('error', function() {
         var e = document.getElementById('loading-logo');
         if (e) {
             e.className = 'gradient is-error';
         }
     })
 </script>
+<style type="text/css">
+    div.content {
+        top: 0;
+        height: 100%
+    }
+
+    div.gradient {
+        width: 100%;
+        height: 100%;
+
+        -mask-size: 7.5%;
+        -webkit-mask-size: 7.5%;
+        mask-repeat: no-repeat;
+        -webkit-mask-repeat: no-repeat;
+        mask-position: center;
+        -webkit-mask-position: center;
+        mask-image: url('/img/logo-light.svg');
+        -webkit-mask-image: url('/img/logo-light.svg');
+
+        opacity: 1;
+
+        transition: all 0.2s
+    }
+
+    div.is-error {
+        background: red
+    }
+</style>
