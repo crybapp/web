@@ -183,7 +183,7 @@ export const mutations = {
         state.portal = allocation
         state.room.portal = allocation
 
-        if(allocation.status === 'creating' || allocation.status === 'starting' || allocation.status === 'open')
+        if (allocation.status === 'creating' || allocation.status === 'starting' || allocation.status === 'open')
             this.commit('updateQueueStatus', null)
     },
 
@@ -191,8 +191,14 @@ export const mutations = {
      * QueueStatus
      */
     updateQueueStatus(state, status) {
-        if(!state.room) return
+        if (!state.room)
+            return
 
+        // ToDo: NUKE THIS ASAP
+        if (state.portal.status === 'waiting' && status !== null) {
+            this.portal.status = 'in-queue'
+            this.state.portal.status = 'in-queue'
+        }
         state.queueStatus = status
     },
 
@@ -211,7 +217,7 @@ export const mutations = {
      * Janus
      */
     updateJanus(state, config) {
-        if(!state.room)
+        if (!state.room)
             return
 
         state.janusId = config.id

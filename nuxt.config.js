@@ -50,7 +50,7 @@ export default {
         routes: [
             '/i/'
         ],
-        fallback: '404.html'
+        fallback: '200.html'
     },
     modules: [
         'nuxt-client-init-module',
@@ -120,7 +120,8 @@ export default {
             mobileApp: true,
             mobileAppIOS: true,
             author: false,
-            appleStatusBarStyle: 'black'
+            appleStatusBarStyle: 'black',
+            favicon: false
         },
         icon: {
             iconSrc: 'assets/icon.png',

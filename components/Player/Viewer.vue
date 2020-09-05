@@ -253,10 +253,8 @@
                 }
             },
             volumeChange() {
-                // ToDo when you're not tired: change how this works to prevent recursions
+                // ToDo: change how this works to prevent recursions
                 // and resource wasting, but keeping the player controls updated.
-                // that said, since I need to move the controls here, maybe I'll re-work
-                // how it works, since I'm not 100% on storing it in store.
                 this.viewerMuted = this.$refs.stream.muted
                 this.viewerVolume = this.$refs.stream.volume
             },

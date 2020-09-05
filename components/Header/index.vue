@@ -67,7 +67,7 @@
                 if (!this.user || !this.room)
                     return false
 
-                return this.$route.name === 'room'
+                return this.$route.name === 'room' && this.room.owner.id === this.user.id
             }
         },
         mounted() {

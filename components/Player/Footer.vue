@@ -16,7 +16,7 @@
                 />
             </div>
             <div class="toggles">
-                <img src="~/assets/icons/keyboard.svg" alt="" title="Show keyboard" class="icon keyboard" @click="showKeyboard" />
+                <!--<img src="~/assets/icons/keyboard.svg" alt="" title="Show keyboard" class="icon keyboard" @click="showKeyboard" />-->
                 <img v-if="canPiP" src="~/assets/icons/pip.svg" alt="" title="Picture-in-Picture" class="icon" @click="togglePiP" />
                 <img src="~/assets/icons/full-screen.svg" alt="" title="Fullscreen" class="icon" @click="toggleFullscreen" />
             </div>
@@ -102,9 +102,9 @@
                 this.$store.commit('setViewerVolume', this.volumeValue)
             },
 
-            showKeyboard() {
-                console.log('hi')
-            },
+            /*showKeyboard() {
+                // ToDo: Properly code
+            },*/
             toggleFullscreen() {
                  if (this.pip && !this.fullscreen)
                     this.$store.commit('setPiPStatus', !this.pip)
