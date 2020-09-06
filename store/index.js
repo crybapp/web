@@ -195,10 +195,9 @@ export const mutations = {
             return
 
         // ToDo: NUKE THIS ASAP
-        if (state.portal.status === 'waiting' && status !== null) {
-            this.portal.status = 'in-queue'
-            this.state.portal.status = 'in-queue'
-        }
+        if (state.portal.status === 'waiting' && status !== null)
+            state.portal.status = 'in-queue'
+
         state.queueStatus = status
     },
 
