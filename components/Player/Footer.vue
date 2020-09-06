@@ -102,13 +102,6 @@
                 this.$store.commit('setViewerVolume', this.volumeValue)
             },
 
-            hasVM(){
-                if (process.env.ENABLE_JANUS)
-                    return this.portalStatus === 'open' && this.janusId
-                else
-                    return this.portalStatus === 'open' && this.apertureWs && this.apertureToken
-            },
-
             /*showKeyboard() {
                 // ToDo: Properly code
             },*/
@@ -119,7 +112,7 @@
                 this.$store.commit('setFullscreenStatus', (document.fullscreenElement === null))
             },
             togglePiP() {
-                if (!this.canPiP || !this.hasVM())
+                if (!this.canPiP)
                     return
 
                 if (this.fullscreen && !this.pip)
