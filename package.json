@@ -2,7 +2,7 @@
   "name": "@cryb/web",
   "version": "1.0.0",
   "description": "The Web app used as the primary client for Cryb",
-  "repository": "https://github.com/crybapp/web",
+  "repository": "https://github.com/crybapp/web.git",
   "author": "JeDaYoshi <hi@jeda.im>",
   "license": "MIT",
   "main": "dist/index.html",

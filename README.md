@@ -1,20 +1,20 @@
-![Cryb OSS](.github/web-icon.png "@cryb/web Logo")
+[![Cryb OSS](.github/web-icon.png "@cryb/web Logo")](https://cryb.app)
 
-_**Web** - Web client_
+**@cryb/web** - _Web client_
 
-[![GitHub contributors](https://img.shields.io/github/contributors/crybapp/web)](https://github.com/crybapp/web/graphs/contributors) [![License](https://img.shields.io/github/license/crybapp/web)](https://github.com/crybapp/web/blob/master/LICENSE) [![Patreon Donate](https://img.shields.io/badge/donate-Patreon-red.svg)](https://patreon.com/cryb)
+[![GitHub contributors](https://img.shields.io/github/contributors/crybapp/web)](https://github.com/crybapp/web/graphs/contributors) [![License](https://img.shields.io/github/license/crybapp/web)](https://github.com/crybapp/web/blob/master/LICENSE) [![Patreon Donate](https://img.shields.io/badge/donate-Patreon-red.svg)](https://patreon.com/cryb) [![Chat on Discord](https://discord.com/api/guilds/594942455749672983/widget.png)](https://discord.gg/xdhEgD5)
 
 ## Docs
 
 * [Info](#info)
   * [Status](#status)
 * [Codebase](#codebase)
-    * [Folder Structure](#folder-structure)
-    * [First time setup](#first-time-setup)
-        * [Installation](#installation)
-    * [Running the app locally](#running-the-app-locally)
-        * [Background services](#background-services)
-        * [Starting @cryb/web](#starting-@cryb/web)
+  * [Folder Structure](#folder-structure)
+  * [First time setup](#first-time-setup)
+    * [Installation](#installation)
+  * [Running the app locally](#running-the-app-locally)
+    * [Background services](#background-services)
+    * [Starting @cryb/web](#starting-@cryb/web)
 * [Questions / Issues](#questions--issues)
 
 ## Info
@@ -31,7 +31,7 @@ You can watch a demo of `@cryb/web` [here](https://youtu.be/pGNMZ98RwZY).
 
 ## Codebase
 
-The codebase for `@cryb/web` is written in HTML, CSS and JS, utilising Vue and Nuxt.js, plus `@cryb/borealis` for the CSS styles.
+The codebase for `@cryb/web` is written in HTML and JS, utilising Vue and Nuxt.js, plus `@cryb/borealis` for the CSS styles.
 
 ### Folder Structure
 
@@ -61,7 +61,7 @@ The following services need to be installed for `@cryb/web` to function:
 
 We recommend that you run the following services alongside `@cryb/web`, but it's not required.
 
-* `@cryb/aperture`
+* `@cryb/aperture` or Janus WebRTC Server
 
 You also need to install the required dependencies by running `yarn`.
 
@@ -85,4 +85,4 @@ It is recommended that in production you run `yarn build`, then `yarn start`.
 
 ## Questions / Issues
 
-If you have any issues with `@cryb/web`, please either open a GitHub issue, contact a maintainer or join the [Cryb Discord Server](https://discord.gg/xdhEgD5) and ask in #tech-support.
+If you have any issues with `@cryb/web`, please either open a GitHub issue, contact a maintainer or join the [Cryb Discord Server](https://discord.gg/xdhEgD5) and ask in `#tech-support`.
