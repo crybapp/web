@@ -1,7 +1,7 @@
 <template>
     <div class="footer">
         <p class="footer">
-            &copy; {{ new Date().getFullYear() }} {{ brand.name }}
+            Powered by Cryb
             <span v-for="page in pages" :key=page.name>
                 &mdash; <a :href=page.link target="_blank" rel="noopener">{{ page.name }}</a>
             </span>
@@ -9,15 +9,14 @@
     </div>
 </template>
 <script>
-	import brand from '~/brand/config'
-	import pages from '~/brand/pages'
+    import pages from '~/brand/pages'
 
-	export default {
-		data() {
-			return {
-				brand,
-				pages
-			}
-		}
-	}
+    export default {
+        data() {
+            return {
+                brand,
+                pages
+            }
+        }
+    }
 </script>
