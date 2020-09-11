@@ -1,7 +1,7 @@
 <template>
     <div class="footer">
         <p class="footer">
-            Powered by Cryb
+            Powered by <a href="https://cryb.app" target="_blank" rel="noopener">Cryb</a>
             <span v-for="page in pages" :key=page.name>
                 &mdash; <a :href=page.link target="_blank" rel="noopener">{{ page.name }}</a>
             </span>
