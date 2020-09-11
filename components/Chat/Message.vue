@@ -40,6 +40,15 @@
                 const safeContent = stripHtml(content)
 
                 return twemoji.parse(safeContent, {
+                    callback: (icon, options, variant) => {
+                        switch (icon) {
+                            case 'a9':      // © copyright
+                            case 'ae':      // ® registered trademark
+                            case '2122':    // ™ trademark
+                                return false
+                        }
+                        return ''.concat(options.base, options.size, '/', icon, options.ext)
+                    },
                     className: 'chat-message-emoji'
                 })
             }
