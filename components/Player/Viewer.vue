@@ -361,6 +361,7 @@
                     const passwords = process.env.TURN_PASSWORD.toString().split(',')
 
                     // ToDo: **seriously** refactor this
+                    this.iceServers = []
                     servers.forEach((serv, i) => this.iceServers.push({
                         url: serv,
                         username: users[i],
