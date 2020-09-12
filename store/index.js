@@ -231,6 +231,9 @@ export const mutations = {
     },
     setViewerVolume(state, newVolume) {
         state.viewerVolume = newVolume
+
+        if (process.browser)
+            localStorage.setItem('volume', newVolume)
     },
     setFullscreenStatus(state, status) {
         state.fullscreen = status

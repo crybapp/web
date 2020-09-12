@@ -45,7 +45,7 @@
         data() {
             return {
                 isStreamMuted: this.viewerMuted,
-                volumeValue: 30
+                volumeValue: 50
             }
         },
         computed: {
@@ -83,11 +83,16 @@
                 return [...new Set(this.room.members.map(({ id }) => id))]
             }
         },
+        mounted() {
+            const volume = localStorage.getItem('volume')
+            if (!isNaN(parseFloat(volume)) && isFinite(volume))
+                this.volumeValue = volume
+        },
         methods: {
             toggleStreamMute() {
                 if (this.volumeValue <= 0) {
                     this.isStreamMuted = false
-                    this.volumeValue = 30
+                    this.volumeValue = 50
                     this.volumeChanged()
                 }
                 else
