@@ -23,7 +23,7 @@
     "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "node-emoji": "^1.10.0",
-    "nuxt": "^2.12.2",
+    "nuxt": "^2.14.5",
     "nuxt-client-init-module": "^0.1.8",
     "nuxt-clipboard2": "^0.2.1",
     "perfect-scrollbar": "^1.5.0",
