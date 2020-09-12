@@ -13,7 +13,7 @@ if (brand.ga_tracking_id)
 
 export default {
     globalName: 'cryb',
-    mode: (process.env.RENDER_MODE === 'ssr' ? 'universal' : 'spa'),
+    ssr: (process.env.RENDER_MODE === 'ssr' ? true : false),
     css: [
         borealis
     ],
