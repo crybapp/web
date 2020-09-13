@@ -2,7 +2,7 @@
     <div class="content no-header is-center">
         <div class="home">
             <div class="auth-images center">
-                <div v-if="!user" class="logo-big logo-mask" :class="{ 'is-loading': loading, 'is-error': error }" />
+                <div v-if="!user && loading || !error" class="is-loading logo-big logo-mask" />
                 <img v-if="user" :src="user.icon" class="profile-image" :alt="user.name" />
             </div>
             <p v-if="error" class="error center">
