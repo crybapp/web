@@ -92,8 +92,10 @@
         },
         mounted() {
             const volume = localStorage.getItem('volume')
-            if (!isNaN(parseFloat(volume)) && isFinite(volume))
+            if (!isNaN(parseFloat(volume)) && isFinite(volume)) {
                 this.volumeValue = volume
+                this.$nextTick(() => this.$store.commit('setViewerVolume', volume))
+            }
         },
         methods: {
             toggleStreamMute() {
