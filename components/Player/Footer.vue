@@ -15,8 +15,8 @@
                     @input="volumeChanged"
                 />
 
-                <img v-if="this.controlLocked" src="~/assets/icons/lock.svg" alt="" title="Unlock controls" class="icon" @click="toggleControlLock"/>
-                <img v-else src="~/assets/icons/unlock.svg" alt="" title="Lock controls" class="icon" @click="toggleControlLock"/>
+                <img v-if="this.controlLocked && this.hasControl" src="~/assets/icons/lock.svg" alt="" title="Unlock controls" class="icon" @click="toggleControlLock"/>
+                <img v-else-if="this.hasControl" src="~/assets/icons/unlock.svg" alt="" title="Lock controls" class="icon" @click="toggleControlLock"/>
             </div>
             <div class="toggles">
                 <!--<img src="~/assets/icons/keyboard.svg" alt="" title="Show keyboard" class="icon keyboard" @click="showKeyboard" />-->
@@ -52,11 +52,14 @@
             }
         },
         computed: {
-            ...mapGetters(['apertureWs', 'apertureToken', 'controlLocked', 'fullscreen', 'janusId', 'pip',
-                'portalStatus', 'room', 'users', 'userId', 'onlineUsers', 'viewerMuted']),
+            ...mapGetters(['apertureWs', 'apertureToken', 'controllerId', 'controlLocked', 'fullscreen', 'janusId',
+                 'pip', 'portalStatus', 'room', 'users', 'userId', 'onlineUsers', 'viewerMuted']),
 
             isJanusEnabled() {
                 return process.env.ENABLE_JANUS
+            },
+            hasControl() {
+                return this.controllerId === this.userId
             },
             canPiP() {
                 if (process.server)
