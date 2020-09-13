@@ -95,8 +95,8 @@
             }
         },
         computed: {
-            ...mapGetters(['ws', 'userId', 'controllerId', 'portal', 'janusId', 'janusIp', 'apertureWs', 'apertureToken',
-                'viewerMuted', 'viewerVolume', 'fullscreen', 'pip']),
+            ...mapGetters(['ws', 'userId', 'controlLocked', 'controllerId', 'portal', 'janusId', 'janusIp', 'apertureWs',
+                 'apertureToken', 'viewerMuted', 'viewerVolume', 'fullscreen', 'pip']),
 
             hasControl() {
                 return this.controllerId === this.userId
@@ -156,10 +156,13 @@
         mounted() {
             document.addEventListener('visibilitychange', this.handleVisibilityChange)
 
-            if (this.viewerMuted)
+            if (this.viewerMuted) {
+                this.$refs.stream.muted = true
                 this.$refs.stream.volume = 0.0
-            else
+            } else {
+                this.$refs.stream.muted = false
                 this.$refs.stream.volume = this.viewerVolume
+            }
 
             this.context = this.$refs.canvasStream.getContext('2d')
 
@@ -491,7 +494,7 @@
                 event.preventDefault()
             },
             didPaste(event) {
-                if (!this.hasControl)
+                if (!this.hasControl || this.controlLocked)
                     return
 
                 const { clipboardData } = event,
@@ -501,7 +504,7 @@
             },
             didKeyDown(event) {
                 event.preventDefault()
-                if (!this.hasControl)
+                if (!this.hasControl || this.controlLocked)
                     return
 
                 const { key, ctrlKey, shiftKey } = event
@@ -521,7 +524,7 @@
             },
             didKeyUp(event) {
                 event.preventDefault()
-                if (!this.hasControl)
+                if (!this.hasControl || this.controlLocked)
                     return
 
                 const { key, ctrlKey, shiftKey } = event
@@ -532,7 +535,7 @@
                 this.emitEvent({ key, ctrlKey, shiftKey }, 'KEY_UP')
             },
             didMouseMove(event) {
-                if (!this.hasControl)
+                if (!this.hasControl || this.controlLocked)
                     return
 
                 const { x, y } = this.calculatePos(event)
@@ -540,7 +543,7 @@
                 this.emitEvent({ x, y }, 'MOUSE_MOVE')
             },
             didMouseDown(event) {
-                if (!this.hasControl)
+                if (!this.hasControl || this.controlLocked)
                     return
 
                 const { button } = event,
@@ -549,7 +552,7 @@
                 this.emitEvent({ x, y, button: button + 1 }, 'MOUSE_DOWN')
             },
             didMouseUp(event) {
-                if (!this.hasControl)
+                if (!this.hasControl || this.controlLocked)
                     return
 
                 const { button } = event,
@@ -559,7 +562,7 @@
             },
             didMouseWheel(event) {
                 event.preventDefault()
-                if (!this.hasControl)
+                if (!this.hasControl || this.controlLocked)
                     return
 
                 const { deltaY } = event
@@ -568,7 +571,7 @@
             },
 
             emitEvent(d, t) {
-                if (!this.ws || !this.hasControl || this.ws.readyState !== this.ws.OPEN)
+                if (!this.ws || this.ws.readyState !== this.ws.OPEN)
                     return
 
                 this.ws.send(JSON.stringify({ op: 0, d, t }))

@@ -49,6 +49,7 @@ export const getters = {
 
     viewerMuted: ({ viewerMuted }) => viewerMuted,
     viewerVolume: ({ viewerVolume }) => (viewerVolume / 100),
+    controlLocked: ({ controlLocked }) => controlLocked,
     fullscreen: ({ fullscreen }) => fullscreen,
     pip: ({ pip }) => pip,
 
@@ -81,6 +82,7 @@ const initialState = () => ({
 
     viewerMuted: false,
     viewerVolume: 30,
+    controlLocked: false,
     fullscreen: false,
     pip: false,
 
@@ -235,6 +237,10 @@ export const mutations = {
         if (process.browser)
             localStorage.setItem('volume', newVolume)
     },
+    setControlLockStatus(state, isLocked) {
+        state.controlLocked = isLocked
+    },
+
     setFullscreenStatus(state, status) {
         state.fullscreen = status
     },

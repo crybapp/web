@@ -2,8 +2,8 @@
     <div class="player-footer">
         <div class="control-bar">
             <div class="volume-controls">
-                <img v-if="!this.isStreamMuted && this.volumeValue > 0" src="~/assets/icons/volume-full.svg" alt="" class="icon" @click="toggleStreamMute"/>
-                <img v-else src="~/assets/icons/volume-mute.svg" alt="" :title="isStreamMuted ? 'Unmute' : 'Mute'" class="icon" @click="toggleStreamMute"/>
+                <img v-if="!this.isStreamMuted && this.volumeValue > 0" src="~/assets/icons/volume-full.svg" alt="" title="Mute" class="icon" @click="toggleStreamMute"/>
+                <img v-else src="~/assets/icons/volume-mute.svg" alt="" title="Unmute" class="icon" @click="toggleStreamMute"/>
                 <input
                     v-model="volumeValue"
                     class="volume-slider"
@@ -14,10 +14,13 @@
                     step="1"
                     @input="volumeChanged"
                 />
+
+                <img v-if="this.controlLocked" src="~/assets/icons/unlock.svg" alt="" title="Unlock controls" class="icon" @click="toggleControlLock"/>
+                <img v-else src="~/assets/icons/lock.svg" alt="" title="Lock controls" class="icon" @click="toggleControlLock"/>
             </div>
             <div class="toggles">
                 <!--<img src="~/assets/icons/keyboard.svg" alt="" title="Show keyboard" class="icon keyboard" @click="showKeyboard" />-->
-                <img v-if="canPiP" src="~/assets/icons/pip.svg" alt="" title="Picture-in-Picture" class="icon" @click="togglePiP" />
+                <img v-if="this.canPiP" src="~/assets/icons/pip.svg" alt="" title="Picture-in-Picture" class="icon" @click="togglePiP" />
                 <img src="~/assets/icons/full-screen.svg" alt="" title="Fullscreen" class="icon" @click="toggleFullscreen" />
             </div>
         </div>
@@ -49,7 +52,8 @@
             }
         },
         computed: {
-            ...mapGetters(['apertureWs', 'apertureToken', 'fullscreen', 'janusId', 'pip', 'portalStatus', 'room', 'users', 'userId', 'onlineUsers', 'viewerMuted']),
+            ...mapGetters(['apertureWs', 'apertureToken', 'controlLocked', 'fullscreen', 'janusId', 'pip',
+                'portalStatus', 'room', 'users', 'userId', 'onlineUsers', 'viewerMuted']),
 
             isJanusEnabled() {
                 return process.env.ENABLE_JANUS
@@ -105,6 +109,9 @@
                     this.toggleStreamMute()
 
                 this.$store.commit('setViewerVolume', this.volumeValue)
+            },
+            toggleControlLock() {
+                this.$store.commit('setControlLockStatus', !this.controlLocked)
             },
 
             /*showKeyboard() {
