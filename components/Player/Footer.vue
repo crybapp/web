@@ -15,8 +15,8 @@
                     @input="volumeChanged"
                 />
 
-                <img v-if="this.controlLocked" src="~/assets/icons/unlock.svg" alt="" title="Unlock controls" class="icon" @click="toggleControlLock"/>
-                <img v-else src="~/assets/icons/lock.svg" alt="" title="Lock controls" class="icon" @click="toggleControlLock"/>
+                <img v-if="this.controlLocked" src="~/assets/icons/lock.svg" alt="" title="Unlock controls" class="icon" @click="toggleControlLock"/>
+                <img v-else src="~/assets/icons/unlock.svg" alt="" title="Lock controls" class="icon" @click="toggleControlLock"/>
             </div>
             <div class="toggles">
                 <!--<img src="~/assets/icons/keyboard.svg" alt="" title="Show keyboard" class="icon keyboard" @click="showKeyboard" />-->
