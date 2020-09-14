@@ -39,7 +39,7 @@
                 if (this.sendingMessages.length > 5)
                     return alert('You already are sending too much messages!')
 
-                const content = stripHtml(this.content.trim(), { dumpLinkHrefsNearby: { enabled: true } })
+                const content = stripHtml(this.content.trim(), { dumpLinkHrefsNearby: { enabled: true } }).result
 
                 if (content.length === 0 || this.notFunnyContent)
                     return

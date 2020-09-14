@@ -15,25 +15,25 @@
   },
   "dependencies": {
     "@cryb/borealis": "^1.0.7",
-    "@nuxtjs/axios": "^5.10.3",
-    "@nuxtjs/pwa": "^3.0.0-beta.20",
+    "@nuxtjs/axios": "^5.12.2",
+    "@nuxtjs/pwa": "^3.0.2",
     "@nuxtjs/robots": "^2.4.2",
     "browser-cookies": "^1.2.0",
     "cookieparser": "^0.1.0",
     "dotenv": "^8.2.0",
     "node-emoji": "^1.10.0",
-    "nuxt": "^2.12.2",
+    "nuxt": "^2.14.5",
     "nuxt-client-init-module": "^0.1.8",
     "nuxt-clipboard2": "^0.2.1",
     "perfect-scrollbar": "^1.5.0",
-    "string-strip-html": "^4.4.0",
-    "twemoji": "^12.1.6"
+    "string-strip-html": "^5.0.2",
+    "twemoji": "^13.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.9.0",
     "eslint-plugin-vue": "^6.2.2",
     "node-sass": "^4.14.1",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^10.0.2"
   }
 }

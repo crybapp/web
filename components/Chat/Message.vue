@@ -37,7 +37,7 @@
             },
             getEmojifiedMessageContent() {
                 const content = (typeof this.message === 'string' ? this.message : this.message.content)
-                const safeContent = stripHtml(content)
+                const safeContent = stripHtml(content).result
 
                 return twemoji.parse(safeContent, {
                     callback: (icon, options, variant) => {
