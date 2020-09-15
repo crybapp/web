@@ -36,19 +36,23 @@
         },
         methods: {
             async sendMessage() {
+                if (this.content.length === 0 || this.notFunnyContent)
+                    return
                 if (this.sendingMessages.length > 5)
                     return alert('You already are sending too much messages!')
 
-                const content = stripHtml(this.content.trim(), { dumpLinkHrefsNearby: { enabled: true } }).result
-
-                if (content.length === 0 || this.notFunnyContent)
-                    return
-                if (content.length > 255)
-                    return alert('This message is longer than 255 characters, please shorten it before trying again.')
+                const message = this.content
 
                 this.content = ''
                 this.didEndTyping()
                 this.$refs.input.focus()
+
+                const content = stripHtml(message.trim(), { dumpLinkHrefsNearby: { enabled: true } }).result
+
+                if (content.length === 0)
+                    return
+                if (content.length > 255)
+                    return alert('This message is longer than 255 characters, please shorten it before trying again.')
 
                 if (content.toLowerCase() === 'something cool')
                     this.content = 'You are not very funny. At all.'
