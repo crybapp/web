@@ -105,14 +105,14 @@
                 return this.loading || this.showMutedPopup || this.showUnsupportedPopup || this.playError
             },
             streamWidth() {
-                if (this.player && this.player.video)
-                    return this.player.video.destination.width
+                if (this.$refs.stream)
+                    return this.$refs.stream.width
                 else
                     return this.maxWidth
             },
             streamHeight() {
-                if (this.player && this.player.video)
-                    return this.player.video.destination.height
+                if (this.$refs.stream)
+                    return this.$refs.stream.height
                 else
                     return this.maxHeight
             },
