@@ -106,13 +106,13 @@
             },
             streamWidth() {
                 if (this.$refs.stream)
-                    return this.$refs.stream.width
+                    return this.$refs.stream.videoWidth
                 else
                     return this.maxWidth
             },
             streamHeight() {
                 if (this.$refs.stream)
-                    return this.$refs.stream.height
+                    return this.$refs.stream.videoHeight
                 else
                     return this.maxHeight
             },
