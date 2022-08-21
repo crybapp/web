@@ -7,14 +7,14 @@
         </p>
 
         <canvas
-            ref="canvasStream"
             id="canvasStream"
+            ref="canvasStream"
             class="player-stream"
             :style="playerStyle"
         />
         <video
-            ref="stream"
             id="remoteStream"
+            ref="stream"
             class="player-stream"
             tabindex="1"
             playsinline
@@ -164,6 +164,19 @@
                 this.$refs.stream.volume = this.viewerVolume
             }
 
+            // ToDo: refactor the entirety of this
+            if (process.env.ENABLE_TURN) {
+                const servers = process.env.TURN_URL.toString().split(',')
+                const users = process.env.TURN_USERNAME.toString().split(',')
+                const passwords = process.env.TURN_PASSWORD.toString().split(',')
+
+                this.iceServers = servers.map((serv, i) => ({
+                    url: serv,
+                    username: users[i],
+                    credential: passwords[i]
+                }))
+            }
+
             this.context = this.$refs.canvasStream.getContext('2d')
 
             if (this.janusId || (this.apertureWs && this.apertureToken))
@@ -291,9 +304,10 @@
                 if (!this.updateCanvas || !this.$refs.stream || !this.$refs.canvasStream)
                     return
 
-                this.context.drawImage(this.$refs.stream, 0, 0, this.streamWidth, this.streamHeight)
-
-                this.$nextTick(() => setTimeout(this.updateFakeStream, 33))
+                window.requestAnimationFrame(() => {
+                    this.context.drawImage(this.$refs.stream, 0, 0, this.streamWidth, this.streamHeight)
+                    setTimeout(this.updateFakeStream, 33)
+                })
             },
 
             areScriptsReady(...values) {
@@ -354,28 +368,13 @@
                 if (!this.$refs.stream)
                     return console.warn('Stream cannot be found, refusing to start player!')
 
-                if (process.env.NODE_ENV === 'development')
+                if (process.env.NODE_ENV !== 'production')
                     console.debug('Initalizing Janus library.')
 
-                // ToDo: refactor the entirety of this
-                if (process.env.ENABLE_TURN) {
-                    const servers = process.env.TURN_URL.toString().split(',')
-                    const users = process.env.TURN_USERNAME.toString().split(',')
-                    const passwords = process.env.TURN_PASSWORD.toString().split(',')
-
-                    // ToDo: **seriously** refactor this
-                    this.iceServers = []
-                    servers.forEach((serv, i) => this.iceServers.push({
-                        url: serv,
-                        username: users[i],
-                        credential: passwords[i]
-                    }))
-                }
-
                 Janus.init({
-                    debug: (process.env.NODE_ENV === 'development'),
+                    debug: (process.env.NODE_ENV !== 'production'),
                     dependencies: Janus.useDefaultDependencies(),
-                    callback: this.configureJanus()
+                    callback: this.configureJanus
                 })
             },
 
@@ -385,7 +384,7 @@
             * this needs to be accompanied by the ability to request an ICE restart in order to switch the TURN sessions.
             */
 
-           // ToDo: Rewrite credential check for more complexity in checking if one more more sets are needed.
+            // ToDo: Rewrite credential check for more complexity in checking if one more more sets are needed.
             configureJanus() {
                 if (process.env.NODE_ENV !== 'production')
                     console.debug('Configuring Janus object')
@@ -446,7 +445,7 @@
 
             janusHandleIncomingStream(stream) {
                 if (!this.$refs.stream) {
-                    console.warn('Stream cannot be found, destryoing player!')
+                    console.warn('Stream cannot be found, destroying player!')
                     return this.cleanPlayers()
                 }
 
@@ -477,7 +476,7 @@
 
             janusError(reason) {
                 if (reason === 'Library not initialized')
-                    return setTimeout(this.playStream, 2000)
+                    return this.$nextTick(this.playStream)
                 console.error(reason)
             },
 
