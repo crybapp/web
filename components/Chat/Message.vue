@@ -9,7 +9,7 @@
 </template>
 <script>
     import { mapGetters } from 'vuex'
-    import stripHtml from 'string-strip-html'
+    import { stripHtml } from 'string-strip-html'
     import twemoji from 'twemoji'
 
     export default {

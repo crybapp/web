@@ -10,7 +10,7 @@
     import { mapGetters } from 'vuex'
 
     import emoji from 'node-emoji'
-    import stripHtml from 'string-strip-html'
+    import { stripHtml } from 'string-strip-html'
 
     export default {
         data() {
