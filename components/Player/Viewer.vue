@@ -476,7 +476,7 @@
 
             janusError(reason) {
                 if (reason === 'Library not initialized')
-                    return this.$nextTick(this.playStream)
+                    return this.$nextTick(this.initJanus)
                 console.error(reason)
             },
 
