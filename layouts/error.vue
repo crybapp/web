@@ -7,15 +7,14 @@
             Fuck.
         </h1>
 
-        <p v-if="!errResponse.description && error.message && error.statusCode !== 404" class="subtitle">
-            {{ error.message }}
-        </p>
-
-        <p v-if="error.statusCode === 404" class="subtitle">
+        <p v-if="error.statusCode === '404'" class="subtitle">
             We couldn't find this page. Maybe it's our fault, maybe it's yours.
         </p>
         <p v-else-if="errResponse.description" class="subtitle">
             {{ errResponse.description }}
+        </p>
+        <p v-else-if="error.message && error.statusCode !== '404'" class="subtitle">
+            {{ error.message }}
         </p>
         <p v-else class="subtitle">
             We're not quite sure what happened here, but it's definitely our fault.

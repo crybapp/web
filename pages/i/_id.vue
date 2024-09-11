@@ -86,7 +86,7 @@
             membersList() {
                 const memberLimit = 3, members = this.room.members.slice(0, 3)
 
-                return `${members.map(({ name }, i) =>(i === members.length - 1) && members.length !== 1 && this.room.members.length <= memberLimit ? `and ${name}` : name).join(', ')}${this.room.members.length > memberLimit ? ` and ${this.room.members.length - memberLimit} others` : ''}`
+                return `${members.map(({ name }, i) => (i === members.length - 1) && members.length !== 1 && this.room.members.length <= memberLimit ? `and ${name}` : name).join(', ')}${this.room.members.length > memberLimit ? ` and ${this.room.members.length - memberLimit} others` : ''}`
             },
 
             inviteId() {
