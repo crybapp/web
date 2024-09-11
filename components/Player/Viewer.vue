@@ -315,19 +315,6 @@
             },
 
             playStream() {
-                this.isJanusEnabled ? this.playJanusStream() : this.playJsmpegStream()
-            },
-
-            playJsmpegStream() {
-                if (this.areScriptsReady('jsmpeg'))
-                    this.initJsmpeg()
-                else
-                    this.scriptReadyCallbacks.push(() => {
-                        if(this.areScriptsReady('jsmpeg'))
-                            this.initJsmpeg()
-                    })
-            },
-            playJanusStream() {
                 if (this.areScriptsReady('janus'))
                     this.initJanus()
                 else
@@ -335,31 +322,6 @@
                         if(this.areScriptsReady('janus'))
                             this.initJanus()
                     })
-            },
-
-            initJsmpeg() {
-                this.cleanPlayers()
-
-                if (!this.$refs.stream || !this.$refs.canvasStream)
-                    return console.warn('Stream cannot be found, refusing to start player!')
-
-                this.context.clearRect(0, 0, this.streamWidth, this.streamHeight)
-
-                this.player = new JSMpeg.Player(`${this.apertureWs}/?t=${this.apertureToken}`, {
-                    canvas: this.$refs.canvasStream,
-                    pauseWhenHidden: false,
-                    // ToDo: check if this is /really/ needed
-                    videoBufferSize: parseInt(process.env.VIDEO_BITRATE || 1200) * 1024,
-                    audioBufferSize: parseInt(process.env.AUDIO_BITRATE || 128) * 1024,
-                    // workarounds so jsmpeg breaks less
-                    disableWebAssembly: true,
-                    disableGl: true
-                })
-
-                this.$refs.stream.srcObject = this.$refs.canvasStream.captureStream()
-
-                if (this.player.audioOut && !this.player.audioOut.unlocked)
-                    this.showMutedPopup = true
             },
 
             initJanus() {

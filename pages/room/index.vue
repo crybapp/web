@@ -51,18 +51,13 @@
             this.$store.commit('disconnectWebSocket')
         },
         head() {
-            // ToDo: rework JSMpeg/Janus imports
             return {
                 title: this.room ? this.room.name : 'Room Not Found',
-                link: process.env.ENABLE_JANUS ? [
+                link: [
                     { rel: 'preload', href: '/assets/js/janus.min.js?v=1', as: 'script'}
-                ] : [
-                    { rel: 'preload', href: '/assets/js/jsmpeg.min.js?v=1', as: 'script'}
                 ],
-                script: process.env.ENABLE_JANUS ? [
+                script: [
                     { charset: 'utf-8', src: '/assets/js/janus.min.js?v=1', callback: () => this.loadedScripts.push('janus')}
-                ] : [
-                    { charset: 'utf-8', src: '/assets/js/jsmpeg.min.js?v=1', callback: () => this.loadedScripts.push('jsmpeg')}
                 ]
             }
         }
