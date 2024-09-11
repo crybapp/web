@@ -3,7 +3,7 @@ import brand from './brand/config'
 import webpack from 'webpack'
 import { defineNuxtConfig } from '@nuxt/bridge'
 
-const borealis = process.env.BOREALIS_REPOSITORY ? process.env.BOREALIS_REPOSITORY : '@cryb/borealis'
+const borealis = process.env.BOREALIS_REPOSITORY ?? '@cryb/borealis'
 
 const script = []
 if (brand.ga_tracking_id)

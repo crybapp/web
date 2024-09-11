@@ -1,7 +1,7 @@
 <template>
     <div v-if="room" class="invite-wrapper">
         <div class="invite-info">
-            <div v-if="room.portal.status === 'open'" class="portal-indicator loading" />
+            <div v-if="room.portal && room.portal.status === 'open'" class="portal-indicator loading" />
             <img src="~/assets/icons/tv.svg" class="invite-icon">
             <div class="invite-member-icons">
                 <div v-for="member in room.members" :key=member.id class="invite-member-icon-wrapper">
@@ -37,6 +37,19 @@
             </p>
         </div>
     </div>
+    <div v-else class="error">
+        <h1 class="title">
+            Invite Not Found
+        </h1>
+
+        <p class="subtitle">
+            This invite wasn't found. Make sure it hasn't expired, and that you typed it in correctly.
+        </p>
+
+        <p class="disclaimer">
+            You might want to <nuxt-link to="/home">go home</nuxt-link> now.
+        </p>
+    </div>
 </template>
 <script>
     import { mapGetters } from 'vuex'
@@ -52,9 +65,12 @@
             LoginButton
         },
         async asyncData(context) {
-            const room = await context.$axios.$get(`/invite/${context.route.params.id}/peek`)
-
-            return { room }
+           try {
+                const room = await context.$axios.$get(`/invite/${context.route.params.id}/peek`)
+                return { room }
+           } catch {
+                return { room: null }
+           }
         },
         data() {
             return {
@@ -70,7 +86,7 @@
             membersList() {
                 const memberLimit = 3, members = this.room.members.slice(0, 3)
 
-                return `${members.map(({ name }) => name).join(', ')}${this.room.members.length > memberLimit ? ` and ${this.room.members.length - memberLimit} others` : ''}`
+                return `${members.map(({ name }, i) =>(i === members.length - 1) && members.length !== 1 && this.room.members.length <= memberLimit ? `and ${name}` : name).join(', ')}${this.room.members.length > memberLimit ? ` and ${this.room.members.length - memberLimit} others` : ''}`
             },
 
             inviteId() {
@@ -96,7 +112,7 @@
                 try {
                     await this.$axios.$post(`/invite/${this.$route.params.id}`)
 
-                    this.$router.push('/room')
+                    setTimeout(() => this.$router.push('/room'), 500)
                 } catch(error) {
                     this.error = error.response ? error.response.data.error.description : error
 

@@ -66,6 +66,7 @@
 </template>
 <script>
     import { mapGetters } from 'vuex'
+    import Janus from 'janus-gateway'
 
     import brand from '~/brand/config'
 
@@ -76,8 +77,7 @@
             Button
         },
         props: {
-            volume: Number,
-            loadedScripts: Array
+            volume: Number
         },
         data() {
             return {
@@ -141,15 +141,6 @@
                     return 'width: 100%; height: auto'
             }
         },
-        watch: {
-            loadedScripts: {
-                immediate: true,
-                handler(newVal, oldVal) {
-                    if (this.scriptReadyCallbacks.length > 0)
-                        this.scriptReadyCallbacks.forEach(callback => callback(newVal))
-                }
-            }
-        },
         mounted() {
             document.addEventListener('visibilitychange', this.handleVisibilityChange)
 
@@ -177,13 +168,12 @@
             this.context = this.$refs.canvasStream.getContext('2d')
 
             if (this.janusId)
-                this.playStream()
+                this.initJanus()
 
             this.unsubscribe = this.$store.subscribe(({ type }, { stream }) => {
                 switch(type) {
                     case 'updateJanus':
-                    case 'updateAperture':
-                        this.$nextTick(this.playStream)
+                        this.$nextTick(this.initJanus)
                         break
                     case 'setMutedStatus':
                         this.setStreamMutedStatus()
@@ -305,20 +295,6 @@
                     this.context.drawImage(this.$refs.stream, 0, 0, this.streamWidth, this.streamHeight)
                     setTimeout(this.updateFakeStream, 33)
                 })
-            },
-
-            areScriptsReady(...values) {
-                return values.every(x => this.loadedScripts.includes(x))
-            },
-
-            playStream() {
-                if (this.areScriptsReady('janus'))
-                    this.initJanus()
-                else
-                    this.scriptReadyCallbacks.push(() => {
-                        if(this.areScriptsReady('janus'))
-                            this.initJanus()
-                    })
             },
 
             initJanus() {

@@ -9,7 +9,7 @@
   "scripts": {
     "build": "nuxi build",
     "start": "node ./.output/server/index.mjs",
-    "dev": "nuxi",
+    "dev": "nuxi dev",
     "lint": "eslint --ext .html,.js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {},
