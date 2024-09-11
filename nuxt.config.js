@@ -1,5 +1,7 @@
 import 'dotenv/config'
 import brand from './brand/config'
+import webpack from 'webpack'
+import { defineNuxtConfig } from '@nuxt/bridge'
 
 const borealis = process.env.BOREALIS_REPOSITORY ? process.env.BOREALIS_REPOSITORY : '@cryb/borealis'
 
@@ -11,9 +13,17 @@ if (brand.ga_tracking_id)
         defer: true
     })
 
-export default {
-    globalName: 'cryb',
-    ssr: (process.env.RENDER_MODE === 'ssr' ? true : false),
+export default defineNuxtConfig({
+    bridge: {
+        nitro: true
+    },
+    nitro: {
+        compressPublicAssets: true,
+        routeRules: {
+            '/auth/**': { ssr: false },
+            '/room': { ssr: false }
+        }
+    },
     css: [
         borealis
     ],
@@ -37,7 +47,6 @@ export default {
         /**
          * Other Config
          */
-        ENABLE_JANUS: (process.env.ENABLE_JANUS === 'true'),
         ENABLE_TURN: (process.env.ENABLE_TURN === 'true'),
         TURN_USERNAME: process.env.TURN_USERNAME,
         TURN_PASSWORD: process.env.TURN_PASSWORD,
@@ -45,12 +54,6 @@ export default {
         SHOW_FOOTER: (process.env.SHOW_FOOTER !== 'false'),
         AUDIO_BITRATE: process.env.AUDIO_BITRATE,
         VIDEO_BITRATE: process.env.VIDEO_BITRATE
-    },
-    generate: {
-        routes: [
-            '/i/'
-        ],
-        fallback: '200.html'
     },
     modules: [
         'nuxt-client-init-module',
@@ -80,7 +83,21 @@ export default {
         publicPath: (process.env.PUBLIC_PATH || '/assets/'),
         watch: [
             '~/.env'
-        ]
+        ],
+        plugins: [
+            new webpack.ProvidePlugin({ adapter: ['webrtc-adapter', 'default'] })
+        ],
+        extend(config) {
+            config.module?.rules.push({
+                test: /\.[cm]?js$/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            })
+        }
     },
     head: {
         title: brand.name,
@@ -93,9 +110,10 @@ export default {
             { property: 'og:site_name', content: brand.name },
             { hid: 'og:title', property: 'og:title', content: brand.name },
             { hid: 'og:description', property: 'og:description', content: `${brand.name} makes it easy to enjoy what you love with your friends` },
-            { property: 'og:image', content: '/img/icon-hq.png' },
+            { property: 'og:image', content: '/assets/img/icon-hq.png' },
             { property: 'og:type', content: 'website' },
-            { name: 'format-detection', content: 'telephone=no' }
+            { name: 'format-detection', content: 'telephone=no' },
+            { name: 'darkreader-lock' }
         ],
         link: [
             { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
@@ -136,4 +154,4 @@ export default {
             background_color: '#ffffff'
         }
     }
-}
+})

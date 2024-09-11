@@ -47,7 +47,7 @@
                 if (this.canPassControl) return `Give the controller to ${this.member.name}`
                 if (this.hasControl) return `${this.member.name} has the controller`
 
-                return `${this.member.name}${this.isUserSelf ? ' (you)' : ''}`
+                return 'How are you here?'
             },
 
             interactable() {

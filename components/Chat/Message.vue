@@ -10,7 +10,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import { stripHtml } from 'string-strip-html'
-    import twemoji from 'twemoji'
+    import twemoji from '@twemoji/api'
 
     export default {
         props: [

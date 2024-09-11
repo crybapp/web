@@ -95,8 +95,8 @@
             }
         },
         computed: {
-            ...mapGetters(['ws', 'userId', 'controlLocked', 'controllerId', 'portal', 'janusId', 'janusIp', 'apertureWs',
-                 'apertureToken', 'viewerMuted', 'viewerVolume', 'fullscreen', 'pip']),
+            ...mapGetters(['ws', 'userId', 'controlLocked', 'controllerId', 'portal', 'janusId', 'janusIp',
+                 'viewerMuted', 'viewerVolume', 'fullscreen', 'pip']),
 
             hasControl() {
                 return this.controllerId === this.userId
@@ -119,9 +119,6 @@
 
             showPlayerDevtools() {
                 return process.env.SHOW_PLAYER_DEVTOOLS && this.portal
-            },
-            isJanusEnabled() {
-                return process.env.ENABLE_JANUS
             },
             canControlPlayer() {
                 return this.$refs.stream && this.$refs.stream.nodeName === 'VIDEO'
@@ -179,7 +176,7 @@
 
             this.context = this.$refs.canvasStream.getContext('2d')
 
-            if (this.janusId || (this.apertureWs && this.apertureToken))
+            if (this.janusId)
                 this.playStream()
 
             this.unsubscribe = this.$store.subscribe(({ type }, { stream }) => {
@@ -212,7 +209,7 @@
         },
         methods: {
             async resumeStream() {
-                if (!this.isJanusEnabled || !this.$refs.stream)
+                if (!this.$refs.stream)
                     return
 
                 this.loading = true
@@ -260,7 +257,7 @@
 
             unmute() {
                 this.showMutedPopup = false
-                if (this.isJanusEnabled && this.$refs.stream) {
+                if (this.$refs.stream) {
                     this.$refs.stream.volume = this.viewerVolume
                     this.resumeStream()
                 }

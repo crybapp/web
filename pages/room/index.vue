@@ -1,7 +1,7 @@
 <template>
     <div v-if="room" class="room-wrapper">
         <div class="room">
-            <Player :loaded-scripts="loadedScripts" />
+            <Player />
             <PlayerFooter />
             <Chat />
         </div>
@@ -27,11 +27,6 @@
         async asyncData(context) {
             await context.store.dispatch('fetchRoom')
         },
-        data() {
-            return {
-                loadedScripts: []
-            }
-        },
         computed: {
             ...mapGetters(['room', 'wsHeartbeat'])
         },
@@ -52,13 +47,7 @@
         },
         head() {
             return {
-                title: this.room ? this.room.name : 'Room Not Found',
-                link: [
-                    { rel: 'preload', href: '/assets/js/janus.min.js?v=1', as: 'script'}
-                ],
-                script: [
-                    { charset: 'utf-8', src: '/assets/js/janus.min.js?v=1', callback: () => this.loadedScripts.push('janus')}
-                ]
+                title: this.room ? this.room.name : 'Room Not Found'
             }
         }
     }
