@@ -10,11 +10,12 @@
     "build": "nuxi build",
     "start": "node ./.output/server/index.mjs",
     "dev": "nuxi dev",
-    "lint": "eslint --ext .html,.js,.vue --ignore-path .gitignore ."
+    "lint": "eslint"
   },
-  "dependencies": {},
   "devDependencies": {
     "@cryb/borealis": "^1.0.7",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.10.0",
     "@nuxt/bridge": "^3.3.1",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/pwa": "^3.3.5",
@@ -26,6 +27,7 @@
     "dotenv": "^16.4.5",
     "eslint": "^9.10.0",
     "eslint-plugin-vue": "^9.28.0",
+    "globals": "^15.9.0",
     "janus-gateway": "^1.2.4",
     "node-emoji": "^2.1.3",
     "nuxi": "^3.13.1",

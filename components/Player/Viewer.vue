@@ -1,43 +1,53 @@
 <template>
-    <div class="player" ref="viewport" :class="{ 'capture-events': hasControl }">
+    <div
+        class="player"
+        ref="viewport"
+        @keydown="didKeyDown"
+        @keyup="didKeyUp"
+        @mouseup="didMouseUp"
+    >
         <p v-if="showPlayerDevtools" class="player-dev">
             Portal ID: {{ portal.id || 'N/A' }}
             <br>
             Portal Status: {{ portal.status }}
         </p>
 
-        <canvas
-            id="canvasStream"
-            ref="canvasStream"
-            class="player-stream"
-            :style="playerStyle"
-        />
         <video
             id="remoteStream"
-            ref="stream"
+            ref="videoStream"
             class="player-stream"
             tabindex="1"
-            playsinline
+            disablepictureinpicture
             loop
+            muted
+            playsinline
             :style="playerStyle"
-            @keydown="didKeyDown"
-            @keyup="didKeyUp"
+
             @mousemove="didMouseMove"
             @mousedown="didMouseDown"
-            @mouseup="didMouseUp"
             @wheel="didMouseWheel"
             @contextmenu="handleRightClick"
             @paste="didPaste"
-            @playing="cleanErrors"
+            @playing="cleanVideoErrors"
             @pause="resumeStream"
-            @error="playerError"
-            @stalled="loading = true"
-            @waiting="loading = true"
-            @suspend="loading = true"
-            @ended="loading = true"
+            @error="videoPlayerError"
+            @stalled="videoLoading = true"
+            @waiting="videoLoading = true"
+            @suspend="videoLoading = true"
+            @ended="videoLoading = true"
             @canplay="resumeStream"
-            @enterpictureinpicture="enterPiP"
-            @leavepictureinpicture="leavePiP"
+        />
+        <audio
+            id="remoteAudio"
+            ref="audioStream"
+            @playing="cleanAudioErrors"
+            @pause="resumeStream"
+            @error="audioPlayerError"
+            @stalled="audioLoading = true"
+            @waiting="audioLoading = true"
+            @suspend="audioLoading = true"
+            @ended="audioLoading = true"
+            @canplay="resumeStream"
         />
 
         <div v-if="showPopup" class="player-message-cover">
@@ -48,13 +58,16 @@
                 </h1>
 
                 <p v-if="showUnsupportedPopup" class="body">
-                    Your browser seems to be running into trouble trying to play your stream.
+                    Your browser seems to be having trouble trying to play your stream.
                 </p>
                 <p v-else-if="!showMutedPopup" class="body">
                     An error has occurred, and it's not letting us play your stream.
                 </p>
-                <p v-if="playError" class="error">
-                    {{ playError }}
+                <p v-if="videoPlayError" class="error">
+                    video: {{ videoPlayError }}
+                </p>
+                <p v-if="audioPlayError" class="error">
+                    audio: {{ audioPlayError }}
                 </p>
 
                 <Button v-if="showMutedPopup" @click.native="unmute()">
@@ -84,14 +97,18 @@
                 brand,
                 activeKeyEvent: null,
                 showMutedPopup: false,
-                showUnsupportedPopup: false,
-                playError: null,
-                scriptReadyCallbacks: [],
-                maxWidth: 1280,
-                maxHeight: 720,
-                loading: true,
-                updateCanvas: false,
-                iceServers: []
+                isVideoUnsupported: false,
+                isAudioUnsupported: false,
+                videoPlayError: null,
+                audioPlayError: null,
+                maxWidth: 1366,
+                maxHeight: 768,
+                videoSize: [this.maxWidth, this.maxHeight],
+                videoLoading: true,
+                audioLoading: true,
+                janusEndpoint: process.env.JANUS_URL.split(','),
+                iceServers: [],
+                viewerClientRect: null
             }
         },
         computed: {
@@ -101,18 +118,21 @@
             hasControl() {
                 return this.controllerId === this.userId
             },
+            showUnsupportedPopup() {
+                return this.showVideoUnsupportedPopup || this.showAudioUnsupportedPopup
+            },
             showPopup() {
-                return this.loading || this.showMutedPopup || this.showUnsupportedPopup || this.playError
+                return this.loading || this.showMutedPopup || this.showUnsupportedPopup || this.videoPlayError || this.audioPlayError
             },
             streamWidth() {
-                if (this.$refs.stream)
-                    return this.$refs.stream.videoWidth
+                if (this.videoSize)
+                    return this.videoSize[0]
                 else
                     return this.maxWidth
             },
             streamHeight() {
-                if (this.$refs.stream)
-                    return this.$refs.stream.videoHeight
+                if (this.videoSize)
+                    return this.videoSize[1]
                 else
                     return this.maxHeight
             },
@@ -121,7 +141,7 @@
                 return process.env.SHOW_PLAYER_DEVTOOLS && this.portal
             },
             canControlPlayer() {
-                return this.$refs.stream && this.$refs.stream.nodeName === 'VIDEO'
+                return this.$refs.videoStream && this.$refs.videoStream.nodeName === 'VIDEO'
             },
             canPiP() {
                 if (process.server)
@@ -129,27 +149,30 @@
 
                 return ('pictureInPictureEnabled' in document && document.pictureInPictureEnabled)
             },
+            loading() {
+                return this.videoLoading || this.audioLoading
+            },
 
             playerStyle() {
-                if (!this.$refs.viewport)
-                    return 'width: auto; height: 100%'
+                if (!this.viewerClientRect)
+                    return 'width: auto; height: 100%;'
 
-                const currentRect = this.$refs.viewport.getBoundingClientRect()
-                if (currentRect.height / this.streamHeight < currentRect.width / this.streamWidth)
-                    return 'width: auto; height: 100%'
+                if (this.viewerClientRect.height / this.streamHeight < this.viewerClientRect.width / this.streamWidth)
+                    return 'width: auto; height: 100%;'
                 else
-                    return 'width: 100%; height: auto'
+                    return 'width: 100%; height: auto;'
             }
         },
         mounted() {
             document.addEventListener('visibilitychange', this.handleVisibilityChange)
+            window.addEventListener('resize', this.handleResize)
 
             if (this.viewerMuted) {
-                this.$refs.stream.muted = true
-                this.$refs.stream.volume = 0.0
+                this.$refs.audioStream.muted = true
+                this.$refs.audioStream.volume = 0.0
             } else {
-                this.$refs.stream.muted = false
-                this.$refs.stream.volume = this.viewerVolume
+                this.$refs.audioStream.muted = false
+                this.$refs.audioStream.volume = this.viewerVolume
             }
 
             // ToDo: refactor the entirety of this
@@ -158,17 +181,17 @@
                 const users = process.env.TURN_USERNAME.toString().split(',')
                 const passwords = process.env.TURN_PASSWORD.toString().split(',')
 
-                this.iceServers = servers.map((serv, i) => ({
-                    url: serv,
-                    username: users[i],
-                    credential: passwords[i]
-                }))
+                this.iceServers = servers.map((serv, i) => {
+                    const server = { urls: serv }
+                    if (users[i] && passwords[i]) {
+                        server.username = users[i]
+                        server.credential = passwords[i]
+                    }
+                    return server
+                })
             }
-
-            this.context = this.$refs.canvasStream.getContext('2d')
-
-            if (this.janusId)
-                this.initJanus()
+            if (this.iceServers.length === 0)
+                this.iceServers = [{ urls: 'stun:stun.cloudflare.com:3478' }]
 
             this.unsubscribe = this.$store.subscribe(({ type }, { stream }) => {
                 switch(type) {
@@ -189,125 +212,160 @@
                         break
                 }
             })
+
+            if (this.canPiP) {
+                this.pipStream = document.createElement('video')
+                this.pipStream.muted = true
+                this.pipStream.addEventListener('enterpictureinpicture', this.enterPiP)
+                this.pipStream.addEventListener('leavepictureinpicture', this.leavePiP)
+            }
         },
         beforeDestroy() {
-            this.leavePiP()
             document.removeEventListener('visibilitychange', this.handleVisibilityChange)
+            window.removeEventListener('resize', this.handleResize)
+            if (this.pipStream) {
+                this.leavePiP()
+                this.pipStream.removeEventListener('enterpictureinpicture', this.enterPiP)
+                this.pipStream.removeEventListener('leavepictureinpicture', this.leavePiP)
+            }
 
             this.cleanPlayers()
             this.unsubscribe()
         },
         methods: {
             async resumeStream() {
-                if (!this.$refs.stream)
-                    return
-
-                this.loading = true
+                if (!this.$refs.videoStream || !this.$refs.audioStream)
+                    return console.warn('asked to resume stream when stream is not present')
 
                 try {
-                    await this.$refs.stream.play()
+                    if (this.$refs.audioStream.readyState >= 3)
+                        await this.$refs.audioStream.play()
+                    else
+                        console.debug('audio not ready yet')
                 } catch (error) {
-                    this.playerError(error)
+                    this.audioPlayerError(error)
+                }
+                try {
+                    if (this.$refs.videoStream.readyState >= 3)
+                        await this.$refs.videoStream.play()
+                    else
+                        console.debug('video not ready yet')
+                } catch (error) {
+                    this.videoPlayerError(error)
                 }
             },
-            playerError(error) {
-                this.loading = false
+            videoPlayerError(error) {
+                console.error('video player error', error)
+                this.videoLoading = false
 
-                if (process.env.NODE_ENV !== 'production')
-                    console.error(error)
-
-                let message = error.message || error.name
-
-                // workaround (thanks Firefox?)
-                if (!message && error.target && error.target.error)
-                    message = error.target.error.message
+                let message = error.message || error.name || error.target?.error?.message
 
                 switch (error.name) {
                     case 'NotAllowedError':
                         this.showMutedPopup = true
                         break
                     case 'NotSupportedError':
-                        this.showUnsupportedPopup = true
-                        this.playError = message
+                        this.isVideoUnsupported = true
+                        this.videoPlayError = message
                         break
                     case 'AbortError':
-                        this.loading = true
+                        console.debug('video AbortError')
+                        this.videoLoading = true
                         break
                     default:
-                        this.playError = message
+                        this.videoPlayError = message
                         break
                 }
             },
-            cleanErrors() {
-                this.loading = false
+            audioPlayerError(error) {
+                console.error('audio player error', error)
+                this.audioLoading = false
+
+                let message = error.message || error.name || error.target?.error?.message
+
+                switch (error.name) {
+                    case 'NotAllowedError':
+                        this.showMutedPopup = true
+                        break
+                    case 'NotSupportedError':
+                        this.isAudioUnsupported = true
+                        this.audioPlayError = message
+                        break
+                    case 'AbortError':
+                        console.debug('audio AbortError')
+                        this.audioLoading = true
+                        break
+                    default:
+                        this.audioPlayError = message
+                        break
+                }
+            },
+            cleanVideoErrors() {
+                this.videoLoading = false
+                this.isVideoUnsupported = false
+                this.videoPlayError = null
+                if (this.$refs.videoStream.videoWidth && this.$refs.videoStream.videoHeight) {
+                    this.videoSize = [this.$refs.videoStream.videoWidth, this.$refs.videoStream.videoHeight]
+                    this.handleResize()
+                }
+            },
+            cleanAudioErrors() {
+                this.audioLoading = false
                 this.showMutedPopup = false
-                this.showUnsupportedPopup = false
-                this.playError = null
+                this.isAudioUnsupported = false
+                this.audioPlayError = null
             },
 
             unmute() {
-                this.showMutedPopup = false
-                if (this.$refs.stream) {
-                    this.$refs.stream.volume = this.viewerVolume
+                if (this.$refs.audioStream) {
+                    this.$refs.audioStream.volume = this.viewerVolume
                     this.resumeStream()
                 }
+                this.showMutedPopup = false
             },
             volumeChange() {
                 // ToDo: change how this works to prevent recursions
                 // and resource wasting, but keeping the player controls updated.
-                this.viewerMuted = this.$refs.stream.muted
-                this.viewerVolume = this.$refs.stream.volume
+                this.viewerMuted = this.$refs.audioStream.muted
+                this.viewerVolume = this.$refs.audioStream.volume
             },
 
-
             togglePiP() {
-                if (!this.canPiP || !this.canControlPlayer || !this.$refs.stream || !this.$refs.canvasStream)
-                    return
+                if (!this.canPiP || !this.canControlPlayer || !this.$refs.videoStream || !this.pipStream)
+                    return console.warn('tried to toggle picture-in-picture while not available')
 
-                if (this.pip)
-                    this.$refs.stream.requestPictureInPicture()
-                else if (document.pictureInPictureElement === this.$refs.stream)
+                if (this.pip) {
+                    this.pipStream.srcObject = this.$refs.videoStream.srcObject
+                    const ready = () => {
+                      this.pipStream.removeEventListener('playing', ready)
+                      this.pipStream.requestPictureInPicture()
+                    }
+                    this.pipStream.addEventListener('playing', ready)
+                    this.pipStream.play()
+                } else if (document.pictureInPictureElement === this.pipStream)
                     document.exitPictureInPicture()
             },
 
             enterPiP() {
                 this.$store.commit('setPiPStatus', true)
-                this.updateCanvas = true
-                this.$refs.canvasStream.width = this.streamWidth
-                this.$refs.canvasStream.height = this.streamHeight
-                this.updateFakeStream()
             },
 
             leavePiP() {
                 this.$store.commit('setPiPStatus', false)
-                setTimeout(() => {
-                    this.context.clearRect(0, 0, this.streamWidth, this.streamHeight)
-                    if (!this.pip)
-                        this.updateCanvas = false
-                }, 300)
-            },
-
-            updateFakeStream() {
-                if (!this.updateCanvas || !this.$refs.stream || !this.$refs.canvasStream)
-                    return
-
-                window.requestAnimationFrame(() => {
-                    this.context.drawImage(this.$refs.stream, 0, 0, this.streamWidth, this.streamHeight)
-                    setTimeout(this.updateFakeStream, 33)
-                })
+                this.pipStream.srcObject = undefined
+                this.pipStream.pause()
             },
 
             initJanus() {
                 this.cleanPlayers()
 
-                if (!this.$refs.stream)
+                if (!this.$refs.videoStream || !this.$refs.audioStream)
                     return console.warn('Stream cannot be found, refusing to start player!')
 
-                if (process.env.NODE_ENV !== 'production')
-                    console.debug('Initalizing Janus library.')
+                console.log('Janus init!!')
 
                 Janus.init({
-                    debug: (process.env.NODE_ENV !== 'production'),
+                    debug: true,
                     dependencies: Janus.useDefaultDependencies(),
                     callback: this.configureJanus
                 })
@@ -319,20 +377,15 @@
             * this needs to be accompanied by the ability to request an ICE restart in order to switch the TURN sessions.
             */
 
-            // ToDo: Rewrite credential check for more complexity in checking if one more more sets are needed.
             configureJanus() {
-                if (process.env.NODE_ENV !== 'production')
-                    console.debug('Configuring Janus object')
-
-                const janusConfig = {
-                    server: `${process.env.JANUS_URL}/janus`,
+                this.player = new Janus({
+                    server: this.janusEndpoint,
                     iceServers: this.iceServers,
+                    max_poll_events: 2,
+                    destroyOnUnload: false,
                     success: this.janusSessionConnected,
-                    error: this.janusError,
-                    destroy: this.janusDestroyed
-                }
-
-                this.player = new Janus(janusConfig)
+                    error: this.janusError
+                })
             },
 
             janusSessionConnected() {
@@ -341,87 +394,97 @@
                     success: this.janusHandleCreated,
                     error: this.janusError,
                     onmessage: this.janusHandleMessages,
-                    onremotestream: this.janusHandleIncomingStream,
-                    oncleanup: this.janusHandleCleanup
+                    onremotetrack: this.janusHandleIncomingStream
                 })
             },
 
             janusHandleCreated(handle) {
                 this.janusHandle = handle
-                this.janusHandle.send({message: {
-                    request: 'watch',
-                    id: this.janusId
-                }})
+                this.janusHandle.send({
+                    message: {
+                        request: 'watch',
+                        id: this.janusId
+                    }
+                })
             },
 
             janusHandleMessages(msg, jsep) {
-                if (jsep)
-                    this.janusHandle.createAnswer({
-                        jsep,
-                        media: {
-                            audioRecv: true,
-                            audioSend: false,
-                            videoRecv: true,
-                            videoSend: false
-                        },
-                        success: this.janusHandleAnswerSuccess,
-                        error: this.janusError
-                    })
+                if (!jsep) return
+                console.log('Janus streaming negotiated. Connecting peer.')
+
+                this.janusHandle.createAnswer({
+                    jsep,
+                    tracks: [],
+                    customizeSdp: jsep => {
+                        // make sure we enable stereo in case it is missing.
+                        // improves audio quality on Chromium-based browsers
+                        if (jsep.sdp.indexOf('stereo=1') == -1)
+                            jsep.sdp = jsep.sdp.replace('useinbandfec=1', 'useinbandfec=1;stereo=1')
+                    },
+                    success: this.janusHandleConfigure,
+                    error: this.janusError
+                })
             },
 
-            janusHandleAnswerSuccess(jsep) {
+            janusHandleIncomingStream(track, mid, on, metadata) {
+                if (!this.$refs.videoStream || !this.$refs.audioStream) {
+                    if (on) {
+                        console.warn('Stream cannot be found, destroying player!')
+                        this.cleanPlayers()
+                    }
+                    return // can also run in off, but during player destroy
+                }
+                if (!on) return
+
+                const stream = new MediaStream([track])
+
+                try {
+                    this.$refs[`${track.kind}Stream`].srcObject = stream
+                } catch(error) {
+                    this[`${track.kind}PlayerError`](error)
+                }
+            },
+
+            janusHandleConfigure(jsep) {
+                console.log('Configuring the Janus stream - let it in!')
+
                 this.janusHandle.send({
                     message: {
-                        request: 'start'
+                        request: 'configure',
+                        streams: [
+                            // video
+                            {
+                                mid: '100',
+                                send: true,
+                                min_delay: 0,
+                                max_delay: 0
+                            },
+                            // audio
+                            {
+                                mid: '101',
+                                send: true,
+                                min_delay: 0,
+                                max_delay: 0
+                            }
+                        ]
                     },
                     jsep
                 })
             },
 
-            janusHandleIncomingStream(stream) {
-                if (!this.$refs.stream) {
-                    console.warn('Stream cannot be found, destroying player!')
-                    return this.cleanPlayers()
-                }
-
-                try {
-                    this.$refs.stream.srcObject = stream
-
-                    if (stream.getVideoTracks().length > 0) {
-                        const streamSettings = stream.getVideoTracks()[0].getSettings()
-
-                        if (streamSettings.width) {
-                            this.maxWidth = streamSettings.width
-                            this.maxHeight = streamSettings.height
-                        }
-                    }
-
-                    setTimeout(() => {
-                        this.janusHandleCreated(this.janusHandle)
-                    }, 1800000)
-                } catch(error) {
-                    console.error(error)
-                }
-            },
-
-            janusHandleCleanup() {
-                if (process.env.NODE_ENV !== 'production')
-                    console.debug('::: Janus cleanup received :::')
-            },
-
             janusError(reason) {
+                console.error('Janus error:', reason)
                 if (reason === 'Library not initialized')
-                    return this.$nextTick(this.initJanus)
-                console.error(reason)
-            },
-
-            janusDestroyed() {
-                delete this.player // ToDo: can we do this without disaster incoming?
+                    this.$nextTick(this.initJanus)
             },
 
             handleVisibilityChange() {
                 if (document.hidden && this.activeKeyEvent)
                     this.didKeyUp(this.activeKeyEvent)
+            },
+            handleResize() {
+                if (!this.$refs.viewport) return
+                this.viewerClientRect = this.$refs.viewport.getBoundingClientRect()
             },
 
             handleRightClick(event) {
@@ -538,10 +601,10 @@
                     return
 
                 if (this.viewerMuted)
-                    this.$refs.stream.muted = true
+                    this.$refs.audioStream.muted = true
                 else {
-                    this.$refs.stream.muted = false
-                    this.$refs.stream.volume = this.viewerVolume
+                    this.$refs.audioStream.muted = false
+                    this.$refs.audioStream.volume = this.viewerVolume
                 }
             },
 
@@ -550,15 +613,28 @@
                     return
 
                 if (!this.viewerMuted) {
-                    this.$refs.stream.muted = false
-                    this.$refs.stream.volume = this.viewerVolume
+                    this.$refs.audioStream.muted = false
+                    this.$refs.audioStream.volume = this.viewerVolume
                 }
             },
 
             cleanPlayers() {
-                if (this.player && this.player.destroy) {
-                    this.player.destroy({ cleanupHandles: true })
-                    delete this.player
+                if (this.$refs.videoStream)
+                    this.$refs.videoStream.srcObject = undefined
+                if (this.$refs.audioStream)
+                    this.$refs.audioStream.srcObject = undefined
+
+                if (this.player) {
+                    if (this.janusHandle) {
+                        this.janusHandle.send({
+                            message: {
+                                request: 'stop'
+                            }
+                        })
+                        this.janusHandle.detach()
+                    }
+
+                    this.player.destroy()
                 }
             }
         }

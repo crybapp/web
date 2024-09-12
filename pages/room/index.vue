@@ -17,20 +17,30 @@
     import Loading from '~/components/Loading'
 
     export default {
-        middleware: 'authenticated',
         components: {
             Chat,
             Player,
             PlayerFooter,
             Loading
         },
+        middleware: 'authenticated',
         async asyncData(context) {
             await context.store.dispatch('fetchRoom')
+        },
+        head() {
+            return {
+                title: this.room ? this.room.name : 'Room Not Found'
+            }
         },
         computed: {
             ...mapGetters(['room', 'wsHeartbeat'])
         },
         mounted() {
+            if (!this.room) {
+                this.$router.push('/home')
+                return
+            }
+
             this.$store.commit('setupWebSocket')
 
             this.unsubscribe = this.$store.subscribe(({ type }, { stream }) => {
@@ -42,13 +52,9 @@
             })
         },
         beforeDestroy() {
-            this.unsubscribe()
+            if (typeof this.unsubscribe === 'function')
+                this.unsubscribe()
             this.$store.commit('disconnectWebSocket')
-        },
-        head() {
-            return {
-                title: this.room ? this.room.name : 'Room Not Found'
-            }
         }
     }
 </script>

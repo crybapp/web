@@ -532,8 +532,6 @@ export const mutations = {
         if (_state.ws)
             this.commit('disconnectWebSocket')
 
-        const state = initialState()
-
         if (process.client)
             cookies.erase('token', {
                 domain: process.env.COOKIE_DOMAIN

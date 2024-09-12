@@ -11,6 +11,12 @@ importers:
       '@cryb/borealis':
         specifier: ^1.0.7
         version: 1.0.7
+      '@eslint/eslintrc':
+        specifier: ^3.1.0
+        version: 3.1.0
+      '@eslint/js':
+        specifier: ^9.10.0
+        version: 9.10.0
       '@nuxt/bridge':
         specifier: ^3.3.1
         version: 3.3.1(@babel/core@7.25.2)(@types/node@22.5.4)(rollup@3.29.4)(sass@1.78.0)(typescript@5.6.2)(vue@2.7.16)(webpack@4.47.0)
@@ -44,6 +50,9 @@ importers:
       eslint-plugin-vue:
         specifier: ^9.28.0
         version: 9.28.0(eslint@9.10.0(jiti@1.21.6))
+      globals:
+        specifier: ^15.9.0
+        version: 15.9.0
       janus-gateway:
         specifier: ^1.2.4
         version: 1.2.4
@@ -3966,6 +3975,10 @@ packages:
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
+    engines: {node: '>=18'}
+
+  globals@15.9.0:
+    resolution: {integrity: sha512-SmSKyLLKFbSr6rptvP8izbyxJL4ILwqO9Jg23UA0sDlGlu58V59D1//I3vlc0KJphVdUR7vMjHIplYnzBxorQA==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -12052,6 +12065,8 @@ snapshots:
       type-fest: 0.20.2
 
   globals@14.0.0: {}
+
+  globals@15.9.0: {}
 
   globalthis@1.0.4:
     dependencies:
