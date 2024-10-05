@@ -41,9 +41,6 @@ export const getters = {
 
     queueStatus: ({ queueStatus }) => queueStatus,
 
-    apertureWs: ({ apertureWs }) => apertureWs,
-    apertureToken: ({ apertureToken }) => apertureToken,
-
     janusId: ({ janusId }) => janusId,
     janusIp: ({ janusIp }) => janusIp,
 
@@ -75,8 +72,6 @@ const initialState = () => ({
 
     queueStatus: null,
 
-    apertureWs: null,
-    apertureToken: null,
     janusId: null,
     janusIp: null,
 
@@ -168,8 +163,6 @@ export const mutations = {
             state.onlineUsers = []
             state.controllerId = null
 
-            state.apertureWs = null
-            state.apertureToken = null
             state.janusId = null
             state.janusIp = null
         }
@@ -201,17 +194,6 @@ export const mutations = {
             state.portal.status = 'in-queue'
 
         state.queueStatus = status
-    },
-
-    /**
-     * Aperture
-     */
-    updateAperture(state, config) {
-        if (!state.room)
-            return
-
-        state.apertureWs = config.ws
-        state.apertureToken = config.t
     },
 
     /**
@@ -441,9 +423,6 @@ export const mutations = {
                     case 'JANUS_CONFIG':
                         this.commit('updateJanus', d)
                         break
-                    case 'APERTURE_CONFIG':
-                        this.commit('updateAperture', d)
-                        break
                     case 'ROOM_DESTROY':
                         this.commit('handleRoom', null)
                         break
@@ -499,8 +478,6 @@ export const mutations = {
         state.controllerId = null
         state.typingUsers = []
         state.onlineMembers = []
-        state.apertureWs = null
-        state.apertureToken = null
         state.janusId = null
         state.janusIp = null
 
@@ -554,8 +531,6 @@ export const mutations = {
     logout(_state) {
         if (_state.ws)
             this.commit('disconnectWebSocket')
-
-        const state = initialState()
 
         if (process.client)
             cookies.erase('token', {

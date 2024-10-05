@@ -52,12 +52,9 @@
             }
         },
         computed: {
-            ...mapGetters(['apertureWs', 'apertureToken', 'controllerId', 'controlLocked', 'fullscreen', 'janusId',
-                 'pip', 'portalStatus', 'room', 'users', 'userId', 'onlineUsers', 'viewerMuted']),
+            ...mapGetters(['controllerId', 'controlLocked', 'fullscreen', 'janusId', 'pip', 'portalStatus',
+                'room', 'users', 'userId', 'onlineUsers', 'viewerMuted']),
 
-            isJanusEnabled() {
-                return process.env.ENABLE_JANUS
-            },
             hasControl() {
                 return this.controllerId === this.userId
             },
