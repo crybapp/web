@@ -11,7 +11,7 @@
             <RoomMenu ref="roomMenu" />
         </div>
         <div v-if=user class="right">
-            <img v-if=userIcon :src=userIcon class="profile-image" @click=toggleUserMenu()>
+            <img v-if=userIcon decoding="async" class="profile-image" :src=userIcon @click=toggleUserMenu()>
             <UserMenu ref="userMenu" />
         </div>
         <div v-else-if=token class="right">

@@ -1,6 +1,12 @@
 <template>
     <div v-if=author class="grouped-chat-messages" @mouseover="hover = true" @mouseleave="hover = false">
-        <img v-if=userIcon :src=userIcon class="chat-messages-author-avatar" :class="{ 'has-control': hasControl, 'owner': isOwnerOfRoom }">
+        <img
+            v-if=userIcon
+            class="chat-messages-author-avatar"
+            :class="{ 'has-control': hasControl, 'owner': isOwnerOfRoom }"
+            decoding="async"
+            :src=userIcon
+        >
         <div class="chat-messages">
             <div class="grouped-chat-messages-meta">
                 <p class="chat-messages-author-name">

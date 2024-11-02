@@ -7,33 +7,37 @@
   "license": "MIT",
   "main": "dist/index.html",
   "scripts": {
-    "build": "nuxt build",
-    "generate": "nuxt generate",
-    "start": "nuxt start",
-    "dev": "nuxt",
-    "lint": "eslint --ext .html,.js,.vue --ignore-path .gitignore ."
+    "build": "nuxi build",
+    "start": "node ./.output/server/index.mjs",
+    "dev": "nuxi dev",
+    "lint": "eslint"
   },
-  "dependencies": {
+  "devDependencies": {
     "@cryb/borealis": "^1.0.7",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.10.0",
+    "@nuxt/bridge": "^3.3.1",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/pwa": "^3.3.5",
-    "@nuxtjs/robots": "^2.5.0",
+    "@nuxtjs/robots": "^3.0.0",
+    "@twemoji/api": "^15.1.0",
+    "babel-eslint": "^10.1.0",
     "browser-cookies": "^1.2.0",
     "cookieparser": "^0.1.0",
-    "dotenv": "^16.0.1",
-    "node-emoji": "^1.11.0",
-    "nuxt": "^2.15.8",
+    "dotenv": "^16.4.5",
+    "eslint": "^9.10.0",
+    "eslint-plugin-vue": "^9.28.0",
+    "globals": "^15.9.0",
+    "janus-gateway": "^1.2.4",
+    "node-emoji": "^2.1.3",
+    "nuxi": "^3.13.1",
+    "nuxt": "^2.18.1",
     "nuxt-client-init-module": "^0.3.0",
     "nuxt-clipboard2": "^0.2.1",
     "perfect-scrollbar": "^1.5.5",
-    "string-strip-html": "^8.3.0",
-    "twemoji": "^14.0.2"
-  },
-  "devDependencies": {
-    "babel-eslint": "^10.1.0",
-    "eslint": "^8.22.0",
-    "eslint-plugin-vue": "^9.3.0",
-    "node-sass": "^9.0.0",
-    "sass-loader": "^10.3.1"
+    "sass": "^1.78.0",
+    "sass-loader": "^10.5.2",
+    "string-strip-html": "^13.4.8",
+    "webrtc-adapter": "^9.0.1"
   }
 }

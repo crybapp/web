@@ -1,6 +1,6 @@
 <template>
     <div v-if=member class="user-icon" :class="{ 'passable': canPassControl, 'offline': !isUserOnline, 'has-control': hasControl, 'owner': isOwnerOfRoom }" @click=didClickUserIcon() @mouseover="hover = true" @mouseleave="hover = false">
-        <img v-if=userIcon :src=userIcon class="user-icon-avatar" :title="userHoverTitle" />
+        <img v-if=userIcon class="user-icon-avatar" :title="userHoverTitle" decoding="async" :src=userIcon />
         <div class="user-name-wrapper">
             <p class="user-name">
                 {{ member.name }}
@@ -47,7 +47,7 @@
                 if (this.canPassControl) return `Give the controller to ${this.member.name}`
                 if (this.hasControl) return `${this.member.name} has the controller`
 
-                return `${this.member.name}${this.isUserSelf ? ' (you)' : ''}`
+                return 'How are you here?'
             },
 
             interactable() {

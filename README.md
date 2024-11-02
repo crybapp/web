@@ -58,10 +58,7 @@ git clone https://github.com/crybapp/web.git
 The following services need to be installed for `@cryb/web` to function:
 
 * `@cryb/api`
-
-We recommend that you run the following services alongside `@cryb/web`, but it's not required.
-
-* `@cryb/aperture` or Janus WebRTC Server
+* Janus WebRTC Server (used for VM streams)
 
 You also need to install the required dependencies by running `yarn`.
 
@@ -75,7 +72,7 @@ In this file, you'll need some values. Documentation is available in the `.env.e
 
 Make sure that you have installed `@cryb/api`.
 
-If you're developing a feature that requires the VM infrastructure, then make sure either `@cryb/aperture` or Janus WebRTC server is running.
+If you're developing a feature that requires the VM infrastructure, then make sure Janus WebRTC server is running.
 
 #### Starting @cryb/web
 

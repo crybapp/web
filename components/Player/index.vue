@@ -84,7 +84,7 @@
                 <div class="loading" />
             </div>
         </div>
-        <Viewer v-show="showViewer" ref="viewer" :loaded-scripts="loadedScripts" />
+        <Viewer v-show="showViewer" ref="viewer" />
     </div>
 </template>
 <script>
@@ -96,17 +96,11 @@
         components: {
             Viewer
         },
-        props: {
-            loadedScripts: Array
-        },
         computed: {
-            ...mapGetters(['user', 'room', 'portal', 'stream', 'janusId', 'janusIp', 'apertureWs', 'apertureToken', 'fullscreen', 'pip', 'queueStatus']),
+            ...mapGetters(['user', 'room', 'portal', 'stream', 'janusId', 'janusIp', 'fullscreen', 'pip', 'queueStatus']),
 
             showViewer() {
-                if (process.env.ENABLE_JANUS)
-                    return this.portalStatus === 'open' && this.janusId
-                else
-                    return this.portalStatus === 'open' && this.apertureWs && this.apertureToken
+                return this.portalStatus === 'open' && this.janusId
             },
             showPlayerDevtools() {
                 return process.env.SHOW_PLAYER_DEVTOOLS

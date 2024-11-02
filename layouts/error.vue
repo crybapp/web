@@ -7,13 +7,13 @@
             Fuck.
         </h1>
 
-        <p v-if="error.statusCode === 404" class="subtitle">
+        <p v-if="error.statusCode === '404'" class="subtitle">
             We couldn't find this page. Maybe it's our fault, maybe it's yours.
         </p>
         <p v-else-if="errResponse.description" class="subtitle">
             {{ errResponse.description }}
         </p>
-        <p v-else-if="error.message && !isProduction" class="subtitle">
+        <p v-else-if="error.message && error.statusCode !== '404'" class="subtitle">
             {{ error.message }}
         </p>
         <p v-else class="subtitle">
@@ -36,9 +36,6 @@
                 if (this.error.response && this.error.response.data)
                     return this.error.response.data.error || {}
                 return {}
-            },
-            isProduction() {
-                return process.env.NODE_ENV === 'production'
             }
         },
         head() {
