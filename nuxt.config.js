@@ -51,9 +51,7 @@ export default defineNuxtConfig({
         TURN_USERNAME: process.env.TURN_USERNAME,
         TURN_PASSWORD: process.env.TURN_PASSWORD,
         SHOW_PLAYER_DEVTOOLS: (process.env.SHOW_PLAYER_DEVTOOLS === 'true'),
-        SHOW_FOOTER: (process.env.SHOW_FOOTER !== 'false'),
-        AUDIO_BITRATE: process.env.AUDIO_BITRATE,
-        VIDEO_BITRATE: process.env.VIDEO_BITRATE
+        SHOW_FOOTER: (process.env.SHOW_FOOTER !== 'false')
     },
     modules: [
         'nuxt-client-init-module',

@@ -448,6 +448,13 @@
             janusHandleConfigure(jsep) {
                 console.log('Configuring the Janus stream - let it in!')
 
+                this.janusHandle.webrtcStuff.pc.getReceivers().forEach(r => {
+                    if (r.jitterBufferTarget === null) {
+                        r.jitterBufferTarget = 0
+                        console.debug(`${r.track.kind} jitterBufferTarget =>`, r.jitterBufferTarget)
+                    }
+                })
+
                 this.janusHandle.send({
                     message: {
                         request: 'configure',
